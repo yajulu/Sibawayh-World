@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace PROJECT.Scripts
 {
+#if UNIT_EDITOR
 	[InitializeOnLoad]
 	public class ProjectInitializer {
 		static ProjectInitializer()
@@ -37,6 +38,6 @@ namespace PROJECT.Scripts
 			Debug.Log($"KeyStore Path Updated to {keyStorePath}");
 		}
 	}
-	
+#endif
 
 }
