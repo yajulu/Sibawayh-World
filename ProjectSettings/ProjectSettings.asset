@@ -165,8 +165,8 @@ PlayerSettings:
     tvOS: 0
   overrideDefaultApplicationIdentifier: 1
   AndroidBundleVersionCode: 3
-  AndroidMinSdkVersion: 22
-  AndroidTargetSdkVersion: 0
+  AndroidMinSdkVersion: 25
+  AndroidTargetSdkVersion: 30
   AndroidPreferredInstallLocation: 1
   aotOptions: 
   stripEngineCode: 1
@@ -252,7 +252,7 @@ PlayerSettings:
   AndroidTargetDevices: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: D:/Game Development/Projects Assets/Sibawayh/Build/Sibawayh.keystore
+  AndroidKeystoreName: D:/Work/Yajulu/Sibawayh World/keystore/Sibawayh World.keystore
   AndroidKeyaliasName: sibawayhuser
   AndroidBuildApkPerCpuArchitecture: 0
   AndroidTVCompatibility: 0

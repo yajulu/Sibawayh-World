@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectedAppIndex: 0
   clientTokens:
-  - f9f6db804a7ba3c81e56e2fe6f6bd86d
+  - GGQVliYUU0UnhiOXhwX0huVXZANMTlSek04elR3SnlUQlNuT29keFk1TGFIemotV3NBZADlkbWIzU2ZAyRU9GTUdhZAnBnWnlfNFZAfS1Q3XzNJU3Vpd0h3Y2VocUIwTjRWQXd5NzdIak1qODhpVjNLZAmlSMVRIMGFFalRWYnhMZAFBPdnNnMjNkaDFCdFhVOXlydFZADVDhpdDUwYl9KWUJENWZAxTgZDZD
   appIds:
   - 635018424268014
   appLabels:
@@ -24,7 +24,7 @@ MonoBehaviour:
   status: 1
   xfbml: 0
   frictionlessRequests: 1
-  androidKeystorePath: D:\Game Development\Projects Assets\Sibawayh\Build\Sibawayh.keystore
+  androidKeystorePath: D:/Work/Yajulu/Sibawayh World/keystore/Sibawayh World.keystore
   iosURLSuffix: 
   appLinkSchemes:
   - list: []
