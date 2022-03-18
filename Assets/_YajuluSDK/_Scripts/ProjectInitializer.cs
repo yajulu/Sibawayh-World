@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace PROJECT.Scripts
 {
-#if UNIT_EDITOR
+#if UNITY_EDITOR
 	[InitializeOnLoad]
 	public class ProjectInitializer {
 		static ProjectInitializer()

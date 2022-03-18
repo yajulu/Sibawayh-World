@@ -7,12 +7,14 @@ using UnityEngine;
 
 namespace _YajuluSDK._Scripts
 {
+
     [CreateAssetMenu()]
     public class ProjectConfig : ScriptableObject
     {
         public static FacebookSettings CurrentSettings;
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         [Button]
+        
         private static void UpdateKeyStorePath()
         {
             
@@ -34,6 +36,7 @@ namespace _YajuluSDK._Scripts
             PlayerSettings.Android.keystoreName = keyStorePath;
             Debug.Log($"KeyStore Path Updated to {keyStorePath}");
         }
-        #endif
+#endif
     }
+
 }
