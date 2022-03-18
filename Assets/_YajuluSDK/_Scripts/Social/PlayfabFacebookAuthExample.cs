@@ -21,21 +21,37 @@ namespace _YajuluSDK._Scripts.Social
             SetMessage("Initializing Facebook..."); // logs the given message and displays it on the screen using OnGUI method
 
             // This call is required before any other calls to the Facebook API. We pass in the callback to be invoked once initialization is finished
-            FB.Init(OnFacebookInitialized);  
+            FB.Init(OnFacebookInitialized, OnHideUnity);  
 
         }
 
         private void OnFacebookInitialized()
         {
-            SetMessage("Logging into Facebook...");
-
+            
             // Once Facebook SDK is initialized, if we are logged in, we log out to demonstrate the entire authentication cycle.
             if (FB.IsLoggedIn)
                 FB.LogOut();
-
+            SetMessage("Facebook Initialized.");
+        }
+        
+        public void LoginWithFacebook()
+        {
+            SetMessage("Logging into Facebook...");
             // We invoke basic login procedure and pass in the callback to process the result
             FB.LogInWithReadPermissions(new List<string>() {"public_profile", "email", "first_name"}, OnFacebookLoggedIn);
         }
+        
+        private void OnHideUnity (bool isGameShown)
+        {
+            if (!isGameShown) {
+                // Pause the game - we will need to hide
+                Time.timeScale = 0;
+            } else {
+                // Resume the game - we're getting focus again
+                Time.timeScale = 1;
+            }
+        }
+
 
         private void OnFacebookLoggedIn(ILoginResult result)
         {
@@ -44,11 +60,11 @@ namespace _YajuluSDK._Scripts.Social
             {
                 SetMessage($"Facebook Auth Complete! Access Token: " + AccessToken.CurrentAccessToken.TokenString + $"\nLogging into PlayFab...  {AccessToken.CurrentAccessToken.UserId}");
 
-                foreach (var per in AccessToken.CurrentAccessToken.Permissions)
-                {
-                    Debug.Log(per);
-                }
-                
+                // foreach (var per in AccessToken.CurrentAccessToken.Permissions)
+                // {
+                //     Debug.Log(per);
+                // }
+                //
                 /*
              * We proceed with making a call to PlayFab API. We pass in current Facebook AccessToken and let it create
              * and account using CreateAccount flag set to true. We also pass the callback for Success and Failure results
