@@ -64,6 +64,7 @@ public class PluginsTestScript : MonoBehaviour
                 Debug.Log("PARAMETERS " + perm);
             }
         } else {
+            Debug.Log("ERROR IS: " + result.Error);
             Debug.Log("User cancelled login");
         }
     }
