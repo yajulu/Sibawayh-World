@@ -664,22 +664,22 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
-    Android: EASY_MOBILE;EASY_MOBILE_PRO;ODIN_INSPECTOR;ODIN_INSPECTOR_3
-    CloudRendering: EASY_MOBILE;EASY_MOBILE_PRO
-    EmbeddedLinux: EASY_MOBILE;EASY_MOBILE_PRO
-    GameCoreScarlett: EASY_MOBILE;EASY_MOBILE_PRO
-    GameCoreXboxOne: EASY_MOBILE;EASY_MOBILE_PRO
-    Lumin: EASY_MOBILE;EASY_MOBILE_PRO
-    Nintendo Switch: EASY_MOBILE;EASY_MOBILE_PRO
-    PS4: EASY_MOBILE;EASY_MOBILE_PRO
-    PS5: EASY_MOBILE;EASY_MOBILE_PRO
-    Stadia: EASY_MOBILE;EASY_MOBILE_PRO
-    Standalone: ODIN_INSPECTOR;ODIN_INSPECTOR_3;EASY_MOBILE;EASY_MOBILE_PRO
-    WebGL: EASY_MOBILE;EASY_MOBILE_PRO
-    Windows Store Apps: EASY_MOBILE;EASY_MOBILE_PRO
-    XboxOne: EASY_MOBILE;EASY_MOBILE_PRO
-    iPhone: EASY_MOBILE;EASY_MOBILE_PRO
-    tvOS: EASY_MOBILE;EASY_MOBILE_PRO
+    Android: EASY_MOBILE;EASY_MOBILE_PRO;ODIN_INSPECTOR;ODIN_INSPECTOR_3;EM_UIAP
+    CloudRendering: EASY_MOBILE;EASY_MOBILE_PRO;EM_UIAP
+    EmbeddedLinux: EASY_MOBILE;EASY_MOBILE_PRO;EM_UIAP
+    GameCoreScarlett: EASY_MOBILE;EASY_MOBILE_PRO;EM_UIAP
+    GameCoreXboxOne: EASY_MOBILE;EASY_MOBILE_PRO;EM_UIAP
+    Lumin: EASY_MOBILE;EASY_MOBILE_PRO;EM_UIAP
+    Nintendo Switch: EASY_MOBILE;EASY_MOBILE_PRO;EM_UIAP
+    PS4: EASY_MOBILE;EASY_MOBILE_PRO;EM_UIAP
+    PS5: EASY_MOBILE;EASY_MOBILE_PRO;EM_UIAP
+    Stadia: EASY_MOBILE;EASY_MOBILE_PRO;EM_UIAP
+    Standalone: ODIN_INSPECTOR;ODIN_INSPECTOR_3;EASY_MOBILE;EASY_MOBILE_PRO;EM_UIAP
+    WebGL: EASY_MOBILE;EASY_MOBILE_PRO;EM_UIAP
+    Windows Store Apps: EASY_MOBILE;EASY_MOBILE_PRO;EM_UIAP
+    XboxOne: EASY_MOBILE;EASY_MOBILE_PRO;EM_UIAP
+    iPhone: EASY_MOBILE;EASY_MOBILE_PRO;EM_UIAP
+    tvOS: EASY_MOBILE;EASY_MOBILE_PRO;EM_UIAP
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
@@ -753,7 +753,10 @@ PlayerSettings:
   XboxOneOverrideIdentityName: 
   XboxOneOverrideIdentityPublisher: 
   vrEditorSettings: {}
-  cloudServicesEnabled: {}
+  cloudServicesEnabled:
+    Analytics: 1
+    Purchasing: 1
+    Unity Ads: 1
   luminIcon:
     m_Name: 
     m_ModelFolderPath: 
@@ -767,11 +770,11 @@ PlayerSettings:
     m_VersionName: 
   apiCompatibilityLevel: 6
   activeInputHandler: 0
-  cloudProjectId: 
+  cloudProjectId: a34953db-a20d-4365-9e30-d960446d1481
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
-  organizationId: 
+  projectName: Sibawayh
+  organizationId: ramyetman
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   playerDataPath: 
