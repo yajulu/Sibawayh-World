@@ -16,6 +16,11 @@ namespace _YajuluSDK._Scripts.Social
         // holds the latest message to be displayed on the screen
         private string _message;
 
+        public static event Action<LoginResult> OnPlayerLoggedIn;
+        public static event Action OnFbInitialized;
+
+        public static event Action<PlayerProfileModel> OnPlayerProfileRecived;
+
         public void Awake()
         {
             SetMessage("Initializing Facebook..."); // logs the given message and displays it on the screen using OnGUI method
@@ -37,6 +42,7 @@ namespace _YajuluSDK._Scripts.Social
                 // Continue with Facebook SDK
                 // ...
                 SetMessage("Facebook Initialized.");
+                OnFbInitialized?.Invoke();
                 // Once Facebook SDK is initialized, if we are logged in, we log out to demonstrate the entire authentication cycle.
                 // if (FB.IsLoggedIn)
                 // {
@@ -106,20 +112,45 @@ namespace _YajuluSDK._Scripts.Social
         {
             SetMessage("PlayFab Facebook Auth Complete. Session ticket: " + result.SessionTicket);
             Debug.Log($"PlayFab ID: {result.PlayFabId}");
-            UpdatePlayerDisplayName(AccessToken.CurrentAccessToken.UserId);
+            OnPlayerLoggedIn?.Invoke(result);
         }
 
-        private void UpdatePlayerDisplayName(string displayName)
+        
+        public static void UpdatePlayerDisplayName(string displayName)
         {
             var request = new UpdateUserTitleDisplayNameRequest
             {
-                DisplayName = name
+                DisplayName = displayName
             };
             //TODO: Update Callbacks
-            PlayFabClientAPI.UpdateUserTitleDisplayName(request, 
-                nameResult => { Debug.Log($"{nameResult.DisplayName}"); },
-                error => Debug.Log(error.GenerateErrorReport()));
+            PlayFabClientAPI.UpdateUserTitleDisplayName(request,
+                nameResult =>
+                {
+                    Debug.Log($"Name Updated: {nameResult.DisplayName}");
+                    GetPlayerData(null);
+                },
+                error => Debug.LogError(error.GenerateErrorReport()));
+        }
+        
+        public static void GetPlayerData(string playFabID)
+        {
+            var request = new GetPlayerProfileRequest
+            {
+                PlayFabId = playFabID
+            };
+            PlayFabClientAPI.GetPlayerProfile(request, OnPlayerDataReceived, OnPlayerProfileRequestError);
+        }
+
+        private static void OnPlayerProfileRequestError(PlayFabError obj)
+        {
+            Debug.LogError(obj.GenerateErrorReport());
             
+        }
+
+        private static void OnPlayerDataReceived(GetPlayerProfileResult obj)
+        {
+            Debug.Log(obj.PlayerProfile.ToString());
+            OnPlayerProfileRecived?.Invoke(obj.PlayerProfile);
         }
 
         private void OnPlayfabFacebookAuthFailed(PlayFabError error)
@@ -136,11 +167,11 @@ namespace _YajuluSDK._Scripts.Social
                 Debug.Log(_message);
         }
 
-        public void OnGUI()
-        {
-            var style = new GUIStyle { fontSize = 40, normal = new GUIStyleState { textColor = Color.white }, alignment = TextAnchor.MiddleCenter, wordWrap = true };
-            var area = new Rect(0,0,Screen.width,Screen.height);
-            GUI.Label(area, _message,style);
-        }
+        // public void OnGUI()
+        // {
+        //     var style = new GUIStyle { fontSize = 40, normal = new GUIStyleState { textColor = Color.white }, alignment = TextAnchor.MiddleCenter, wordWrap = true };
+        //     var area = new Rect(0,0,Screen.width,Screen.height);
+        //     GUI.Label(area, _message,style);
+        // }
     }
 }
