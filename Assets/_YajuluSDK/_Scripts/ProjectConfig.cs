@@ -11,9 +11,11 @@ namespace _YajuluSDK._Scripts
     public class ProjectConfig : ScriptableObject
     {
         public static FacebookSettings CurrentSettings;
+        #if UNITY_EDITOR
         [Button]
         private static void UpdateKeyStorePath()
         {
+            
             var yajuluPath = Environment.GetEnvironmentVariable("Yajulu", EnvironmentVariableTarget.User);
             if (yajuluPath == null)
             {
@@ -32,5 +34,6 @@ namespace _YajuluSDK._Scripts
             PlayerSettings.Android.keystoreName = keyStorePath;
             Debug.Log($"KeyStore Path Updated to {keyStorePath}");
         }
+        #endif
     }
 }
