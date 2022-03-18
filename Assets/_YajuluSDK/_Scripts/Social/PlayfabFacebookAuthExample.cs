@@ -16,29 +16,46 @@ namespace _YajuluSDK._Scripts.Social
         // holds the latest message to be displayed on the screen
         private string _message;
 
-        public void Start()
+        public void Awake()
         {
             SetMessage("Initializing Facebook..."); // logs the given message and displays it on the screen using OnGUI method
-
-            // This call is required before any other calls to the Facebook API. We pass in the callback to be invoked once initialization is finished
-            FB.Init(OnFacebookInitialized, OnHideUnity);  
-
+            if (!FB.IsInitialized) {
+                // This call is required before any other calls to the Facebook API. We pass in the callback to be invoked once initialization is finished
+                FB.Init(OnFacebookInitialized, OnHideUnity);
+            } else {
+                // Already initialized, signal an app activation App Event
+                FB.ActivateApp();
+            }
+           
         }
 
         private void OnFacebookInitialized()
         {
+            if (FB.IsInitialized) {
+                // Signal an app activation App Event
+                FB.ActivateApp();
+                // Continue with Facebook SDK
+                // ...
+                SetMessage("Facebook Initialized.");
+                // Once Facebook SDK is initialized, if we are logged in, we log out to demonstrate the entire authentication cycle.
+                // if (FB.IsLoggedIn)
+                // {
+                //     FB.LogOut();
+                //     SetMessage("Logging Out.");
+                // }
+            } else {
+                Debug.Log("Failed to Initialize the Facebook SDK");
+            }
             
-            // Once Facebook SDK is initialized, if we are logged in, we log out to demonstrate the entire authentication cycle.
-            if (FB.IsLoggedIn)
-                FB.LogOut();
-            SetMessage("Facebook Initialized.");
         }
         
         public void LoginWithFacebook()
         {
             SetMessage("Logging into Facebook...");
+            //FB.Android.RetrieveLoginStatus(LoginStatusCallback);
+            var perms = new List<string>(){"public_profile", "email"};
             // We invoke basic login procedure and pass in the callback to process the result
-            FB.LogInWithReadPermissions(new List<string>() {"public_profile", "email", "first_name"}, OnFacebookLoggedIn);
+            FB.LogInWithReadPermissions(perms, OnFacebookLoggedIn);
         }
         
         private void OnHideUnity (bool isGameShown)
