@@ -6,6 +6,7 @@ using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using EasyMobile;
 using LoginResult = PlayFab.ClientModels.LoginResult;
 
 namespace _YajuluSDK._Scripts.Social
@@ -67,7 +68,7 @@ namespace _YajuluSDK._Scripts.Social
 		{
 			if (isLoggedIn)
 				return;
-			loginPanel.SetActive(false);
+			// loginPanel.SetActive(false);
 			profilePanel.SetActive(true);
 			isLoggedIn = true;
 			PlayfabFacebookAuthExample.GetPlayerData(null);
@@ -77,6 +78,7 @@ namespace _YajuluSDK._Scripts.Social
 		{
 			PlayfabFacebookAuthExample.UpdatePlayerDisplayName(displayNameInputField.text);
 		}
+		
 		
 	}
 

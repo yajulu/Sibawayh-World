@@ -1,12 +1,10 @@
-// Import statements introduce all the necessary classes for this example.
-
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Facebook.Unity;
 using PlayFab;
 using PlayFab.ClientModels;
 using UnityEngine;
+using GS = EasyMobile.GameServices;
 using LoginResult = PlayFab.ClientModels.LoginResult;
 
 namespace _YajuluSDK._Scripts.Social
@@ -31,7 +29,87 @@ namespace _YajuluSDK._Scripts.Social
                 // Already initialized, signal an app activation App Event
                 FB.ActivateApp();
             }
-           
+            
+        }
+
+        private void OnEnable()
+        {
+            GS.UserLoginSucceeded += OnGameServicesLogInSucceeded;
+            GS.UserLoginFailed += OnGameServicesLogInFailed;
+        }
+
+        private void OnDisable()
+        {
+            GS.UserLoginSucceeded -= OnGameServicesLogInSucceeded;
+            GS.UserLoginFailed -= OnGameServicesLogInFailed;
+        }
+
+        private void OnGameServicesLogInSucceeded()
+        {
+            #if UNITY_ANDROID
+            Debug.Log($"Game Services Username: {GS.LocalUser.userName}");
+            var authCode = GS.GetServerAuthCode();
+            Debug.Log($"Google Auth Code: {authCode}");
+            if (PlayFabClientAPI.IsClientLoggedIn())
+            {
+                
+                var linkGoogleAccountRequest = new LinkGoogleAccountRequest
+                {
+                    ServerAuthCode = authCode
+                };
+                
+                PlayFabClientAPI.LinkGoogleAccount(linkGoogleAccountRequest, result =>
+                {
+                    Debug.Log($"Google Account Linked Successfully.");
+                }, OnPlayfabAuthFailed);
+            }
+            else
+            {
+                Debug.Log($"Logging In with new Google Account.");
+                var req = new LoginWithGoogleAccountRequest
+                {
+                    ServerAuthCode = authCode,
+                    CreateAccount = true
+                };
+                PlayFabClientAPI.LoginWithGoogleAccount(req, OnPlayfabAuthComplete, OnPlayfabAuthFailed);
+            }
+            #elif UNITY_IOS
+            
+            #endif
+                
+        }
+        
+
+        private void OnGameServicesLogInFailed()
+        {
+            Debug.Log("Game Services Login Failed");
+            PlayLoginWithDeviceID();
+        }
+
+        private void PlayLoginWithDeviceID()
+        {
+            Debug.Log("Logging in with device ID.");
+            #if UNITY_ANDROID
+            var req = new LoginWithAndroidDeviceIDRequest
+            {
+                CreateAccount = true,
+                AndroidDeviceId = SystemInfo.deviceUniqueIdentifier,
+                AndroidDevice = SystemInfo.deviceModel,
+            };
+            PlayFabClientAPI.LoginWithAndroidDeviceID(req, OnPlayfabAuthComplete, OnPlayfabAuthFailed);
+            #elif UNITY_IOS
+            var req = new LoginWithIOSDeviceIDRequest
+            {
+                CreateAccount = true,
+                DeviceId = SystemInfo.deviceUniqueIdentifier,
+                DeviceModel = SystemInfo.deviceModel,
+                // TODO: InfoRequestParameters = new GetPlayerCombinedInfoRequestParams
+                // {
+                //     
+                // }
+            };
+            PlayFabClientAPI.LoginWithIOSDeviceID(req, OnPlayfabAuthComplete, OnPlayfabAuthFailed);
+            #endif
         }
 
         private void OnFacebookInitialized()
@@ -75,6 +153,21 @@ namespace _YajuluSDK._Scripts.Social
             }
         }
 
+        private void PlayFabLoginWithGameServices()
+        {
+            
+        }
+        
+        
+
+        public void TestRequestAuthCode()
+        {
+            GS.GetAnotherServerAuthCode(true, s =>
+            {
+                Debug.Log($"Auth Code: {s}");
+            });
+        }
+
 
         private void OnFacebookLoggedIn(ILoginResult result)
         {
@@ -92,12 +185,28 @@ namespace _YajuluSDK._Scripts.Social
              * We proceed with making a call to PlayFab API. We pass in current Facebook AccessToken and let it create
              * and account using CreateAccount flag set to true. We also pass the callback for Success and Failure results
              */
-                PlayFabClientAPI.LoginWithFacebook(new LoginWithFacebookRequest { CreateAccount = true, AccessToken = AccessToken.CurrentAccessToken.TokenString, 
-                        InfoRequestParameters = new GetPlayerCombinedInfoRequestParams
+                if (PlayFabClientAPI.IsClientLoggedIn())
+                {
+                    var fbReq = new LinkFacebookAccountRequest
                     {
-                        GetPlayerProfile = true
-                    }},
-                    OnPlayfabFacebookAuthComplete, OnPlayfabFacebookAuthFailed);
+                        AccessToken = AccessToken.CurrentAccessToken.TokenString
+                    };
+                    PlayFabClientAPI.LinkFacebookAccount(fbReq,
+                        accountResult =>
+                    {
+                        Debug.Log($"Facebook Account Linked Successfully.");
+                    }, OnPlayfabAuthFailed);
+                }
+                else
+                {
+                    PlayFabClientAPI.LoginWithFacebook(new LoginWithFacebookRequest { CreateAccount = true, AccessToken = AccessToken.CurrentAccessToken.TokenString, 
+                            InfoRequestParameters = new GetPlayerCombinedInfoRequestParams
+                            {
+                                GetPlayerProfile = true
+                            }},
+                        OnPlayfabAuthComplete, OnPlayfabAuthFailed);    
+                }
+                
                 
             }
             else
@@ -108,9 +217,9 @@ namespace _YajuluSDK._Scripts.Social
         }
 
         // When processing both results, we just set the message, explaining what's going on.
-        private void OnPlayfabFacebookAuthComplete(LoginResult result)
+        private void OnPlayfabAuthComplete(LoginResult result)
         {
-            SetMessage("PlayFab Facebook Auth Complete. Session ticket: " + result.SessionTicket);
+            SetMessage("PlayFab Auth Complete. Session ticket: " + result.SessionTicket);
             Debug.Log($"PlayFab ID: {result.PlayFabId}");
             OnPlayerLoggedIn?.Invoke(result);
         }
@@ -153,9 +262,9 @@ namespace _YajuluSDK._Scripts.Social
             OnPlayerProfileRecived?.Invoke(obj.PlayerProfile);
         }
 
-        private void OnPlayfabFacebookAuthFailed(PlayFabError error)
+        private void OnPlayfabAuthFailed(PlayFabError error)
         {
-            SetMessage("PlayFab Facebook Auth Failed: " + error.GenerateErrorReport(), true);
+            SetMessage("PlayFab Auth Failed: " + error.GenerateErrorReport(), true);
         }
 
         public void SetMessage(string message, bool error = false)
@@ -165,6 +274,11 @@ namespace _YajuluSDK._Scripts.Social
                 Debug.LogError(_message);
             else
                 Debug.Log(_message);
+        }
+
+        public void GameServices()
+        {
+            Debug.Log(EasyMobile.GameServices.LocalUser.userName);
         }
 
         // public void OnGUI()

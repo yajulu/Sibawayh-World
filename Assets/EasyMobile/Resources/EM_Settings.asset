@@ -275,21 +275,24 @@ MonoBehaviour:
     mAutoInit: 1
     mAutoInitAfterUserLogout: 0
     mAutoInitDelay: 0
-    mAndroidMaxLoginRequests: 0
+    mAndroidMaxLoginRequests: 3
     mGpgsDebugLogEnabled: 1
     mGpgsPopupGravity: 0
-    mGpgsShouldRequestServerAuthCode: 0
-    mGpgsForceRefreshServerAuthCode: 0
+    mGpgsShouldRequestServerAuthCode: 1
+    mGpgsForceRefreshServerAuthCode: 1
     mGpgsOauthScopes: []
-    mLeaderboards:
-    - _name: Score
-      _iosId: 
-      _androidId: 
+    mLeaderboards: []
     mAchievements:
-    - _name: Successful Login
+    - _name: First Puzzle
       _iosId: 
-      _androidId: 
-    mAndroidXmlResources: 
+      _androidId: CgkI6bjs_aUdEAIQAQ
+    mAndroidXmlResources: "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<!--Google
+      Play game services IDs. Save this file as res/values/games-ids.xml in your
+      project.-->\r\n<resources>\r\n  <!--app_id-->\r\n  <string name=\"app_id\"
+      translatable=\"false\">1006628445289</string>\r\n  <!--package_name-->\r\n 
+      <string name=\"package_name\" translatable=\"false\">com.YajuluStudio.Sibawayh</string>\r\n 
+      <!--achievement First Puzzle-->\r\n  <string name=\"achievement_first_puzzle\"
+      translatable=\"false\">CgkI6bjs_aUdEAIQAQ</string>\r\n</resources>"
     mEnableMultiplayer: 0
     mEnableSavedGames: 0
     mAutoConflictResolutionStrategy: 0

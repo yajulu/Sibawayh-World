@@ -8,8 +8,7 @@ namespace EasyMobile
 {
 	public static class EM_GameServicesConstants
 	{
-		public const string Achievement_Successful_Login = "Successful Login";
-		public const string Leaderboard_Score = "Score";
+		public const string Achievement_First_Puzzle = "First Puzzle";
 
 	}
 }
