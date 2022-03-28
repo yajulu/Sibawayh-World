@@ -26,25 +26,55 @@ namespace _YajuluSDK._Scripts.Social
 		private void OnEnable()
 		{
 			displayNameUpdateButton.onClick.AddListener(UpdatePlayerName);
-			isInitialized = FB.IsInitialized;
-			isLoggedIn = FB.IsLoggedIn;
-			
-			loginPanel.SetActive(false);
+
+			loginPanel.SetActive(true);
 			profilePanel.SetActive(false);
+			
+			PlayfabManager.OnPlayerLoggedIn += OnPlayerLogin;
+			PlayfabManager.OnPlayerProfileReceived += OnPlayerProfileReceived;
+			PlayfabManager.OnFacebookLoginStatusRetrieved += OnFBLoginStatusRetrieved;
 			
 			if (isInitialized)
 			{
-				if(isLoggedIn)
-					loginPanel.SetActive(true);
+				OnFBInitialized();
 			}
 			else
 			{
-				PlayfabFacebookAuthExample.OnFbInitialized += OnFBInitialized;
+				PlayfabManager.OnFbInitialized += OnFBInitialized;
 			}
-			PlayfabFacebookAuthExample.OnPlayerLoggedIn += OnPlayerLogin;
-			PlayfabFacebookAuthExample.OnPlayerProfileRecived += OnPlayerProfileReceived;
+
 			
 		}
+
+		private void OnFBLoginStatusRetrieved(ILoginStatusResult obj)
+		{
+			if (obj.Failed)
+			{
+				Debug.Log($"Login Status Retrieved Failed");
+				Debug.LogError(obj.Error);
+			}
+			
+			if (obj.Cancelled)
+			{
+				Debug.Log($"Login Status Retrieved Canceled");
+			}
+
+			isLoggedIn = FB.IsLoggedIn;
+			
+			Debug.Log($"OnFacebookLoginRetrieved -> LoggedIn: {isLoggedIn}");
+			
+			if (FB.IsLoggedIn)
+			{
+				loginPanel.SetActive(false);
+				profilePanel.SetActive(true);
+			}
+			else
+			{
+				loginPanel.SetActive(true);
+			}
+			
+		}
+
 
 		private void OnPlayerProfileReceived(PlayerProfileModel obj)
 		{
@@ -54,13 +84,12 @@ namespace _YajuluSDK._Scripts.Social
 		private void OnDisable()
 		{
 			displayNameUpdateButton.onClick.RemoveAllListeners();
-			PlayfabFacebookAuthExample.OnPlayerLoggedIn -= OnPlayerLogin;
-			PlayfabFacebookAuthExample.OnFbInitialized -= OnFBInitialized;
+			PlayfabManager.OnPlayerLoggedIn -= OnPlayerLogin;
+			PlayfabManager.OnFbInitialized -= OnFBInitialized;
 		}
 
 		private void OnFBInitialized()
 		{
-			loginPanel.SetActive(true);
 			isInitialized = true;
 		}
 
@@ -71,12 +100,12 @@ namespace _YajuluSDK._Scripts.Social
 			// loginPanel.SetActive(false);
 			profilePanel.SetActive(true);
 			isLoggedIn = true;
-			PlayfabFacebookAuthExample.GetPlayerData(null);
+			PlayfabManager.GetPlayerData(null);
 		}
 
 		private void UpdatePlayerName()
 		{
-			PlayfabFacebookAuthExample.UpdatePlayerDisplayName(displayNameInputField.text);
+			PlayfabManager.UpdatePlayerDisplayName(displayNameInputField.text);
 		}
 		
 		

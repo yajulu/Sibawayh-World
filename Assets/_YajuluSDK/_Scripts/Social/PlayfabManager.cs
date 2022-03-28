@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Facebook.Unity;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
 using PlayFab;
 using PlayFab.ClientModels;
 using UnityEngine;
@@ -9,27 +11,20 @@ using LoginResult = PlayFab.ClientModels.LoginResult;
 
 namespace _YajuluSDK._Scripts.Social
 {
-    public class PlayfabFacebookAuthExample : MonoBehaviour
+    public class PlayfabManager : MonoBehaviour
     {
         // holds the latest message to be displayed on the screen
         private string _message;
 
         public static event Action<LoginResult> OnPlayerLoggedIn;
         public static event Action OnFbInitialized;
-
-        public static event Action<PlayerProfileModel> OnPlayerProfileRecived;
+        public static event Action<ILoginStatusResult> OnFacebookLoginStatusRetrieved;
+        public static event Action<PlayerProfileModel> OnPlayerProfileReceived;
 
         public void Awake()
         {
-            SetMessage("Initializing Facebook..."); // logs the given message and displays it on the screen using OnGUI method
-            if (!FB.IsInitialized) {
-                // This call is required before any other calls to the Facebook API. We pass in the callback to be invoked once initialization is finished
-                FB.Init(OnFacebookInitialized, OnHideUnity);
-            } else {
-                // Already initialized, signal an app activation App Event
-                FB.ActivateApp();
-            }
-            
+            FacebookInitialization();
+            GameServicesInitialization();
         }
 
         private void OnEnable()
@@ -43,22 +38,91 @@ namespace _YajuluSDK._Scripts.Social
             GS.UserLoginSucceeded -= OnGameServicesLogInSucceeded;
             GS.UserLoginFailed -= OnGameServicesLogInFailed;
         }
+        
+        private void FacebookInitialization()
+        {
+            SetMessage("Initializing Facebook..."); // logs the given message and displays it on the screen using OnGUI method
+            if (!FB.IsInitialized) {
+                // This call is required before any other calls to the Facebook API. We pass in the callback to be invoked once initialization is finished
+                FB.Init(OnFacebookInitialized, OnHideUnity);
+            } else {
+                // Already initialized, signal an app activation App Event
+                FB.ActivateApp();
+            }
+
+        }
+
+        public void SilentLogin()
+        {
+            PlayLoginWithDeviceID();
+        }
+
+        public void GameServicesInitialization()
+        {
+#if UNITY_ANDROID
+            Debug.Log($"Game Services: {GS.IsInitialized()}");
+            PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
+                .AddOauthScope("profile")
+                .RequestServerAuthCode(false)
+                .Build();
+            PlayGamesPlatform.InitializeInstance(config);
+            
+            PlayGamesPlatform.DebugLogEnabled = true;
+            
+            PlayGamesPlatform.Activate();
+            
+            // if (GS.IsInitialized())
+            // {
+            // GS.ManagedInit();
+            // }
+#endif
+        }
 
         private void OnGameServicesLogInSucceeded()
         {
-            #if UNITY_ANDROID
+#if UNITY_ANDROID
             Debug.Log($"Game Services Username: {GS.LocalUser.userName}");
-            var authCode = GS.GetServerAuthCode();
-            Debug.Log($"Google Auth Code: {authCode}");
+            GS.GetAnotherServerAuthCode(true,
+                authCode =>
+                {
+                    Debug.Log($"Google Auth Code: {authCode}");
+                    if (PlayFabClientAPI.IsClientLoggedIn())
+                    {
+                
+                        var linkGoogleAccountRequest = new LinkGoogleAccountRequest
+                        {
+                            ServerAuthCode = authCode
+
+                        };
+                
+                        PlayFabClientAPI.LinkGoogleAccount(linkGoogleAccountRequest, result =>
+                        {
+                            Debug.Log($"Google Account Linked Successfully.");
+                        }, OnPlayfabAuthFailed);
+                    }
+                    else
+                    {
+                        Debug.Log($"Logging In with new Google Account.");
+                        var req = new LoginWithGoogleAccountRequest
+                        {
+                            TitleId = PlayFabSettings.TitleId,
+                            ServerAuthCode = authCode,
+                            CreateAccount = true
+                        };
+                        PlayFabClientAPI.LoginWithGoogleAccount(req, OnPlayfabAuthComplete, OnPlayfabAuthFailed);
+                    }
+                });
+
+            
+#elif UNITY_IOS
             if (PlayFabClientAPI.IsClientLoggedIn())
             {
                 
-                var linkGoogleAccountRequest = new LinkGoogleAccountRequest
+                var linkGameCenterAccount = new LinkGameCenterAccountRequest()
                 {
-                    ServerAuthCode = authCode
                 };
                 
-                PlayFabClientAPI.LinkGoogleAccount(linkGoogleAccountRequest, result =>
+                PlayFabClientAPI.LinkGameCenterAccount(linkGameCenterAccount, result =>
                 {
                     Debug.Log($"Google Account Linked Successfully.");
                 }, OnPlayfabAuthFailed);
@@ -66,19 +130,22 @@ namespace _YajuluSDK._Scripts.Social
             else
             {
                 Debug.Log($"Logging In with new Google Account.");
-                var req = new LoginWithGoogleAccountRequest
+                var req = new LoginWithGameCenterRequest()
                 {
-                    ServerAuthCode = authCode,
-                    CreateAccount = true
+                    TitleId = PlayFabSettings.TitleId,
+                    CreateAccount = true,
+                    PlayerId = GS.LocalUser.id
                 };
-                PlayFabClientAPI.LoginWithGoogleAccount(req, OnPlayfabAuthComplete, OnPlayfabAuthFailed);
+                PlayFabClientAPI.LoginWithGameCenter(req, OnPlayfabAuthComplete, OnPlayfabAuthFailed);
             }
-            #elif UNITY_IOS
-            
-            #endif
+#endif
                 
         }
-        
+
+        public void FacebookLogout()
+        {
+            FB.LogOut();
+        }
 
         private void OnGameServicesLogInFailed()
         {
@@ -121,6 +188,9 @@ namespace _YajuluSDK._Scripts.Social
                 // ...
                 SetMessage("Facebook Initialized.");
                 OnFbInitialized?.Invoke();
+#if UNITY_ANDROID
+                FB.Android.RetrieveLoginStatus(OnLoginStatusRetrieved);
+#endif
                 // Once Facebook SDK is initialized, if we are logged in, we log out to demonstrate the entire authentication cycle.
                 // if (FB.IsLoggedIn)
                 // {
@@ -141,7 +211,23 @@ namespace _YajuluSDK._Scripts.Social
             // We invoke basic login procedure and pass in the callback to process the result
             FB.LogInWithReadPermissions(perms, OnFacebookLoggedIn);
         }
+
+        public void LoginWithGameServices()
+        {
+            GS.ManagedInit();
+        }
         
+        private void OnLoginStatusRetrieved(ILoginStatusResult result)
+        { 
+            Debug.Log($"Login Retrieved Failed: {result.Failed}");
+            Debug.Log($"Login Retrieved Canceled: {result.Cancelled}");
+            if( !result.Failed && !result.Cancelled)
+            {
+                OnFacebookLoggedIn(result);
+            }
+            
+            OnFacebookLoginStatusRetrieved?.Invoke(result);
+        }
         private void OnHideUnity (bool isGameShown)
         {
             if (!isGameShown) {
@@ -223,7 +309,6 @@ namespace _YajuluSDK._Scripts.Social
             Debug.Log($"PlayFab ID: {result.PlayFabId}");
             OnPlayerLoggedIn?.Invoke(result);
         }
-
         
         public static void UpdatePlayerDisplayName(string displayName)
         {
@@ -259,7 +344,7 @@ namespace _YajuluSDK._Scripts.Social
         private static void OnPlayerDataReceived(GetPlayerProfileResult obj)
         {
             Debug.Log(obj.PlayerProfile.ToString());
-            OnPlayerProfileRecived?.Invoke(obj.PlayerProfile);
+            OnPlayerProfileReceived?.Invoke(obj.PlayerProfile);
         }
 
         private void OnPlayfabAuthFailed(PlayFabError error)

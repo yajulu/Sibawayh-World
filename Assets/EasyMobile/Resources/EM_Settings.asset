@@ -272,15 +272,16 @@ MonoBehaviour:
         minimumDiskSpaceForAds: 50000000
         disableHardwareId: 0
   mGameServiceSettings:
-    mAutoInit: 1
+    mAutoInit: 0
     mAutoInitAfterUserLogout: 0
-    mAutoInitDelay: 0
-    mAndroidMaxLoginRequests: 3
+    mAutoInitDelay: 3
+    mAndroidMaxLoginRequests: 5
     mGpgsDebugLogEnabled: 1
     mGpgsPopupGravity: 0
-    mGpgsShouldRequestServerAuthCode: 1
+    mGpgsShouldRequestServerAuthCode: 0
     mGpgsForceRefreshServerAuthCode: 1
-    mGpgsOauthScopes: []
+    mGpgsOauthScopes:
+    - profile
     mLeaderboards: []
     mAchievements:
     - _name: First Puzzle
