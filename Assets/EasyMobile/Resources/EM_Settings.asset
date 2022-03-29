@@ -272,18 +272,28 @@ MonoBehaviour:
         minimumDiskSpaceForAds: 50000000
         disableHardwareId: 0
   mGameServiceSettings:
-    mAutoInit: 1
+    mAutoInit: 0
     mAutoInitAfterUserLogout: 0
-    mAutoInitDelay: 0
-    mAndroidMaxLoginRequests: 0
-    mGpgsDebugLogEnabled: 0
+    mAutoInitDelay: 3
+    mAndroidMaxLoginRequests: 5
+    mGpgsDebugLogEnabled: 1
     mGpgsPopupGravity: 0
     mGpgsShouldRequestServerAuthCode: 0
-    mGpgsForceRefreshServerAuthCode: 0
-    mGpgsOauthScopes: []
+    mGpgsForceRefreshServerAuthCode: 1
+    mGpgsOauthScopes:
+    - profile
     mLeaderboards: []
-    mAchievements: []
-    mAndroidXmlResources: 
+    mAchievements:
+    - _name: First Puzzle
+      _iosId: 
+      _androidId: CgkI6bjs_aUdEAIQAQ
+    mAndroidXmlResources: "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<!--Google
+      Play game services IDs. Save this file as res/values/games-ids.xml in your
+      project.-->\r\n<resources>\r\n  <!--app_id-->\r\n  <string name=\"app_id\"
+      translatable=\"false\">1006628445289</string>\r\n  <!--package_name-->\r\n 
+      <string name=\"package_name\" translatable=\"false\">com.YajuluStudio.Sibawayh</string>\r\n 
+      <!--achievement First Puzzle-->\r\n  <string name=\"achievement_first_puzzle\"
+      translatable=\"false\">CgkI6bjs_aUdEAIQAQ</string>\r\n</resources>"
     mEnableMultiplayer: 0
     mEnableSavedGames: 0
     mAutoConflictResolutionStrategy: 0
@@ -291,7 +301,7 @@ MonoBehaviour:
   mInAppPurchaseSettings:
     mAutoInit: 1
     mTargetAndroidStore: 0
-    mSimulateAppleAskToBuy: 0
+    mSimulateAppleAskToBuy: 1
     mInterceptApplePromotionalPurchases: 0
     mEnableAmazonSandboxTesting: 0
     mValidateAppleReceipt: 0
@@ -329,7 +339,14 @@ MonoBehaviour:
       mContent: 
       mTitle: Privacy Consent
       mToggles: []
-      mActionButtons: []
+      mActionButtons:
+      - id: 
+        title: 
+        interactable: 0
+        titleColor: {r: 0, g: 0, b: 0, a: 0}
+        backgroundColor: {r: 0, g: 0, b: 0, a: 0}
+        uninteractableTitleColor: {r: 0, g: 0, b: 0, a: 0}
+        uninteractableBackgroundColor: {r: 0, g: 0, b: 0, a: 0}
     mConsentDialogComposerSettings:
       mToggleSelectedIndex: 0
       mButtonSelectedIndex: 0
@@ -396,8 +413,8 @@ MonoBehaviour:
   mRuntimeAutoInitialization: 1
   mIsAdModuleEnable: 0
   mIsIAPModuleEnable: 1
-  mIsGameServiceModuleEnable: 0
+  mIsGameServiceModuleEnable: 1
   mIsNotificationModuleEnable: 0
   mIsSharingModuleEnable: 0
-  mActiveModuleIndex: 3
+  mActiveModuleIndex: 1
   mIsSelectingModule: 0
