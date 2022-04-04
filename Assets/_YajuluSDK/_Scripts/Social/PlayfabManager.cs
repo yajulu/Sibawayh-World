@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using EasyMobile;
 using Facebook.Unity;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
@@ -25,6 +26,9 @@ namespace _YajuluSDK._Scripts.Social
         {
             FacebookInitialization();
             GameServicesInitialization();
+            //Intializing Easy Mobile
+            if (!RuntimeManager.IsInitialized())
+            RuntimeManager.Init();
         }
 
         private void OnEnable()
