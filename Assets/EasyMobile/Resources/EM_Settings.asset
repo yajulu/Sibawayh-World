@@ -81,8 +81,12 @@ MonoBehaviour:
         keys: []
         values: []
       mCustomInterstitialAdIds:
-        keys: []
-        values: []
+        keys:
+        - mName: Game_Over
+          mUseCustomName: 0
+        values:
+        - mIosId: ca-app-pub-5240449996090728/7840291954
+          mAndroidId: ca-app-pub-5240449996090728/1434665700
       mCustomRewardedAdIds:
         keys: []
         values: []
