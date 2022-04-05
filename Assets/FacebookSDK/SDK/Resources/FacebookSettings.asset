@@ -24,7 +24,8 @@ MonoBehaviour:
   status: 1
   xfbml: 0
   frictionlessRequests: 1
-  androidKeystorePath: D:/Work/Yajulu/Sibawayh World/keystore/Sibawayh World.keystore
+  androidKeystorePath: D:\Game Development\Projects Assets\Yajulu\Sibawayh World\keystore\Sibawayh
+    World.keystore
   iosURLSuffix: 
   appLinkSchemes:
   - list: []

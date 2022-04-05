@@ -54,7 +54,7 @@ MonoBehaviour:
         keys: []
         values: []
     mAdMob:
-      mEnable: 0
+      mEnable: 1
       mTargetingSettings:
         mTagForChildDirectedTreatment: 0
         mExtraOptions:
@@ -81,8 +81,12 @@ MonoBehaviour:
         keys: []
         values: []
       mCustomInterstitialAdIds:
-        keys: []
-        values: []
+        keys:
+        - mName: Game_Over
+          mUseCustomName: 0
+        values:
+        - mIosId: ca-app-pub-5240449996090728/7840291954
+          mAndroidId: ca-app-pub-5240449996090728/1434665700
       mCustomRewardedAdIds:
         keys: []
         values: []
@@ -304,9 +308,16 @@ MonoBehaviour:
     mSimulateAppleAskToBuy: 1
     mInterceptApplePromotionalPurchases: 0
     mEnableAmazonSandboxTesting: 0
-    mValidateAppleReceipt: 0
-    mValidateGooglePlayReceipt: 0
-    mProducts: []
+    mValidateAppleReceipt: 1
+    mValidateGooglePlayReceipt: 1
+    mProducts:
+    - _name: Fake Item 1
+      _type: 0
+      _id: testing_product_1
+      _price: 20
+      _description: 
+      _storeSpecificIds: []
+      _isEditingAdvanced: 1
   mNotificationSettings:
     mAutoInit: 1
     mAutoInitDelay: 0
@@ -411,10 +422,10 @@ MonoBehaviour:
       - mKey: NSContactsUsageDescription
         mValue: '[Your usage description]'
   mRuntimeAutoInitialization: 1
-  mIsAdModuleEnable: 0
+  mIsAdModuleEnable: 1
   mIsIAPModuleEnable: 1
   mIsGameServiceModuleEnable: 1
   mIsNotificationModuleEnable: 0
   mIsSharingModuleEnable: 0
-  mActiveModuleIndex: 1
+  mActiveModuleIndex: 0
   mIsSelectingModule: 0
