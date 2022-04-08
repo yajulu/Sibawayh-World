@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "942483027339",
+    "project_id": "sibawayh-world",
+    "storage_bucket": "sibawayh-world.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:942483027339:android:62d913ae59a1860ae72b8e",
+        "android_client_info": {
+          "package_name": "com.YajuluStudio.Sibawayh"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "942483027339-v18lt6nemna92j32cl4aevlj22k1964f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDisisMXD26ImANbEFftgcpg-bnn9l8fWs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "942483027339-v18lt6nemna92j32cl4aevlj22k1964f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "942483027339-hncu0tmni7rlcbpecua6g4g8g5i78hhh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.Yajulu.Sibawayh"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

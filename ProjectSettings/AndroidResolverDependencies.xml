@@ -12,7 +12,12 @@
     <package>com.facebook.android:facebook-login:[11.0, 12)</package>
     <package>com.facebook.android:facebook-share:[11.0, 12)</package>
     <package>com.google.android.gms:play-services-ads:20.6.0</package>
+    <package>com.google.android.gms:play-services-base:17.6.0</package>
     <package>com.google.android.play:core:1.8.+</package>
+    <package>com.google.firebase:firebase-analytics:20.0.0</package>
+    <package>com.google.firebase:firebase-analytics-unity:8.8.0</package>
+    <package>com.google.firebase:firebase-app-unity:8.8.0</package>
+    <package>com.google.firebase:firebase-common:20.0.0</package>
     <package>com.google.games:gpgs-plugin-support:0.10.14</package>
     <package>com.parse.bolts:bolts-android:1.4.0</package>
     <package>com.sglib.easymobile:easy-mobile:1.+</package>
@@ -84,12 +89,26 @@
     <file>Assets/Plugins/Android/com.google.android.gms.play-services-basement-17.6.0.aar</file>
     <file>Assets/Plugins/Android/com.google.android.gms.play-services-drive-17.0.0.aar</file>
     <file>Assets/Plugins/Android/com.google.android.gms.play-services-games-21.0.0.aar</file>
-    <file>Assets/Plugins/Android/com.google.android.gms.play-services-measurement-base-18.0.3.aar</file>
-    <file>Assets/Plugins/Android/com.google.android.gms.play-services-measurement-sdk-api-18.0.3.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.gms.play-services-measurement-20.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.gms.play-services-measurement-api-20.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.gms.play-services-measurement-base-20.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.gms.play-services-measurement-impl-20.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.gms.play-services-measurement-sdk-20.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.gms.play-services-measurement-sdk-api-20.0.0.aar</file>
     <file>Assets/Plugins/Android/com.google.android.gms.play-services-nearby-18.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.android.gms.play-services-stats-17.0.0.aar</file>
     <file>Assets/Plugins/Android/com.google.android.gms.play-services-tasks-17.2.1.aar</file>
     <file>Assets/Plugins/Android/com.google.android.play.core-1.8.3.aar</file>
     <file>Assets/Plugins/Android/com.google.android.ump.user-messaging-platform-1.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.firebase.firebase-analytics-20.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.firebase.firebase-analytics-unity-8.8.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.firebase.firebase-annotations-16.0.0.jar</file>
+    <file>Assets/Plugins/Android/com.google.firebase.firebase-app-unity-8.8.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.firebase.firebase-common-20.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.firebase.firebase-components-17.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.firebase.firebase-installations-17.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.firebase.firebase-installations-interop-17.0.0.aar</file>
+    <file>Assets/Plugins/Android/com.google.firebase.firebase-measurement-connector-19.0.0.aar</file>
     <file>Assets/Plugins/Android/com.google.games.gpgs-plugin-support-0.10.14.aar</file>
     <file>Assets/Plugins/Android/com.google.guava.listenablefuture-1.0.jar</file>
     <file>Assets/Plugins/Android/com.google.zxing.core-3.3.3.jar</file>

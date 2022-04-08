@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>942483027339-hncu0tmni7rlcbpecua6g4g8g5i78hhh.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.942483027339-hncu0tmni7rlcbpecua6g4g8g5i78hhh</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBSWEN-3-cq3mOzVtj9Uu0k5YTfoItr8D0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>942483027339</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.Yajulu.Sibawayh</string>
+	<key>PROJECT_ID</key>
+	<string>sibawayh-world</string>
+	<key>STORAGE_BUCKET</key>
+	<string>sibawayh-world.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:942483027339:ios:aaad0222d2d20038e72b8e</string>
+</dict>
+</plist>
