@@ -11,6 +11,7 @@ namespace _YajuluSDK._Scripts.Ads
 
         public void ShowAdIntersential()
         {
+            
             // Check if interstitial ad is ready
             bool isReady = Advertising.IsInterstitialAdReady();
 
@@ -23,6 +24,7 @@ namespace _YajuluSDK._Scripts.Ads
             }
             else
             {
+                Advertising.LoadInterstitialAd();
                 Debug.Log("Ad failed to show");
             }
         }
@@ -32,6 +34,7 @@ namespace _YajuluSDK._Scripts.Ads
         {
             Advertising.Initialize();
             Advertising.InterstitialAdCompleted += InterstitialAdCompletedHandler;
+            
         }
 
         // The event handler
