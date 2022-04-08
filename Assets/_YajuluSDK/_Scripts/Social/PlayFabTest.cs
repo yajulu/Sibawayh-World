@@ -22,10 +22,17 @@ namespace _YajuluSDK._Scripts.Social
 		[SerializeField] private TextMeshProUGUI displayName;
 		[SerializeField] private TMP_InputField displayNameInputField;
 		[SerializeField] private Button displayNameUpdateButton;
+		
+		[SerializeField] private TextMeshProUGUI scoreTest;
+		[SerializeField] private TMP_InputField scoreInputField;
+		[SerializeField] private Button scoreUpdateButton;
+		[SerializeField] private Button leaderboardButton;
 
 		private void OnEnable()
 		{
 			displayNameUpdateButton.onClick.AddListener(UpdatePlayerName);
+			scoreUpdateButton.onClick.AddListener(UpdatePlayerScore);
+			leaderboardButton.onClick.AddListener(ShowLeaderboard);
 
 			loginPanel.SetActive(true);
 			profilePanel.SetActive(false);
@@ -79,6 +86,8 @@ namespace _YajuluSDK._Scripts.Social
 		private void OnPlayerProfileReceived(PlayerProfileModel obj)
 		{
 			displayName.SetText(obj.DisplayName);
+			scoreTest.SetText(obj.Statistics[0].Value.ToString());
+			PlayfabManager.GetPlayerStatistics(null);
 		}
 
 		private void OnDisable()
@@ -106,6 +115,16 @@ namespace _YajuluSDK._Scripts.Social
 		private void UpdatePlayerName()
 		{
 			PlayfabManager.UpdatePlayerDisplayName(displayNameInputField.text);
+		}
+		
+		private void UpdatePlayerScore()
+		{
+			PlayfabManager.UpdateLeaderBoard("MaxScore", int.Parse(scoreInputField.text));
+		}
+
+		private void ShowLeaderboard()
+		{
+			PlayfabManager.GetLeaderBoardData("MaxScore", 0);
 		}
 		
 		

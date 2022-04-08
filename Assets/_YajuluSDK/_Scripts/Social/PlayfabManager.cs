@@ -21,14 +21,14 @@ namespace _YajuluSDK._Scripts.Social
         public static event Action OnFbInitialized;
         public static event Action<ILoginStatusResult> OnFacebookLoginStatusRetrieved;
         public static event Action<PlayerProfileModel> OnPlayerProfileReceived;
-
+        
         public void Awake()
         {
             FacebookInitialization();
             GameServicesInitialization();
             //Intializing Easy Mobile
             if (!RuntimeManager.IsInitialized())
-            RuntimeManager.Init();
+                RuntimeManager.Init();
         }
 
         private void OnEnable()
@@ -247,6 +247,11 @@ namespace _YajuluSDK._Scripts.Social
         {
             
         }
+
+        private static void OnError(PlayFabError playFabError)
+        {
+            Debug.LogError(playFabError.GenerateErrorReport());
+        }
         
         
 
@@ -334,7 +339,12 @@ namespace _YajuluSDK._Scripts.Social
         {
             var request = new GetPlayerProfileRequest
             {
-                PlayFabId = playFabID
+                PlayFabId = playFabID,
+                ProfileConstraints = new PlayerProfileViewConstraints
+                {
+                    ShowStatistics = true,
+                    ShowDisplayName = true
+                }
             };
             PlayFabClientAPI.GetPlayerProfile(request, OnPlayerDataReceived, OnPlayerProfileRequestError);
         }
@@ -369,6 +379,87 @@ namespace _YajuluSDK._Scripts.Social
         {
             Debug.Log(EasyMobile.GameServices.LocalUser.userName);
         }
+
+        #region Leaderboards
+
+        public static void GetLeaderBoardData(string statisticName, int startPosition)
+        {
+            var request  = new GetLeaderboardRequest
+            {
+                StartPosition = startPosition,
+                StatisticName = statisticName,
+                MaxResultsCount = 10
+            };
+            
+            PlayFabClientAPI.GetLeaderboard(request, OnGetLeaderboardSuccess, OnError );
+        }
+
+        private static void OnGetLeaderboardSuccess(GetLeaderboardResult obj)
+        {
+            Debug.Log("---- LeaderBoard Start ----");
+            foreach (var leaderboardEntry in obj.Leaderboard)
+            {
+                Debug.Log($"{leaderboardEntry.Position} - " +
+                          $"{leaderboardEntry.PlayFabId} - " +
+                          $"{leaderboardEntry.StatValue} - " +
+                          $"{leaderboardEntry.DisplayName}");
+            }
+            Debug.Log("---- LeaderBoard End ----");
+        }
+
+        public static void UpdateLeaderBoard(string statistics, int value)
+        {
+            var request = new UpdatePlayerStatisticsRequest
+            {
+                Statistics = new List<StatisticUpdate>
+                {
+                    new StatisticUpdate
+                    {
+                        StatisticName = statistics,
+                        Value = value
+                    }
+                }
+            };
+            
+            PlayFabClientAPI.UpdatePlayerStatistics(request, OnUpdatePlayerStatisticsSuccess, OnError);
+        }
+
+        private static void OnUpdatePlayerStatisticsSuccess(UpdatePlayerStatisticsResult obj)
+        {
+            Debug.Log($"Player Statistics Updated Successfully");
+            //TODO: maybe update the leaderboard to reflect the change.
+            GetPlayerData(null);
+        }
+
+        public static void GetPlayerStatistics(List<string> statisticNames)
+        {
+            GetPlayerStatisticsRequest request;
+            if (statisticNames == null)
+            {
+                request = new GetPlayerStatisticsRequest();    
+            }
+            else
+            {
+                request = new GetPlayerStatisticsRequest
+                {
+                    StatisticNames = statisticNames
+                };
+            }
+            
+            PlayFabClientAPI.GetPlayerStatistics(request, OnGetPlayerStatisticsSuccess, OnError);
+        }
+
+        private static void OnGetPlayerStatisticsSuccess(GetPlayerStatisticsResult obj)
+        {
+            Debug.Log("---------- Statistics Start -------------");
+            foreach (var statisticValue in obj.Statistics)
+            {
+                Debug.Log($"{statisticValue.StatisticName}: {statisticValue.Value}");
+            }
+            Debug.Log("---------- Statistics End -------------");
+        }
+
+        #endregion
 
         // public void OnGUI()
         // {
