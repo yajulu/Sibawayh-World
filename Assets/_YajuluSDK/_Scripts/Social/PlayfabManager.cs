@@ -42,14 +42,17 @@ namespace _YajuluSDK._Scripts.Social
             GS.UserLoginSucceeded -= OnGameServicesLogInSucceeded;
             GS.UserLoginFailed -= OnGameServicesLogInFailed;
         }
-        
+
         private void FacebookInitialization()
         {
             SetMessage("Initializing Facebook..."); // logs the given message and displays it on the screen using OnGUI method
-            if (!FB.IsInitialized) {
+            if (!FB.IsInitialized)
+            {
                 // This call is required before any other calls to the Facebook API. We pass in the callback to be invoked once initialization is finished
                 FB.Init(OnFacebookInitialized, OnHideUnity);
-            } else {
+            }
+            else
+            {
                 // Already initialized, signal an app activation App Event
                 FB.ActivateApp();
             }
@@ -70,11 +73,11 @@ namespace _YajuluSDK._Scripts.Social
                 .RequestServerAuthCode(false)
                 .Build();
             PlayGamesPlatform.InitializeInstance(config);
-            
+
             PlayGamesPlatform.DebugLogEnabled = true;
-            
+
             PlayGamesPlatform.Activate();
-            
+
             // if (GS.IsInitialized())
             // {
             // GS.ManagedInit();
@@ -92,13 +95,13 @@ namespace _YajuluSDK._Scripts.Social
                     Debug.Log($"Google Auth Code: {authCode}");
                     if (PlayFabClientAPI.IsClientLoggedIn())
                     {
-                
+
                         var linkGoogleAccountRequest = new LinkGoogleAccountRequest
                         {
                             ServerAuthCode = authCode
 
                         };
-                
+
                         PlayFabClientAPI.LinkGoogleAccount(linkGoogleAccountRequest, result =>
                         {
                             Debug.Log($"Google Account Linked Successfully.");
@@ -117,7 +120,7 @@ namespace _YajuluSDK._Scripts.Social
                     }
                 });
 
-            
+
 #elif UNITY_IOS
             if (PlayFabClientAPI.IsClientLoggedIn())
             {
@@ -143,7 +146,7 @@ namespace _YajuluSDK._Scripts.Social
                 PlayFabClientAPI.LoginWithGameCenter(req, OnPlayfabAuthComplete, OnPlayfabAuthFailed);
             }
 #endif
-                
+
         }
 
         public void FacebookLogout()
@@ -160,7 +163,7 @@ namespace _YajuluSDK._Scripts.Social
         private void PlayLoginWithDeviceID()
         {
             Debug.Log("Logging in with device ID.");
-            #if UNITY_ANDROID
+#if UNITY_ANDROID
             var req = new LoginWithAndroidDeviceIDRequest
             {
                 CreateAccount = true,
@@ -168,7 +171,7 @@ namespace _YajuluSDK._Scripts.Social
                 AndroidDevice = SystemInfo.deviceModel,
             };
             PlayFabClientAPI.LoginWithAndroidDeviceID(req, OnPlayfabAuthComplete, OnPlayfabAuthFailed);
-            #elif UNITY_IOS
+#elif UNITY_IOS
             var req = new LoginWithIOSDeviceIDRequest
             {
                 CreateAccount = true,
@@ -180,12 +183,13 @@ namespace _YajuluSDK._Scripts.Social
                 // }
             };
             PlayFabClientAPI.LoginWithIOSDeviceID(req, OnPlayfabAuthComplete, OnPlayfabAuthFailed);
-            #endif
+#endif
         }
 
         private void OnFacebookInitialized()
         {
-            if (FB.IsInitialized) {
+            if (FB.IsInitialized)
+            {
                 // Signal an app activation App Event
                 FB.ActivateApp();
                 // Continue with Facebook SDK
@@ -201,17 +205,19 @@ namespace _YajuluSDK._Scripts.Social
                 //     FB.LogOut();
                 //     SetMessage("Logging Out.");
                 // }
-            } else {
+            }
+            else
+            {
                 Debug.Log("Failed to Initialize the Facebook SDK");
             }
-            
+
         }
-        
+
         public void LoginWithFacebook()
         {
             SetMessage("Logging into Facebook...");
             //FB.Android.RetrieveLoginStatus(LoginStatusCallback);
-            var perms = new List<string>(){"public_profile", "email"};
+            var perms = new List<string>() { "public_profile", "email" };
             // We invoke basic login procedure and pass in the callback to process the result
             FB.LogInWithReadPermissions(perms, OnFacebookLoggedIn);
         }
@@ -220,24 +226,27 @@ namespace _YajuluSDK._Scripts.Social
         {
             GS.ManagedInit();
         }
-        
+
         private void OnLoginStatusRetrieved(ILoginStatusResult result)
-        { 
+        {
             Debug.Log($"Login Retrieved Failed: {result.Failed}");
             Debug.Log($"Login Retrieved Canceled: {result.Cancelled}");
-            if( !result.Failed && !result.Cancelled)
+            if (!result.Failed && !result.Cancelled)
             {
                 OnFacebookLoggedIn(result);
             }
-            
+
             OnFacebookLoginStatusRetrieved?.Invoke(result);
         }
-        private void OnHideUnity (bool isGameShown)
+        private void OnHideUnity(bool isGameShown)
         {
-            if (!isGameShown) {
+            if (!isGameShown)
+            {
                 // Pause the game - we will need to hide
                 Time.timeScale = 0;
-            } else {
+            }
+            else
+            {
                 // Resume the game - we're getting focus again
                 Time.timeScale = 1;
             }
@@ -245,7 +254,7 @@ namespace _YajuluSDK._Scripts.Social
 
         private void PlayFabLoginWithGameServices()
         {
-            
+
         }
 
         private static void OnError(PlayFabError playFabError)
@@ -254,6 +263,8 @@ namespace _YajuluSDK._Scripts.Social
         }
         
         
+
+
 
         public void TestRequestAuthCode()
         {
@@ -294,15 +305,19 @@ namespace _YajuluSDK._Scripts.Social
                 }
                 else
                 {
-                    PlayFabClientAPI.LoginWithFacebook(new LoginWithFacebookRequest { CreateAccount = true, AccessToken = AccessToken.CurrentAccessToken.TokenString, 
-                            InfoRequestParameters = new GetPlayerCombinedInfoRequestParams
-                            {
-                                GetPlayerProfile = true
-                            }},
-                        OnPlayfabAuthComplete, OnPlayfabAuthFailed);    
+                    PlayFabClientAPI.LoginWithFacebook(new LoginWithFacebookRequest
+                    {
+                        CreateAccount = true,
+                        AccessToken = AccessToken.CurrentAccessToken.TokenString,
+                        InfoRequestParameters = new GetPlayerCombinedInfoRequestParams
+                        {
+                            GetPlayerProfile = true
+                        }
+                    },
+                        OnPlayfabAuthComplete, OnPlayfabAuthFailed);
                 }
-                
-                
+
+
             }
             else
             {
@@ -318,7 +333,7 @@ namespace _YajuluSDK._Scripts.Social
             Debug.Log($"PlayFab ID: {result.PlayFabId}");
             OnPlayerLoggedIn?.Invoke(result);
         }
-        
+
         public static void UpdatePlayerDisplayName(string displayName)
         {
             var request = new UpdateUserTitleDisplayNameRequest
@@ -334,7 +349,7 @@ namespace _YajuluSDK._Scripts.Social
                 },
                 error => Debug.LogError(error.GenerateErrorReport()));
         }
-        
+
         public static void GetPlayerData(string playFabID)
         {
             var request = new GetPlayerProfileRequest
@@ -352,7 +367,7 @@ namespace _YajuluSDK._Scripts.Social
         private static void OnPlayerProfileRequestError(PlayFabError obj)
         {
             Debug.LogError(obj.GenerateErrorReport());
-            
+
         }
 
         private static void OnPlayerDataReceived(GetPlayerProfileResult obj)
@@ -467,5 +482,13 @@ namespace _YajuluSDK._Scripts.Social
         //     var area = new Rect(0,0,Screen.width,Screen.height);
         //     GUI.Label(area, _message,style);
         // }
+
+
+        //Should be moved to another script
+        public void RateUs()
+        {
+            // Show the rating dialog with default behavior
+            StoreReview.RequestRating();
+        }
     }
 }
