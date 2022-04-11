@@ -26,7 +26,7 @@ MonoBehaviour:
       bannerAdNetwork: 2
       interstitialAdNetwork: 2
       rewardedAdNetwork: 2
-      rewardedInterstitialNetwork: 0
+      rewardedInterstitialNetwork: 2
     mAdColony:
       mEnable: 0
       mAppId:
@@ -427,5 +427,5 @@ MonoBehaviour:
   mIsGameServiceModuleEnable: 1
   mIsNotificationModuleEnable: 0
   mIsSharingModuleEnable: 1
-  mActiveModuleIndex: 0
-  mIsSelectingModule: 0
+  mActiveModuleIndex: 1
+  mIsSelectingModule: 1
