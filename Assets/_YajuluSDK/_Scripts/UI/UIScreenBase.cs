@@ -1,24 +1,42 @@
+using System;
+using UnityEngine;
+
 namespace _YajuluSDK._Scripts.UI
 {
     public class UIScreenBase : UIElementBase
     {
-        // Start is called before the first frame update
-        void Start()
-        {
-        
-        }
+        public eUIScreenState State { get; private set; } = eUIScreenState.Closed;
 
-        // Update is called once per frame
-        void Update()
-        {
-        
-        }
+        private eUIScreenState _previousState;
 
-        public virtual void Open()
+        private Action _openSucceedsAction;
+        private Action _openFailedAction;
+        
+        private Action _closeSuccessAction;
+        private Action _closeFailedAction;
+
+        
+        public void Open(Action onSucceeded = null, Action onFailed = null)
         {
+            if (State != eUIScreenState.Closed)
+            {
+                Debug.LogWarning($"Screen {this.GetType().Name} cannot be opened!, Current State {State}");
+                return;
+            }
+
+            _openSucceedsAction = onSucceeded;
+            _openFailedAction = onFailed;
+            
+            var prevState = State;
+            State = eUIScreenState.PreOpen;
+            UIScreenManager.Instance.ScreenPreOpened(this);
             if (OnScreenPreOpen())
             {
                 OnScreenOpenStarted();
+            }
+            else
+            {
+                State = prevState;
             }
         }
 
@@ -29,6 +47,7 @@ namespace _YajuluSDK._Scripts.UI
         
         protected virtual void OnScreenOpenStarted()
         {
+            State = eUIScreenState.OpenStarted;
             UIScreenManager.Instance.ScreenOpenStarted(this);
             
             OpenAnimation();
@@ -43,25 +62,48 @@ namespace _YajuluSDK._Scripts.UI
 
         protected virtual void OnScreenOpenEnded()
         {
-            UIScreenManager.Instance.ScreenCloseEnded(this);
+            State = eUIScreenState.Opened;
+            
+            UIScreenManager.Instance.ScreenOpenEnded(this);
+            _openSucceedsAction?.Invoke();
+            _openSucceedsAction = null;
         }
-        
-        public virtual void Close()
+
+        public void Close(Action onSucceeded = null, Action onFailed = null)
         {
+            
+            if (State != eUIScreenState.Opened)
+            {
+                Debug.LogWarning($"Screen {this.GetType().Name} cannot be closed!, Current State {State}");
+                return;
+            }
+            
+            _closeSuccessAction = onSucceeded;
+            _closeFailedAction = onFailed;
+            
+            var prevState = State;
+            State = eUIScreenState.PreClose;
+            UIScreenManager.Instance.ScreenPreClosed(this);
+            
             if (OnScreenPreClose())
             {
                 OnScreenCloseStarted();
+            }
+            else
+            {
+                State = prevState;
             }
         }
 
         protected virtual bool OnScreenPreClose()
         {
-            UIScreenManager.Instance.ScreenPreOpened(this);
+            
             return true;
         }
 
         protected virtual void OnScreenCloseStarted()
         {
+            State = eUIScreenState.CloseStarted;
             UIScreenManager.Instance.ScreenCloseStarted(this);
             
             CloseAnimation();
@@ -76,7 +118,10 @@ namespace _YajuluSDK._Scripts.UI
 
         protected virtual void OnScreenCloseEnded()
         {
+            State = eUIScreenState.Closed;
             UIScreenManager.Instance.ScreenCloseEnded(this);
+            _closeSuccessAction?.Invoke();
+            _closeSuccessAction = null;
         }
         
     }

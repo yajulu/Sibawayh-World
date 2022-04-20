@@ -1,7 +1,7 @@
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace _YajuluSDK._Scripts.MISC
+namespace _YajuluSDK._Scripts.Essentials
 {
     public abstract class Singleton<T> : Singleton where T : MonoBehaviour
     {
