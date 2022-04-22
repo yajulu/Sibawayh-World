@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 namespace _YajuluSDK._Scripts.UI
 {
-    [RequireComponent(typeof(Button))]
+    [RequireComponent(typeof(Button)), Serializable]
     public class UINavigationButton : UIElementBase
     {
-        [SerializeField, ValueDropdown(nameof(ScreensList))] private UIScreenBase navigateToScreen;
-        [SerializeField] private bool closeCurrent;
-        private List<UIScreenBase> ScreensList => FindObjectOfType<UIScreenManager>().ScreenRefs.ScreenBaseList;
+        public UINavigationData NavigationData => navigationData;
+        [SerializeField] private UINavigationData navigationData = new UINavigationData();
 
         private Button _button;
 
@@ -32,8 +32,16 @@ namespace _YajuluSDK._Scripts.UI
 
         private void Navigate()
         {
-            UIScreenManager.Instance.NavigateTo(navigateToScreen, closeCurrent);
+            UIScreenManager.Instance.NavigateTo(navigationData.navigateToScreen, navigationData.closeCurrent);
         }
         
+    }
+    
+    [Serializable]
+    public class UINavigationData 
+    {
+        [SerializeField, ValueDropdown(nameof(ScreensList))] public UIScreenBase navigateToScreen;
+        [SerializeField] public bool closeCurrent;
+        private List<UIScreenBase> ScreensList => Object.FindObjectOfType<UIScreenManager>().ScreenRefs.ScreenBaseList;
     }
 }

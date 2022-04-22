@@ -8,8 +8,9 @@ namespace PROJECT.Scripts.UI
     {
         private Button navButton;
         
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             navButton = GetComponentInChildren<Button>();
         }
         protected override void OpenAnimation()

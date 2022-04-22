@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace _YajuluSDK._Scripts.UI
 {
+    [RequireComponent(typeof(UIScreenNavigatorController))]
     public class UIScreenBase : UIElementBase
     {
         public eUIScreenState State { get; private set; } = eUIScreenState.Closed;
@@ -15,7 +16,13 @@ namespace _YajuluSDK._Scripts.UI
         private Action _closeSuccessAction;
         private Action _closeFailedAction;
 
-        
+        private UIScreenNavigatorController navController;
+
+        protected virtual void Awake()
+        {
+            navController = GetComponent<UIScreenNavigatorController>();
+        }
+
         public void Open(Action onSucceeded = null, Action onFailed = null)
         {
             if (State != eUIScreenState.Closed)
