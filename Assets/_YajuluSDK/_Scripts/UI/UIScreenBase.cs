@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using UnityEngine;
 
 namespace _YajuluSDK._Scripts.UI
@@ -23,6 +24,22 @@ namespace _YajuluSDK._Scripts.UI
             navController = GetComponent<UIScreenNavigatorController>();
         }
 
+        public void SkipAnimation()
+        {
+            switch (State)
+            {
+                case eUIScreenState.OpenStarted:
+                    OnSkipOpenAnimation();
+                    break;
+                case eUIScreenState.CloseStarted:
+                    OnSkipCloseAnimation();
+                    break;
+                default:
+                    Debug.LogError($"The Screen State cannot be skipped.");
+                    break;
+            }
+        }
+
         public void Open(Action onSucceeded = null, Action onFailed = null)
         {
             if (State != eUIScreenState.Closed)
@@ -36,8 +53,9 @@ namespace _YajuluSDK._Scripts.UI
             
             var prevState = State;
             State = eUIScreenState.PreOpen;
-            UIScreenManager.Instance.ScreenPreOpened(this);
-            if (OnScreenPreOpen())
+            var preOpen = OnScreenPreOpen();
+            UIScreenManager.Instance.ScreenPreOpened(this, preOpen);
+            if (preOpen)
             {
                 OnScreenOpenStarted();
             }
@@ -66,9 +84,18 @@ namespace _YajuluSDK._Scripts.UI
             
             OnScreenOpenEnded();
         }
+        
+        protected virtual void OnSkipOpenAnimation()
+        {
+            gameObject.SetActive(true);
+            OnScreenOpenEnded();
+        }
 
         protected virtual void OnScreenOpenEnded()
         {
+            if (State == eUIScreenState.Opened)
+                return;
+            
             State = eUIScreenState.Opened;
             
             UIScreenManager.Instance.ScreenOpenEnded(this);
@@ -90,9 +117,10 @@ namespace _YajuluSDK._Scripts.UI
             
             var prevState = State;
             State = eUIScreenState.PreClose;
-            UIScreenManager.Instance.ScreenPreClosed(this);
+            var preClose = OnScreenPreOpen();
+            UIScreenManager.Instance.ScreenPreClosed(this, preClose);
             
-            if (OnScreenPreClose())
+            if (preClose)
             {
                 OnScreenCloseStarted();
             }
@@ -117,6 +145,13 @@ namespace _YajuluSDK._Scripts.UI
         }
 
         protected virtual void CloseAnimation()
+        {
+            gameObject.SetActive(false);
+            
+            OnScreenCloseEnded();
+        }
+        
+        protected virtual void OnSkipCloseAnimation()
         {
             gameObject.SetActive(false);
             
