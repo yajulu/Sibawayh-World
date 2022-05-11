@@ -144,7 +144,11 @@ namespace _YajuluSDK._Scripts.UI
         protected override void OnDestroy()
         {
             if (m_Group != null)
+            {
                 m_Group.EnsureValidState();
+                m_Group.UnregisterToggle(this, true);
+            }
+            
             base.OnDestroy();
         }
 
@@ -160,7 +164,7 @@ namespace _YajuluSDK._Scripts.UI
             SetTabGroup(null, false);
             base.OnDisable();
         }
-
+        
         protected override void OnDidApplyAnimationProperties()
         {
             // Check if isOn has been changed by the animation.
@@ -187,9 +191,11 @@ namespace _YajuluSDK._Scripts.UI
         {
             // Sometimes IsActive returns false in OnDisable so don't check for it.
             // Rather remove the toggle too often than too little.
-            if (m_Group != null)
+            if (m_Group != null && newGroup != m_Group)
+            {
                 m_Group.UnregisterToggle(this);
-
+            }
+            
             // At runtime the group variable should be set but not when calling this method from OnEnable or OnDisable.
             // That's why we use the setMemberValue parameter.
             if (setMemberValue)

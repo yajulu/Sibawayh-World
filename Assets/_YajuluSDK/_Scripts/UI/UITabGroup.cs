@@ -98,21 +98,29 @@ namespace _YajuluSDK._Scripts.UI
             
         }
 
+        private void UpdateContentView(UITab tab)
+        {
+            
+        }
+
         /// <summary>
         /// Unregister a toggle from the group.
         /// </summary>
-        /// <param name="toggle">The toggle to remove.</param>
-        public void UnregisterToggle(UITab tab)
+        /// <param name="tab">The toggle to remove.</param>
+        /// <param name="isDestroyed"></param>
+        public void UnregisterToggle(UITab tab, bool isDestroyed = false)
         {
             if (m_Tabs.Contains(tab))
                 m_Tabs.Remove(tab);
             
+            if (!isDestroyed)
+                return;
             if (_tabGroupDictionary.TryGetValue(tab, out var val))
             {
                 _tabGroupDictionary.Remove(tab);
                 if (val != null)
                 {
-                    val.name = "Unused";
+                    val.name = "Unused1";
                     val.gameObject.SetActive(false);
                 }
             }
@@ -138,7 +146,25 @@ namespace _YajuluSDK._Scripts.UI
             
             if (tabContentTransform == null)
             {
-                tabContentTransform = found  ? content : Instantiate(tabsContentParent.GetChild(0), tabsContentParent, false);
+                if (found)
+                {
+                    tabContentTransform = content;
+                }
+                else
+                {
+                    var tabIndex = tab.transform.GetSiblingIndex();
+                    if (tabsContentParent.childCount > tabIndex)
+                    {
+                        tabContentTransform = tabsContentParent.GetChild(tabIndex);
+                        tabContentTransform = _tabGroupDictionary.ContainsValue(tabContentTransform) ? Instantiate(tabsContentParent.GetChild(0), tabsContentParent, false) : tabContentTransform;
+
+                    }
+                    else
+                    {
+                        tabContentTransform = Instantiate(tabsContentParent.GetChild(0), tabsContentParent, false);    
+                    }
+                      
+                }
             }
             else
             {
@@ -153,7 +179,7 @@ namespace _YajuluSDK._Scripts.UI
             
             tabContentTransform.name = tab.transform.gameObject.name + "_Content";
             
-            RefreshTabs();
+            // RefreshTabs();
         }
 
         /// <summary>
@@ -281,17 +307,6 @@ namespace _YajuluSDK._Scripts.UI
             //     }
             // }
             // else 
-            if (tabsParent.childCount < tabsContentParent.childCount)
-            {
-                // Disabling not used tabsContent panels
-                for (var i = tabsParent.childCount; i < tabsContentParent.childCount; i++)
-                {
-                    var content = tabsContentParent.GetChild(i);
-                    content.SetSiblingIndex(i);
-                    content.name = "Unused";
-                }
-            }
-
             _tabGroupDictionary.Clear();
 
             for (var i = 0; i < tabsParent.childCount; i++)
@@ -332,10 +347,27 @@ namespace _YajuluSDK._Scripts.UI
                     {
                         tab.group = this;
                         tabContent = _tabGroupDictionary[tab];
+                        
                     }
 
                     tabContent.gameObject.SetActive(true);
                     tabContent.SetSiblingIndex(tabTransform.GetSiblingIndex());
+                }
+            }
+            
+            if (tabsParent.childCount < tabsContentParent.childCount)
+            {
+                // Disabling not used tabsContent panels
+                var contentChildCount = tabsContentParent.childCount; 
+                for (var i = tabsParent.childCount; i < contentChildCount; i++)
+                {
+                    
+                    var content = tabsContentParent.GetChild(i);
+                    if (!content.gameObject.activeSelf)
+                        continue;
+                    content.SetSiblingIndex(i);
+                    content.name = content.name +"_Unused2";
+                    content.gameObject.SetActive(false);
                 }
             }
         }
