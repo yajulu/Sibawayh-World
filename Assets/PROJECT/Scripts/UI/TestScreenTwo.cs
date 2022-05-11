@@ -27,7 +27,7 @@ namespace PROJECT.Scripts.UI
         protected override void OpenAnimation()
         {
             gameObject.SetActive(true);
-            navButton.transform.DOScale(1, 3)
+            navButton.transform.DOScale(1, 0.3f)
                 .SetEase(Ease.OutBounce)
                 .From(0)
                 .OnComplete(base.OpenAnimation);
@@ -35,7 +35,7 @@ namespace PROJECT.Scripts.UI
         
         protected override void CloseAnimation()
         {
-            navButton.transform.DOScale(0, 3)
+            navButton.transform.DOScale(0, 0.3f)
                 .SetEase(Ease.InBack)
                 .From(1)
                 .OnComplete(base.CloseAnimation);
