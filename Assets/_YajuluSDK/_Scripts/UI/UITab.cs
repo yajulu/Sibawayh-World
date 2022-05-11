@@ -182,12 +182,12 @@ namespace _YajuluSDK._Scripts.UI
             base.OnDidApplyAnimationProperties();
         }
 
-        public void SetTabGroup(UITabGroup newGroup, Transform tabContentTransform)
+        public void SetTabGroup(UITabGroup newGroup, RectTransform tabContentTransform)
         {
             SetTabGroup(newGroup, true, tabContentTransform);
         }
 
-        private void SetTabGroup(UITabGroup newGroup, bool setMemberValue, Transform tabContentTransform = null)
+        private void SetTabGroup(UITabGroup newGroup, bool setMemberValue, RectTransform tabContentTransform = null)
         {
             // Sometimes IsActive returns false in OnDisable so don't check for it.
             // Rather remove the toggle too often than too little.
@@ -293,7 +293,7 @@ namespace _YajuluSDK._Scripts.UI
             PlayEffect(tabTransition == TabTransition.None);
             if (sendCallback)
             {
-                UISystemProfilerApi.AddMarker("Toggle.value", this);
+                UISystemProfilerApi.AddMarker("Tab.value", this);
                 OnValueChanged?.Invoke(m_IsOn);
             }
         }

@@ -5,6 +5,7 @@ using _YajuluSDK._Scripts.Essentials;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -23,7 +24,7 @@ namespace _YajuluSDK._Scripts.UI
     
     public class UITabGroup : UIBehaviour
     {
-        [SerializeField] private bool m_AllowSwitchOff = false;
+        [SerializeField, TitleGroup("Properties")] private bool m_AllowSwitchOff = false;
 
         /// <summary>
         /// Is it allowed that no toggle is switched on?
@@ -48,12 +49,21 @@ namespace _YajuluSDK._Scripts.UI
         
         private bool _transition;
         
+        [TitleGroup("Animations")] 
+        [SerializeField] private float tabSwitchingDuration = 0.35f;
+
+        [SerializeField] private Ease tabSwitchingEase = Ease.OutQuad;
         
+        [TitleGroup("Refs")]
         [SerializeField] private Transform tabsParent;
         [SerializeField] private Transform tabsContentParent;
+        [SerializeField, Sirenix.OdinInspector.ReadOnly] private RectTransform tabsContentParentRectTransform;
 
-        private Dictionary<UITab, Transform> _tabGroupDictionary = new Dictionary<UITab, Transform>();
+        
 
+        private Dictionary<UITab, RectTransform> _tabGroupDictionary = new Dictionary<UITab, RectTransform>();
+
+        private RectTransform _dummyTabContentTransform;
         /// <summary>
         /// Because all the Toggles have registered themselves in the OnEnabled, Start should check to
         /// make sure at least one Toggle is active in groups that do not AllowSwitchOff
@@ -95,12 +105,24 @@ namespace _YajuluSDK._Scripts.UI
                 else
                     m_Tabs[i].SetIsOnWithoutNotify(false);
             }
-            
+            if(Application.isPlaying)
+                UpdateContentView(tab);
         }
 
         private void UpdateContentView(UITab tab)
         {
-            
+            _dummyTabContentTransform = null;
+            if (_tabGroupDictionary.TryGetValue(tab, out _dummyTabContentTransform))
+            {
+                var endValue = -_dummyTabContentTransform.anchoredPosition.x;
+                _contentTween =
+                    tabsContentParentRectTransform.DOLocalMoveX(endValue, tabSwitchingDuration)
+                        .SetEase(tabSwitchingEase);
+            }
+            else
+            {
+                Debug.LogError("Cannot find this tabs content.");
+            }
         }
 
         /// <summary>
@@ -131,7 +153,7 @@ namespace _YajuluSDK._Scripts.UI
         /// </summary>
         /// <param name="tab">The toggle to register with the group.</param>
         /// <param name="tabContentTransform">The transform of the content of this tab</param>
-        public void RegisterToggle(UITab tab, Transform tabContentTransform = null)
+        public void RegisterToggle(UITab tab, RectTransform tabContentTransform = null)
         {
             if (!m_Tabs.Contains(tab))
                 m_Tabs.Add(tab);
@@ -155,13 +177,13 @@ namespace _YajuluSDK._Scripts.UI
                     var tabIndex = tab.transform.GetSiblingIndex();
                     if (tabsContentParent.childCount > tabIndex)
                     {
-                        tabContentTransform = tabsContentParent.GetChild(tabIndex);
-                        tabContentTransform = _tabGroupDictionary.ContainsValue(tabContentTransform) ? Instantiate(tabsContentParent.GetChild(0), tabsContentParent, false) : tabContentTransform;
+                        tabContentTransform = tabsContentParent.GetChild(tabIndex) as RectTransform;
+                        tabContentTransform = (_tabGroupDictionary.ContainsValue(tabContentTransform) ? Instantiate(tabsContentParent.GetChild(0), tabsContentParent, false) : tabContentTransform) as RectTransform;
 
                     }
                     else
                     {
-                        tabContentTransform = Instantiate(tabsContentParent.GetChild(0), tabsContentParent, false);    
+                        tabContentTransform = Instantiate(tabsContentParent.GetChild(0), tabsContentParent, false) as RectTransform;    
                     }
                       
                 }
@@ -194,11 +216,11 @@ namespace _YajuluSDK._Scripts.UI
                 NotifyToggleOn(m_Tabs[0]);
             }
 
-            IEnumerable<UITab> activeToggles = ActiveToggles();
+            IEnumerable<UITab> activeToggles = ActiveTabs();
 
             if (activeToggles.Count() > 1)
             {
-                UITab firstActive = GetFirstActiveToggle();
+                UITab firstActive = GetFirstActiveTab();
 
                 foreach (UITab toggle in activeToggles)
                 {
@@ -228,7 +250,7 @@ namespace _YajuluSDK._Scripts.UI
         /// <remarks>
         /// Toggles belonging to this group but are not active either because their GameObject is inactive or because the Toggle component is disabled, are not returned as part of the list.
         /// </remarks>
-        public IEnumerable<UITab> ActiveToggles()
+        public IEnumerable<UITab> ActiveTabs()
         {
             return m_Tabs.Where(x => x.isOn);
         }
@@ -240,10 +262,10 @@ namespace _YajuluSDK._Scripts.UI
         /// <remarks>
         /// Get the active toggle for this group. As the group
         /// </remarks>
-        public UITab GetFirstActiveToggle()
+        public UITab GetFirstActiveTab()
         {
-            IEnumerable<UITab> activeToggles = ActiveToggles();
-            return activeToggles.Count() > 0 ? activeToggles.First() : null;
+            IEnumerable<UITab> activeTabs = ActiveTabs();
+            return activeTabs.Any() ? activeTabs.First() : null;
         }
 
         /// <summary>
@@ -275,9 +297,7 @@ namespace _YajuluSDK._Scripts.UI
         {
 
         }
-        
-        
-        
+
         protected override void Reset()
         {
             base.Reset();
@@ -290,6 +310,7 @@ namespace _YajuluSDK._Scripts.UI
         {
             tabsParent = transform.FindDeepChild<Transform>("Tabs");
             tabsContentParent = transform.FindDeepChild<Transform>("TabsContent");
+            tabsContentParentRectTransform = tabsContentParent.GetComponent<RectTransform>();
         }
 
         [Button]
@@ -316,7 +337,7 @@ namespace _YajuluSDK._Scripts.UI
                 {
                     if (i < tabsContentParent.childCount)
                     {
-                        var tabContent = tabsContentParent.GetChild(i).gameObject.transform;
+                        var tabContent = tabsContentParent.GetChild(i).gameObject.transform as RectTransform;
                         tab.SetTabGroup(this, tabContent);
                     }
                     else
@@ -343,7 +364,7 @@ namespace _YajuluSDK._Scripts.UI
                 var tabTransform = tabsParent.GetChild(i);
                 if (tabTransform.TryGetComponent(out UITab tab))
                 {
-                    if (!_tabGroupDictionary.TryGetValue(tab, out Transform tabContent) || tabContent == null)
+                    if (!_tabGroupDictionary.TryGetValue(tab, out RectTransform tabContent) || tabContent == null)
                     {
                         tab.group = this;
                         tabContent = _tabGroupDictionary[tab];
