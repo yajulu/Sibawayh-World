@@ -11,7 +11,7 @@ namespace _YajuluSDK._Scripts.UI
 {
     public class UIScreenManager : Singleton<UIScreenManager>
     {
-        
+
         #region Inspector
 
         [OnInspectorGUI]
@@ -19,18 +19,18 @@ namespace _YajuluSDK._Scripts.UI
         {
             if (ScreenRefs.SafeIsUnityNull())
             {
-                ScreenRefs = transform.GetComponentInChildren<UIScreenRefs>();    
+                ScreenRefs = transform.GetComponentInChildren<UIScreenRefs>();
             }
 
             if (_skipAnimationButton.SafeIsUnityNull())
             {
                 _skipAnimationButton = transform.FindDeepChild<Button>("SkipAnimation_Button");
             }
-                
+
         }
 
         #endregion
-        
+
         #region Fields
 
         public UIScreenRefs ScreenRefs;
@@ -43,13 +43,13 @@ namespace _YajuluSDK._Scripts.UI
         private UIScreenQueueData _dummyQueueData;
 
         private bool _screenNavigationLock;
-        
+
         #endregion
-        
+
         protected override void OnAwake()
         {
             base.OnAwake();
-            
+
             _openedScreens = new List<UIScreenBase>();
             _skipAnimationButton.onClick.AddListener(SkipCurrenScreenAnimation);
             _screenQueue = new Queue<UIScreenQueueData>();
@@ -58,15 +58,15 @@ namespace _YajuluSDK._Scripts.UI
         private void Start()
         {
             InitializeScreens();
-            OpenScreen(nameof(TestScreen));
+            OpenScreen(nameof(Screen_HomeScreen));
         }
-        
+
         #region Events
 
         public static event Action<UIScreenBase, bool> OnScreenPreOpen;
         public static event Action<UIScreenBase> OnScreenOpenStarted;
         public static event Action<UIScreenBase> OnScreenOpenEnded;
-        
+
         public static event Action<UIScreenBase, bool> OnScreenPreClose;
         public static event Action<UIScreenBase> OnScreenCloseStarted;
         public static event Action<UIScreenBase> OnScreenCloseEnded;
@@ -83,7 +83,7 @@ namespace _YajuluSDK._Scripts.UI
                 _screenNavigationLock = false;
             }
             OnScreenPreOpen?.Invoke(screen, isValid);
-            if(!isValid)
+            if (!isValid)
                 CheckQueue();
         }
 
@@ -102,7 +102,7 @@ namespace _YajuluSDK._Scripts.UI
             OnScreenOpenEnded?.Invoke(screen);
             CheckQueue();
         }
-        
+
         public void ScreenPreClosed(UIScreenBase screen, bool isValid)
         {
             if (!isValid)
@@ -111,7 +111,7 @@ namespace _YajuluSDK._Scripts.UI
                 _screenNavigationLock = false;
             }
             OnScreenPreClose?.Invoke(screen, isValid);
-            if(!isValid)
+            if (!isValid)
                 CheckQueue();
         }
 
@@ -138,7 +138,7 @@ namespace _YajuluSDK._Scripts.UI
         {
             if (_screenQueue.TryDequeue(out _dummyQueueData))
             {
-                if(_dummyQueueData.IsOpening)
+                if (_dummyQueueData.IsOpening)
                     OpenScreen(_dummyQueueData.ScreenBase.GetType().Name);
                 else
                     CloseScreen(_dummyQueueData.ScreenBase.GetType().Name);
@@ -158,20 +158,20 @@ namespace _YajuluSDK._Scripts.UI
             foreach (var screen in ScreenRefs.Screens.Values)
             {
                 screen.gameObject.SetActive(false);
-            }   
+            }
             _skipAnimationButton.gameObject.SetActive(false);
         }
-        
+
         public void OpenScreen(string i_screen, Action onSucceeded = null, Action onFailed = null)
         {
             var screen = ScreenRefs.Screens[i_screen];
-            
+
             OpenScreen(screen);
         }
 
         public void OpenScreen(UIScreenBase screen, Action onSucceeded = null, Action onFailed = null)
         {
-            
+
             //Check if there is a screenNavigationLock or there is a screen currently opening or closing
             if (_screenNavigationLock && !_currentChangingScreen.SafeIsUnityNull())
             {
@@ -183,7 +183,7 @@ namespace _YajuluSDK._Scripts.UI
                 Debug.LogError($"Screen ({screen}) is will be Queued to Open, Current State: ({screen.State})");
                 return;
             }
-            
+
             if (screen.State != eUIScreenState.Closed)
             {
                 Debug.LogError($"Screen ({screen}) is already Opened or is being opened. Current Screen state ({screen.State})");
@@ -194,14 +194,14 @@ namespace _YajuluSDK._Scripts.UI
             _screenNavigationLock = true;
             screen.Open(onSucceeded, onFailed);
         }
-        
+
         public void CloseScreen(string i_screen, Action onSucceeded = null, Action onFailed = null)
         {
             var screen = ScreenRefs.Screens[i_screen];
-            
+
             CloseScreen(screen);
         }
-        
+
         public void CloseScreen(UIScreenBase screen, Action onSucceeded = null, Action onFailed = null)
         {
             //Check if there is a screenNavigationLock or there is a screen currently opening or closing
@@ -215,7 +215,7 @@ namespace _YajuluSDK._Scripts.UI
                 Debug.LogError($"Screen ({screen}) is will be Queued to Close, Current State: ({screen.State})");
                 return;
             }
-            
+
             if (screen.State != eUIScreenState.Opened)
             {
                 Debug.LogError($"Screen ({screen}) is already closed or is being closed. Current Screen state ({screen.State})");
@@ -226,7 +226,7 @@ namespace _YajuluSDK._Scripts.UI
             _screenNavigationLock = true;
             screen.Close(onSucceeded, onFailed);
         }
-        
+
         public void NavigateTo(UIScreenBase i_screen, bool i_closeCurrent)
         {
             // //Check if there is a screenNavigationLock or there is a screen currently opening or closing
@@ -250,7 +250,7 @@ namespace _YajuluSDK._Scripts.UI
             //     }
             //     return;
             // }
-            
+
             if (_openedScreens.Count > 0 && i_closeCurrent)
             {
                 var latestScreen = _openedScreens[^1];
@@ -260,7 +260,7 @@ namespace _YajuluSDK._Scripts.UI
             {
                 OpenScreen(i_screen);
             }
-            
+
 
             #region local Methods
 
@@ -276,13 +276,13 @@ namespace _YajuluSDK._Scripts.UI
 
             #endregion
         }
-        
+
         public void NavigateTo(string i_screen, bool i_closeCurrent)
         {
             var screen = ScreenRefs.Screens[i_screen];
             NavigateTo(screen, i_closeCurrent);
         }
-        
+
     }
 
     [Serializable]
