@@ -2,6 +2,8 @@ using System;
 using System.Reflection;
 using _YajuluSDK._Scripts.UI;
 using DG.Tweening;
+using Sirenix.OdinInspector;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -11,17 +13,35 @@ namespace PROJECT.Scripts.Game
 {
     public class GameLetter : UIElementBase, IPointerDownHandler, IDragHandler, IPointerMoveHandler, IPointerEnterHandler, IPointerExitHandler
     {
-        private Image _image;
-        private Button _button;
+        [SerializeField] private string letter = "";
+        
+        [SerializeField, ReadOnly] private Image _image;
+        [SerializeField, ReadOnly] private TextMeshProUGUI _letterUI;
         
         private Tweener _tweener;
         private Vector3 _dummyVector3One;
 
         private bool _selected = false;
 
-        private void Awake()
+        public string Letter
+        {
+            get => letter;
+            set
+            {
+                letter = value;
+                _letterUI.SetText(letter);
+            }
+        }
+
+        [Button]
+        private void SetRefs()
         {
             _image = GetComponent<Image>();
+            _letterUI = GetComponentInChildren<TextMeshProUGUI>();
+        }
+
+        private void Awake()
+        {
             _dummyVector3One = Vector3.one;
         }
 
@@ -37,6 +57,7 @@ namespace PROJECT.Scripts.Game
         
         }
 
+        #region PointerCallBacks
         public void OnPointerDown(PointerEventData eventData)
         {
             if (_selected)
@@ -78,7 +99,10 @@ namespace PROJECT.Scripts.Game
                 return;
             EnterExitAnimation(false);
         }
+        
 
+        #endregion
+        
         private void SelectButton()
         {
             _selected = true;
