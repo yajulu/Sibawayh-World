@@ -15,13 +15,17 @@ namespace PROJECT.Scripts.Game
     {
         [SerializeField] private string letter = "";
         
-        [SerializeField, ReadOnly] private Image _image;
-        [SerializeField, ReadOnly] private TextMeshProUGUI _letterUI;
+        [SerializeField, ReadOnly] private Image image;
+        [SerializeField, ReadOnly] private TextMeshProUGUI letterUI;
+        [SerializeField, ReadOnly] private LetterSpawner letterSpawner;
         
         private Tweener _tweener;
         private Vector3 _dummyVector3One;
 
         private bool _selected = false;
+        private int _buttonIndex;
+
+        public Action<string, int, bool> OnButtonToggled;
 
         public string Letter
         {
@@ -29,20 +33,22 @@ namespace PROJECT.Scripts.Game
             set
             {
                 letter = value;
-                _letterUI.SetText(letter);
+                letterUI.SetText(letter);
             }
         }
 
         [Button]
         private void SetRefs()
         {
-            _image = GetComponent<Image>();
-            _letterUI = GetComponentInChildren<TextMeshProUGUI>();
+            image = GetComponent<Image>();
+            letterUI = GetComponentInChildren<TextMeshProUGUI>();
+            letterSpawner = GetComponentInParent<LetterSpawner>();
         }
 
         private void Awake()
         {
             _dummyVector3One = Vector3.one;
+            _buttonIndex = transform.GetSiblingIndex();
         }
 
         // Start is called before the first frame update
@@ -106,13 +112,15 @@ namespace PROJECT.Scripts.Game
         private void SelectButton()
         {
             _selected = true;
-            _image.color = Color.gray;
+            image.color = Color.gray;
+            OnButtonToggled?.Invoke(letter, _buttonIndex, true);
         }
 
         private void DeselectButton()
         {
             _selected = false;
-            _image.color = Color.white;
+            image.color = Color.white;
+            OnButtonToggled?.Invoke(letter, _buttonIndex, false);
         }
         
 
