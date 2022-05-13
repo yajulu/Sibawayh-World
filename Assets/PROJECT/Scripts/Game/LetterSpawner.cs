@@ -1,4 +1,8 @@
+using System;
+using _YajuluSDK._Scripts.Essentials;
+using PROJECT.Scripts.Game.Controllers;
 using Sirenix.OdinInspector;
+using TMPro;
 using UnityEngine;
 
 namespace PROJECT.Scripts.Game
@@ -6,6 +10,7 @@ namespace PROJECT.Scripts.Game
     public class LetterSpawner : MonoBehaviour
     {
         [SerializeField, TitleGroup("Refs"), OnValueChanged(nameof(UpdateLettersList))] private Transform parentTarget;
+        [SerializeField, TitleGroup("Refs")] private TextMeshProUGUI currentCheckWord;
 
         [SerializeField, DisableIf("@this.parentTarget == null"), OnValueChanged(nameof(UpdateCountFromWord))]
         private string word;
@@ -15,7 +20,8 @@ namespace PROJECT.Scripts.Game
 
         [SerializeField, OnValueChanged(nameof(UpdateSpawner))] private float radius;
 
-        [SerializeField, ReadOnly]private GameLetter [] letters;
+        [SerializeField, ReadOnly] private GameLetter [] letters;
+        
         private Transform _dummyTransform;
         private GameLetter _dummyGameLetter;
         private Vector2 _dummyPosition;
@@ -44,11 +50,29 @@ namespace PROJECT.Scripts.Game
         {
             return parentTarget == null ? 0 : letters.Length;
         }
-        
+
+        private void OnEnable()
+        {
+            GameModeManager.Instance.GameModeCheckWord += UpdateCheckWord;
+            GameModeManager.Instance.GameModeWordChanged += UpdateReferenceWord;
+        }
+
+        private void OnDisable()
+        {
+            GameModeManager.Instance.GameModeCheckWord -= UpdateCheckWord;
+            GameModeManager.Instance.GameModeWordChanged -= UpdateReferenceWord;
+        }
+
         [Button]
         private void UpdateLettersList()
         {
-            letters = parentTarget.GetComponentsInChildren<GameLetter>();
+            letters = parentTarget.GetComponentsInChildren<GameLetter>(true);
+        }
+
+        [Button]
+        private void SetRefs()
+        {
+            currentCheckWord = transform.FindDeepChild<TextMeshProUGUI>("CheckWord_Text");
         }
 
         private void UpdateSpawner()
@@ -69,12 +93,36 @@ namespace PROJECT.Scripts.Game
                     _dummyPosition.y = Mathf.Sin((angle * i) + (Mathf.PI * 0.5f)) * radius;
                     _dummyTransform.localPosition = _dummyPosition;
                     _dummyGameLetter.Letter = i < word.Length ? word[i].ToString() : "X";
+                    _dummyGameLetter.OnButtonToggled = HandleButtonToggles;
                 }
                 else
                 {
                     _dummyTransform.gameObject.SetActive(false);
                 }
             }
+        }
+
+        private void UpdateCheckWord(string checkWord, bool check)
+        {
+            currentCheckWord.SetText(checkWord);
+        }
+
+        private void UpdateReferenceWord(string refWord)
+        {
+            Word = refWord;
+        }
+
+        private void HandleButtonToggles(string letter, int buttonIndex, bool selected)
+        {
+            if (selected)
+            {
+                GameModeManager.Instance.AddLetter(letter, buttonIndex);
+            }
+            else
+            {
+                GameModeManager.Instance.RemoveLetter(letter, buttonIndex);
+            }
+            
         }
 
         private void UpdateCountFromWord()
