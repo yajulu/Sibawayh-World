@@ -2983,7 +2983,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cda65f2490ac4a349b845f285b293cef, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ccc4c88caae6852449d0f1e2828b549b, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2992,7 +2992,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 5
 --- !u!222 &678314747
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3562,7 +3562,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 69.6
+  m_fontSize: 62.35
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3902,7 +3902,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   navigationData:
-    navigateToScreen: {fileID: 0}
+    navigateToScreen: {fileID: 770905295}
     closeCurrent: 1
 --- !u!114 &810823558
 MonoBehaviour:
@@ -7462,7 +7462,7 @@ MonoBehaviour:
   navigationData:
   - button: {fileID: 810823557}
     data:
-      navigateToScreen: {fileID: 0}
+      navigateToScreen: {fileID: 770905295}
       closeCurrent: 1
   - button: {fileID: 1252357063}
     data:
