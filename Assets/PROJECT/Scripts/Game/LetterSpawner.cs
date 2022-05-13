@@ -15,7 +15,7 @@ namespace PROJECT.Scripts.Game
 
         [SerializeField, OnValueChanged(nameof(UpdateSpawner))] private float radius;
 
-        private GameLetter [] _letters;
+        [SerializeField, ReadOnly]private GameLetter [] letters;
         private Transform _dummyTransform;
         private GameLetter _dummyGameLetter;
         private Vector2 _dummyPosition;
@@ -42,21 +42,22 @@ namespace PROJECT.Scripts.Game
 
         private int MaxCount()
         {
-            return parentTarget == null ? 0 : _letters.Length;
+            return parentTarget == null ? 0 : letters.Length;
         }
         
+        [Button]
         private void UpdateLettersList()
         {
-            _letters = parentTarget.GetComponentsInChildren<GameLetter>();
+            letters = parentTarget.GetComponentsInChildren<GameLetter>();
         }
 
         private void UpdateSpawner()
         {
             var angle = (Mathf.PI * 2) / count;
-            for (var i = 0; i < _letters.Length; i++)
+            for (var i = 0; i < letters.Length; i++)
             {
                 _dummyGameLetter = null;
-                _dummyGameLetter = _letters[i];
+                _dummyGameLetter = letters[i];
                 
                 _dummyTransform = null;
                 _dummyTransform = _dummyGameLetter.transform;
@@ -80,7 +81,7 @@ namespace PROJECT.Scripts.Game
         {
             if (word == null)
                 return;
-            count = Mathf.Min(word.Length, _letters.Length);
+            count = Mathf.Min(word.Length, letters.Length);
             UpdateSpawner();
         }
     }

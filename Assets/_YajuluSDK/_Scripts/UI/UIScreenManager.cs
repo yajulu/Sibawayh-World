@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using _YajuluSDK._Scripts.Essentials;
 using PROJECT.Scripts.UI;
+using PROJECT.Scripts.UI.Screens;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using UnityEngine;

@@ -1,12 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using _YajuluSDK._Scripts.UI;
 
-
-
-
-namespace PROJECT.Scripts.UI
+namespace PROJECT.Scripts.UI.Screens
 {
     public class Screen_HomeScreen : UIScreenBase
     {
