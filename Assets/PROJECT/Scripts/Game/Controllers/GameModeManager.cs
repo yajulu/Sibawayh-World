@@ -23,6 +23,10 @@ namespace PROJECT.Scripts.Game.Controllers
         [SerializeField] private List<string> currentLevelWordsList;
         [SerializeField, ReadOnly] private int currentWordIndex = 0;
 
+        public int CurrentWordIndex => currentWordIndex;
+
+        public string CurrentReferenceWord => currentReferenceWord;
+
         // Start is called before the first frame update
         void Start()
         {

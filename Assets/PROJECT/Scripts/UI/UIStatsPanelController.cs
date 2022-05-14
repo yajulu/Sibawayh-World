@@ -1,7 +1,12 @@
+using System;
+using System.Collections.Generic;
 using _YajuluSDK._Scripts.Essentials;
+using DG.Tweening;
+using PROJECT.Scripts.Game.Controllers;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace PROJECT.Scripts.UI
 {
@@ -13,6 +18,8 @@ namespace PROJECT.Scripts.UI
         
         [SerializeField, TitleGroup("Refs")] private TextMeshProUGUI gameModeTitleText;
         [SerializeField, TitleGroup("Refs")] private TextMeshProUGUI gameModeSubtitleText;
+        [SerializeField, TitleGroup("Refs")] private Transform progressBarTransform;
+        [SerializeField, TitleGroup("Refs"), ReadOnly] private Image[] progressBarElementsList;
 
         public string GameModeTitle
         {
@@ -33,7 +40,38 @@ namespace PROJECT.Scripts.UI
                 UpdateTitles();
             }
         }
+
+        private void OnEnable()
+        {
+            GameModeManager.Instance.GameModeStarted += GameModeStarted;
+            GameModeManager.Instance.GameModeCheckWord += CheckWord;
+        }
         
+        private void OnDisable()
+        {
+            GameModeManager.Instance.GameModeStarted -= GameModeStarted;
+            GameModeManager.Instance.GameModeCheckWord -= CheckWord;
+        }
+
+        private void GameModeStarted()
+        {
+            var color = UnityEngine.Color.white;
+            color.a = 0.4f;
+            foreach (var element in progressBarElementsList)
+            {
+                element.color = color;
+            }
+        }
+        
+        private void CheckWord(string word, bool check)
+        {
+            if (!check)
+                return;
+            var image = progressBarElementsList[GameModeManager.Instance.CurrentWordIndex];
+            image.color = Color.white;
+            image.transform.DOPunchScale(Vector3.one, 0.5f, 5);
+        }
+
         [Button, TitleGroup("Properties")]
         private void UpdateTitles()
         {
@@ -46,6 +84,8 @@ namespace PROJECT.Scripts.UI
         {
             gameModeTitleText = transform.FindDeepChild<TextMeshProUGUI>("GameModeTitle_Text");
             gameModeSubtitleText = transform.FindDeepChild<TextMeshProUGUI>("GameModeSubtitle_Text");
+            progressBarTransform = transform.FindDeepChild<Transform>("ProgressPoints");
+            progressBarElementsList = progressBarTransform.GetComponentsInChildren<Image>(true);
         }
         
     }

@@ -27,6 +27,8 @@ namespace PROJECT.Scripts.Game
 
         public Action<string, int, bool> OnButtonToggled;
 
+        private float _buttonResetTime;
+
         public string Letter
         {
             get => letter;
@@ -34,7 +36,7 @@ namespace PROJECT.Scripts.Game
             {
                 letter = value;
                 letterUI.SetText(letter);
-                DeselectButton();
+                ResetButton();
             }
         }
 
@@ -67,6 +69,9 @@ namespace PROJECT.Scripts.Game
         #region PointerCallBacks
         public void OnPointerDown(PointerEventData eventData)
         {
+            if (eventData.clickTime < _buttonResetTime)
+                return;
+            
             if (_selected)
             {
                 DeselectButton();
@@ -92,7 +97,10 @@ namespace PROJECT.Scripts.Game
         {
             if (_selected)
                 return;
-            
+
+            if (eventData.clickTime < _buttonResetTime)
+                return;
+
             EnterExitAnimation(true);
             if (eventData.dragging)
             {
@@ -104,6 +112,10 @@ namespace PROJECT.Scripts.Game
         {
             if (_selected)
                 return;
+            
+            if (eventData.clickTime < _buttonResetTime)
+                return;
+
             EnterExitAnimation(false);
         }
         
@@ -122,6 +134,13 @@ namespace PROJECT.Scripts.Game
             _selected = false;
             image.color = Color.white;
             OnButtonToggled?.Invoke(letter, _buttonIndex, false);
+        }
+
+        private void ResetButton()
+        {
+            DeselectButton();
+            _buttonResetTime = Time.time;
+            transform.localScale = Vector3.one;
         }
         
 
