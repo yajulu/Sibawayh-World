@@ -11,8 +11,8 @@ namespace PROJECT.Scripts.Game.Controllers
 
         public event Action GameModeStarted;
         public event Action<string> GameModeWordChanged;
+        public event Action<string> GameModeWordUpdated; 
         public event Action<string, bool> GameModeCheckWord;
-
         public event Action GameModeCompleted;
 
         [SerializeField, ReadOnly] private string currentCheckWord;
@@ -55,14 +55,19 @@ namespace PROJECT.Scripts.Game.Controllers
 
         private void UpdateCheckWord()
         {
-            currentCheckWord = _lettersDict.Values.ToString();
+            currentCheckWord = "";
+            foreach (var letter in _lettersDict.Values)
+            {
+                currentCheckWord += letter;
+            }
+            OnGameModeWordUpdated(currentCheckWord);
             if(currentCheckWord.Length == currentReferenceWord.Length)
                 OnGameModeCheckWord(currentCheckWord, CheckWord());
         }
 
         private void ShowNextWord()
         {
-            if (currentWordIndex == currentLevelWordsList.Count)
+            if (currentWordIndex + 1 == currentLevelWordsList.Count)
             {
                 OnGameModeCompleted();
             }
@@ -88,8 +93,9 @@ namespace PROJECT.Scripts.Game.Controllers
 
         protected virtual void OnGameModeWordChanged(string newWord)
         {
+            currentReferenceWord = newWord;
             _lettersDict.Clear();
-            GameModeWordChanged?.Invoke(newWord);
+            GameModeWordChanged?.Invoke(newWord);   
         }
 
         protected virtual void OnGameModeCheckWord(string currentWord, bool result)
@@ -99,11 +105,20 @@ namespace PROJECT.Scripts.Game.Controllers
             {
                 ShowNextWord();
             }
+            else
+            {
+                OnGameModeWordChanged(currentReferenceWord);
+            }
         }
 
         protected virtual void OnGameModeCompleted()
         {
             GameModeCompleted?.Invoke();
+        }
+
+        protected virtual void OnGameModeWordUpdated(string checkWord)
+        {
+            GameModeWordUpdated?.Invoke(checkWord);
         }
     }
     

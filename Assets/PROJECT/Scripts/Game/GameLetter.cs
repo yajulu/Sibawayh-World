@@ -34,6 +34,7 @@ namespace PROJECT.Scripts.Game
             {
                 letter = value;
                 letterUI.SetText(letter);
+                DeselectButton();
             }
         }
 
@@ -78,7 +79,7 @@ namespace PROJECT.Scripts.Game
 
         public void OnPointerMove(PointerEventData eventData)
         {
-            Debug.Log("Move");
+            // Debug.Log("Move");
         }
 
         public void OnDrag(PointerEventData eventData)

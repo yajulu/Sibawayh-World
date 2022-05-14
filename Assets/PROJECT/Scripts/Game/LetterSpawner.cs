@@ -53,13 +53,14 @@ namespace PROJECT.Scripts.Game
 
         private void OnEnable()
         {
-            GameModeManager.Instance.GameModeCheckWord += UpdateCheckWord;
+            GameModeManager.Instance.GameModeWordUpdated += UpdateCheckWord;
             GameModeManager.Instance.GameModeWordChanged += UpdateReferenceWord;
+            
         }
 
         private void OnDisable()
         {
-            GameModeManager.Instance.GameModeCheckWord -= UpdateCheckWord;
+            GameModeManager.Instance.GameModeWordUpdated -= UpdateCheckWord;
             GameModeManager.Instance.GameModeWordChanged -= UpdateReferenceWord;
         }
 
@@ -102,7 +103,7 @@ namespace PROJECT.Scripts.Game
             }
         }
 
-        private void UpdateCheckWord(string checkWord, bool check)
+        private void UpdateCheckWord(string checkWord)
         {
             currentCheckWord.SetText(checkWord);
         }
