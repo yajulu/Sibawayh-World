@@ -21,7 +21,7 @@ namespace _YajuluSDK._Scripts.UI
     /// </remarks>
     [AddComponentMenu("UI/Tab Group", 31)]
     [DisallowMultipleComponent]
-    
+
     public class UITabGroup : UIBehaviour
     {
         [SerializeField, TitleGroup("Properties")] private bool m_AllowSwitchOff = false;
@@ -46,20 +46,20 @@ namespace _YajuluSDK._Scripts.UI
         }
 
         private Tween _contentTween;
-        
+
         private bool _transition;
-        
-        [TitleGroup("Animations")] 
+
+        [TitleGroup("Animations")]
         [SerializeField] private float tabSwitchingDuration = 0.35f;
 
         [SerializeField] private Ease tabSwitchingEase = Ease.OutQuad;
-        
+
         [TitleGroup("Refs")]
         [SerializeField] private Transform tabsParent;
         [SerializeField] private Transform tabsContentParent;
         [SerializeField, Sirenix.OdinInspector.ReadOnly] private RectTransform tabsContentParentRectTransform;
 
-        
+
 
         private Dictionary<UITab, RectTransform> _tabGroupDictionary = new Dictionary<UITab, RectTransform>();
 
@@ -105,7 +105,7 @@ namespace _YajuluSDK._Scripts.UI
                 else
                     m_Tabs[i].SetIsOnWithoutNotify(false);
             }
-            if(Application.isPlaying)
+            if (Application.isPlaying)
                 UpdateContentView(tab);
         }
 
@@ -134,7 +134,7 @@ namespace _YajuluSDK._Scripts.UI
         {
             if (m_Tabs.Contains(tab))
                 m_Tabs.Remove(tab);
-            
+
             if (!isDestroyed)
                 return;
             if (_tabGroupDictionary.TryGetValue(tab, out var val))
@@ -157,15 +157,15 @@ namespace _YajuluSDK._Scripts.UI
         {
             if (!m_Tabs.Contains(tab))
                 m_Tabs.Add(tab);
-            
+
             var found = _tabGroupDictionary.TryGetValue(tab, out var content);
-            
+
             if (content == null)
             {
                 _tabGroupDictionary.Remove(tab);
                 found = false;
             }
-            
+
             if (tabContentTransform == null)
             {
                 if (found)
@@ -183,9 +183,9 @@ namespace _YajuluSDK._Scripts.UI
                     }
                     else
                     {
-                        tabContentTransform = Instantiate(tabsContentParent.GetChild(0), tabsContentParent, false) as RectTransform;    
+                        tabContentTransform = Instantiate(tabsContentParent.GetChild(0), tabsContentParent, false) as RectTransform;
                     }
-                      
+
                 }
             }
             else
@@ -196,11 +196,11 @@ namespace _YajuluSDK._Scripts.UI
 
             if (!found)
             {
-                _tabGroupDictionary.Add(tab, tabContentTransform);    
+                _tabGroupDictionary.Add(tab, tabContentTransform);
             }
-            
+
             tabContentTransform.name = tab.transform.gameObject.name + "_Content";
-            
+
             // RefreshTabs();
         }
 
@@ -298,12 +298,14 @@ namespace _YajuluSDK._Scripts.UI
 
         }
 
+#if UNITY_EDITOR
         protected override void Reset()
         {
             base.Reset();
             SetRefs();
             ResetTabs();
         }
+#endif
 
         [Button]
         private void SetRefs()
@@ -368,26 +370,26 @@ namespace _YajuluSDK._Scripts.UI
                     {
                         tab.group = this;
                         tabContent = _tabGroupDictionary[tab];
-                        
+
                     }
 
                     tabContent.gameObject.SetActive(true);
                     tabContent.SetSiblingIndex(tabTransform.GetSiblingIndex());
                 }
             }
-            
+
             if (tabsParent.childCount < tabsContentParent.childCount)
             {
                 // Disabling not used tabsContent panels
-                var contentChildCount = tabsContentParent.childCount; 
+                var contentChildCount = tabsContentParent.childCount;
                 for (var i = tabsParent.childCount; i < contentChildCount; i++)
                 {
-                    
+
                     var content = tabsContentParent.GetChild(i);
                     if (!content.gameObject.activeSelf)
                         continue;
                     content.SetSiblingIndex(i);
-                    content.name = content.name +"_Unused2";
+                    content.name = content.name + "_Unused2";
                     content.gameObject.SetActive(false);
                 }
             }
