@@ -27,7 +27,7 @@ namespace PROJECT.Scripts.Game
 
         public Action<string, int, bool> OnButtonToggled;
 
-        private float _buttonResetTime;
+        // private float _buttonResetTime;
 
         public string Letter
         {
@@ -69,9 +69,7 @@ namespace PROJECT.Scripts.Game
         #region PointerCallBacks
         public void OnPointerDown(PointerEventData eventData)
         {
-            if (eventData.clickTime < _buttonResetTime)
-                return;
-            
+
             if (_selected)
             {
                 DeselectButton();
@@ -98,9 +96,6 @@ namespace PROJECT.Scripts.Game
             if (_selected)
                 return;
 
-            if (eventData.clickTime < _buttonResetTime)
-                return;
-
             EnterExitAnimation(true);
             if (eventData.dragging)
             {
@@ -113,9 +108,6 @@ namespace PROJECT.Scripts.Game
             if (_selected)
                 return;
             
-            if (eventData.clickTime < _buttonResetTime)
-                return;
-
             EnterExitAnimation(false);
         }
         
@@ -139,28 +131,25 @@ namespace PROJECT.Scripts.Game
         private void ResetButton()
         {
             DeselectButton();
-            _buttonResetTime = Time.time;
+            // _buttonResetTime = Time.time;
+            _tweener.Complete();
             transform.localScale = Vector3.one;
         }
         
 
         void EnterExitAnimation(bool enter)
         {
-            if (_tweener == null)
-            {
-                _tweener =  transform.DOScale(1.25f, 0.2f)
-                    .SetEase(Ease.OutBack, 2f)
-                    .Pause()
-                    .SetAutoKill(false);
-            }
-            
+            _tweener?.Complete();
+
             if (enter)
             {
-                _tweener.PlayForward();
+                _tweener = transform.DOScale(1.15f, 0.2f)
+                    .SetEase(Ease.OutBack, 2f);
             }
             else
             {
-                _tweener.PlayBackwards();
+                _tweener = transform.DOScale(1f, 0.2f)
+                    .SetEase(Ease.InBack, 2f);
             }
         }
     }
