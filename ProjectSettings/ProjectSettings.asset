@@ -252,7 +252,8 @@ PlayerSettings:
   AndroidTargetDevices: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: D:/Work/Yajulu/Sibawayh World/keystore/Sibawayh World.keystore
+  AndroidKeystoreName: D:/Game Development/Projects Assets/Yajulu/Sibawayh World/keystore/Sibawayh
+    World.keystore
   AndroidKeyaliasName: sibawayhuser
   AndroidBuildApkPerCpuArchitecture: 0
   AndroidTVCompatibility: 0
@@ -866,7 +867,7 @@ PlayerSettings:
     m_VersionCode: 1
     m_VersionName: 
   apiCompatibilityLevel: 6
-  activeInputHandler: 0
+  activeInputHandler: 2
   cloudProjectId: a34953db-a20d-4365-9e30-d960446d1481
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
