@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using _YajuluSDK._Scripts.Essentials;
 using _YajuluSDK._Scripts.UI;
+using DG.Tweening;
 using PROJECT.Scripts.Game.Controllers;
 using RTLTMPro;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 namespace PROJECT.Scripts.Game
@@ -18,7 +19,9 @@ namespace PROJECT.Scripts.Game
     {
         [SerializeField, TitleGroup("Refs"), OnValueChanged(nameof(UpdateLettersList))] private Transform parentTarget;
         [SerializeField, TitleGroup("Refs")] private RTLTextMeshPro currentCheckWord;
-
+        [SerializeField, TitleGroup("Refs")] private Image centerPieceImage;
+        [SerializeField, TitleGroup("Refs")] private RectTransform centerPieceTransform;
+        
         [SerializeField, DisableIf("@this.parentTarget == null"), OnValueChanged(nameof(UpdateCountFromWord)), SuffixLabel("@fixedWord", true)]
         private string word;
 
@@ -35,9 +38,15 @@ namespace PROJECT.Scripts.Game
         private GameLetter _dummyGameLetter;
         private Vector2 _dummyPosition;
 
+        
+
         private List<GameLetter> _currentSelectedLetters = new List<GameLetter>();
 
         public event Action OnResetWord;
+        
+        private Sequence checkingSequence;
+
+        private Sequence _lettersSequence;
 
         public int Count
         {
@@ -71,6 +80,7 @@ namespace PROJECT.Scripts.Game
             GameModeManager.Instance.GameModeWordUpdated += UpdateCheckWordUI;
             GameModeManager.Instance.GameModeWordChanged += UpdateReferenceWord;
             GameModeManager.Instance.GameModeCheckWord += OnGameModeCheckWord;
+            ResetCenterPiece();
         }
         
         protected override void OnDisable()
@@ -80,6 +90,7 @@ namespace PROJECT.Scripts.Game
             GameModeManager.Instance.GameModeStarted -= OnGameModeStarted;
             GameModeManager.Instance.GameModeWordUpdated -= UpdateCheckWordUI;
             GameModeManager.Instance.GameModeWordChanged -= UpdateReferenceWord;
+            GameModeManager.Instance.GameModeCheckWord -= OnGameModeCheckWord;
         }
 
         [Button]
@@ -92,6 +103,8 @@ namespace PROJECT.Scripts.Game
         private void SetRefs()
         {
             currentCheckWord = transform.FindDeepChild<RTLTextMeshPro>("CheckWord_Text");
+            centerPieceImage = transform.FindDeepChild<Image>("CenterPiece");
+            centerPieceTransform = centerPieceImage.rectTransform;
             // separator = transform.FindDeepChild<Transform>("ClickSeparator");
         }
 
@@ -99,6 +112,9 @@ namespace PROJECT.Scripts.Game
         {
             _currentSelectedLetters.Clear();
             var angle = (Mathf.PI * 2) / count;
+            
+            _lettersSequence = DOTween.Sequence();
+            
             using var numbers = Enumerable.Range(0, count).OrderBy(x => Random.Range(0, count)).GetEnumerator();
             {
                 for (var i = 0; i < letters.Length; i++)
@@ -112,14 +128,16 @@ namespace PROJECT.Scripts.Game
                     if (i < count)
                     {
                         numbers.MoveNext();
-                        var angleMultiplier = numbers.Current;
+                        var index = numbers.Current;
                         _dummyTransform.gameObject.SetActive(true);
-                        _dummyPosition.x = Mathf.Cos((angle * angleMultiplier) + (Mathf.PI * 0.5f)) * radius;
-                        _dummyPosition.y = Mathf.Sin((angle * angleMultiplier) + (Mathf.PI * 0.5f)) * radius;
+                        _dummyPosition.x = Mathf.Cos((angle * i) + (Mathf.PI * 0.5f)) * radius;
+                        _dummyPosition.y = Mathf.Sin((angle * i) + (Mathf.PI * 0.5f)) * radius;
                         _dummyTransform.localPosition = _dummyPosition;
-                        _dummyGameLetter.Letter = i < word.Length ? word[i].ToString() : "X";
+                        _dummyGameLetter.Letter = index < word.Length ? word[index].ToString() : "X";
                         _dummyGameLetter.OnButtonToggled = HandleButtonToggles;
-                        _dummyGameLetter.OnButtonUpOrDragEnded = OnButtonUpOrDragEnded;
+                        _dummyGameLetter.OnButtonUp = OnButtonUpOrDragEnded;
+                        if(Application.isPlaying)
+                            _lettersSequence.Insert(i * 0.1f, _dummyTransform.DOLocalMove(_dummyPosition, 0.15f).SetEase(Ease.OutBack).From(Vector3.zero));
                     }
                     else
                     {
@@ -127,6 +145,8 @@ namespace PROJECT.Scripts.Game
                     }    
                 }
             }
+
+
 
             void OnButtonUpOrDragEnded()
             {
@@ -177,11 +197,31 @@ namespace PROJECT.Scripts.Game
         
         private void OnGameModeCheckWord(string checkWord, bool check)
         {
-            if (!check)
+            checkingSequence = DOTween.Sequence();
+            checkingSequence.OnComplete(ResetCenterPiece);
+            if (check)
             {
+                checkingSequence.Append(centerPieceImage.DOColor(Color.green, 0.1f).SetEase(Ease.Linear));
+                checkingSequence.Join(centerPieceTransform.DOPunchScale(Vector3.one * 0.15f, 0.5f, 5).SetEase(Ease.Linear));
+                checkingSequence.Append(centerPieceImage.DOColor(Color.cyan, 0.4f));
+            }
+            else
+            {
+                checkingSequence.Append(centerPieceImage.DOColor(Color.red, 0.1f).SetEase(Ease.Linear));
+                checkingSequence.Join(centerPieceTransform.transform.DOShakePosition(0.5f, 25f));
+                checkingSequence.Append(centerPieceImage.DOColor(Color.cyan, 0.4f));
+                
                 OnResetWord?.Invoke();
                 _currentSelectedLetters.Clear();
             }
+
+        }
+        
+        private void ResetCenterPiece()
+        {
+            centerPieceImage.color = Color.cyan;
+            centerPieceTransform.localScale = Vector3.one;
+            centerPieceTransform.localPosition = Vector3.zero;
         }
         
         private void UpdateCountFromWord()

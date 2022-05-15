@@ -14,7 +14,7 @@ namespace _YajuluSDK._Scripts.Essentials
 			// attributes.Add(new OnValueChangedAttribute("@RTLStringAttributeProcessor.GetFixedText($value)"));
 			attributes.Add(new SuffixLabelAttribute("@RTLStringAttributeProcessor.GetFixedText($value)", true));
 		}
-
+		
 		public static string GetFixedText(string input)
 		{
 			if (string.IsNullOrEmpty(input))
