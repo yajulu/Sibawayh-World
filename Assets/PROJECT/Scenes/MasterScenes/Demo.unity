@@ -6333,6 +6333,7 @@ GameObject:
   - component: {fileID: 1356626508}
   - component: {fileID: 1356626510}
   - component: {fileID: 1356626509}
+  - component: {fileID: 1356626511}
   m_Layer: 5
   m_Name: CheckWord_Text
   m_TagString: Untagged
@@ -6382,8 +6383,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c704da261a6afbc40b0fe350ea89641b, type: 2}
+  m_sharedMaterial: {fileID: -8798198981223475417, guid: c704da261a6afbc40b0fe350ea89641b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6457,6 +6458,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1356626507}
   m_CullTransparentMesh: 1
+--- !u!114 &1356626511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1356626507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80172e7093d66a24a9c280683dbfd615, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fixedText: 
+  ShowTashkeel: 1
+  UseHinduNumbers: 1
 --- !u!1 &1377162620
 GameObject:
   m_ObjectHideFlags: 0
@@ -7812,14 +7828,14 @@ MonoBehaviour:
   currentCheckWord: 
   currentReferenceWord: 
   currentLevelWordsList:
-  - Steven
-  - Omar
-  - Car
-  - Elephant
-  - Laptop
-  - Graphic
-  - Smart
-  - Fridge
+  - "\u0634\u0627\u0634\u0629"
+  - "\u0641\u0623\u0631\u0629"
+  - "\u0645\u0644\u0641"
+  - "\u0625\u0633\u0637\u0648\u0627\u0646\u0629"
+  - "\u0643\u064A\u0628\u0648\u0631\u062F"
+  - "\u0648\u064A\u0646\u062F\u0648\u0632"
+  - "\u062A\u0647\u0643\u064A\u0631"
+  - "\u0641\u064A\u0631\u0648\u0633\u0627\u062A"
   currentWordIndex: 0
 --- !u!4 &1706539554
 Transform:
