@@ -85,7 +85,7 @@ namespace RTLTMPro
                         output.Set(i, (char)(converted + 2));
                     } else
                     {
-                        output.Set(i, (char)converted);
+                        output.Set(i, (char)iChar);
                     }
                 }
 
