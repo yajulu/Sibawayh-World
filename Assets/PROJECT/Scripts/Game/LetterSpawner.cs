@@ -60,15 +60,16 @@ namespace PROJECT.Scripts.Game
         protected override void OnEnable()
         {
             base.OnEnable();
+            GameModeManager.Instance.GameModeStarted += OnGameModeStarted;
             GameModeManager.Instance.GameModeWordUpdated += UpdateCheckWord;
             GameModeManager.Instance.GameModeWordChanged += UpdateReferenceWord;
-            
         }
-
+        
         protected override void OnDisable()
         {
             base.OnDisable();
             if (Singleton.Quitting) return;
+            GameModeManager.Instance.GameModeStarted -= OnGameModeStarted;
             GameModeManager.Instance.GameModeWordUpdated -= UpdateCheckWord;
             GameModeManager.Instance.GameModeWordChanged -= UpdateReferenceWord;
         }
@@ -130,6 +131,11 @@ namespace PROJECT.Scripts.Game
                 }
             
             }
+        }
+        
+        private void OnGameModeStarted()
+        {
+            UpdateCheckWord("");
         }
 
         private void UpdateCheckWord(string checkWord)
