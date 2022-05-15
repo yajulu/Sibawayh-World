@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using _YajuluSDK._Scripts.Essentials;
 using _YajuluSDK._Scripts.UI;
 using PROJECT.Scripts.Game.Controllers;
@@ -7,6 +9,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
+using Random = UnityEngine.Random;
 
 namespace PROJECT.Scripts.Game
 {
@@ -30,8 +33,10 @@ namespace PROJECT.Scripts.Game
         private GameLetter _dummyGameLetter;
         private Vector2 _dummyPosition;
 
-        
-        
+        private List<GameLetter> _currentSelectedLetters = new List<GameLetter>();
+
+        public event Action OnResetWord;
+
         public int Count
         {
             get => count;
@@ -61,8 +66,9 @@ namespace PROJECT.Scripts.Game
         {
             base.OnEnable();
             GameModeManager.Instance.GameModeStarted += OnGameModeStarted;
-            GameModeManager.Instance.GameModeWordUpdated += UpdateCheckWord;
+            GameModeManager.Instance.GameModeWordUpdated += UpdateCheckWordUI;
             GameModeManager.Instance.GameModeWordChanged += UpdateReferenceWord;
+            GameModeManager.Instance.GameModeCheckWord += OnGameModeCheckWord;
         }
         
         protected override void OnDisable()
@@ -70,7 +76,7 @@ namespace PROJECT.Scripts.Game
             base.OnDisable();
             if (Singleton.Quitting) return;
             GameModeManager.Instance.GameModeStarted -= OnGameModeStarted;
-            GameModeManager.Instance.GameModeWordUpdated -= UpdateCheckWord;
+            GameModeManager.Instance.GameModeWordUpdated -= UpdateCheckWordUI;
             GameModeManager.Instance.GameModeWordChanged -= UpdateReferenceWord;
         }
 
@@ -89,28 +95,34 @@ namespace PROJECT.Scripts.Game
 
         private void UpdateSpawner()
         {
+            _currentSelectedLetters.Clear();
             var angle = (Mathf.PI * 2) / count;
-            for (var i = 0; i < letters.Length; i++)
+            using var numbers = Enumerable.Range(0, count).OrderBy(x => Random.Range(0, count)).GetEnumerator();
             {
-                _dummyGameLetter = null;
-                _dummyGameLetter = letters[i];
+                for (var i = 0; i < letters.Length; i++)
+                {
+                    _dummyGameLetter = null;
+                    _dummyGameLetter = letters[i];
                 
-                _dummyTransform = null;
-                _dummyTransform = _dummyGameLetter.transform;
-
-                if (i < count)
-                {
-                    _dummyTransform.gameObject.SetActive(true);
-                    _dummyPosition.x = Mathf.Cos((angle * i) + (Mathf.PI * 0.5f)) * radius;
-                    _dummyPosition.y = Mathf.Sin((angle * i) + (Mathf.PI * 0.5f)) * radius;
-                    _dummyTransform.localPosition = _dummyPosition;
-                    _dummyGameLetter.Letter = i < word.Length ? word[i].ToString() : "X";
-                    _dummyGameLetter.OnButtonToggled = HandleButtonToggles;
-                    _dummyGameLetter.OnButtonUpOrDragEnded = OnButtonUpOrDragEnded;
-                }
-                else
-                {
-                    _dummyTransform.gameObject.SetActive(false);
+                    _dummyTransform = null;
+                    _dummyTransform = _dummyGameLetter.transform;
+               
+                    if (i < count)
+                    {
+                        numbers.MoveNext();
+                        var angleMultiplier = numbers.Current;
+                        _dummyTransform.gameObject.SetActive(true);
+                        _dummyPosition.x = Mathf.Cos((angle * angleMultiplier) + (Mathf.PI * 0.5f)) * radius;
+                        _dummyPosition.y = Mathf.Sin((angle * angleMultiplier) + (Mathf.PI * 0.5f)) * radius;
+                        _dummyTransform.localPosition = _dummyPosition;
+                        _dummyGameLetter.Letter = i < word.Length ? word[i].ToString() : "X";
+                        _dummyGameLetter.OnButtonToggled = HandleButtonToggles;
+                        _dummyGameLetter.OnButtonUpOrDragEnded = OnButtonUpOrDragEnded;
+                    }
+                    else
+                    {
+                        _dummyTransform.gameObject.SetActive(false);
+                    }    
                 }
             }
 
@@ -119,26 +131,28 @@ namespace PROJECT.Scripts.Game
                 GameModeManager.Instance.TestCurrentCheckWord();    
             }
             
-            void HandleButtonToggles(string letter, int buttonIndex, bool selected)
+            void HandleButtonToggles(GameLetter letter, bool selected)
             {
                 if (selected)
                 {
-                    GameModeManager.Instance.AddLetter(letter, buttonIndex);
+                    _currentSelectedLetters.Add(letter);
                 }
                 else
                 {
-                    GameModeManager.Instance.RemoveLetter(letter, buttonIndex);
+                    _currentSelectedLetters.Remove(letter);
                 }
-            
+
+                var newCheckWord = _currentSelectedLetters.Aggregate("", (current, selectedLetter) => current + selectedLetter.Letter);
+                GameModeManager.Instance.UpdateCheckWord(newCheckWord);
             }
         }
         
         private void OnGameModeStarted()
         {
-            UpdateCheckWord("");
+            UpdateCheckWordUI("");
         }
 
-        private void UpdateCheckWord(string checkWord)
+        private void UpdateCheckWordUI(string checkWord)
         {
             currentCheckWord.SetText(checkWord);
         }
@@ -149,11 +163,25 @@ namespace PROJECT.Scripts.Game
             // {
             //     _separator.gameObject.SetActive(true);    
             // }
-            Word = refWord;
+            // if (refWord.Equals(word))
+            // {
+            //     OnResetWord?.Invoke();
+            // }
+            // else
+            // {
+            Word = refWord;    
+            // }
         }
-
         
-
+        private void OnGameModeCheckWord(string checkWord, bool check)
+        {
+            if (!check)
+            {
+                OnResetWord?.Invoke();
+                _currentSelectedLetters.Clear();
+            }
+        }
+        
         private void UpdateCountFromWord()
         {
             if (word == null)
