@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using _YajuluSDK._Scripts.Essentials;
 using _YajuluSDK._Scripts.UI;
 using PROJECT.Scripts.Game.Controllers;
+using RTLTMPro;
 using Sirenix.OdinInspector;
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
@@ -16,11 +17,12 @@ namespace PROJECT.Scripts.Game
     public class LetterSpawner : UIBehaviour
     {
         [SerializeField, TitleGroup("Refs"), OnValueChanged(nameof(UpdateLettersList))] private Transform parentTarget;
-        [SerializeField, TitleGroup("Refs")] private TextMeshProUGUI currentCheckWord;
-        [SerializeField, TitleGroup("Refs")] private Transform separator;
-        
-        [SerializeField, DisableIf("@this.parentTarget == null"), OnValueChanged(nameof(UpdateCountFromWord))]
+        [SerializeField, TitleGroup("Refs")] private RTLTextMeshPro currentCheckWord;
+
+        [SerializeField, DisableIf("@this.parentTarget == null"), OnValueChanged(nameof(UpdateCountFromWord)), SuffixLabel("@fixedWord", true)]
         private string word;
+
+        private string fixedWord;
 
         [SerializeField, PropertyRange(0, nameof(MaxCount)), DisableIf("@this.parentTarget == null"), OnValueChanged(nameof(UpdateSpawner))]
         private int count;
@@ -89,8 +91,8 @@ namespace PROJECT.Scripts.Game
         [Button]
         private void SetRefs()
         {
-            currentCheckWord = transform.FindDeepChild<TextMeshProUGUI>("CheckWord_Text");
-            separator = transform.FindDeepChild<Transform>("ClickSeparator");
+            currentCheckWord = transform.FindDeepChild<RTLTextMeshPro>("CheckWord_Text");
+            // separator = transform.FindDeepChild<Transform>("ClickSeparator");
         }
 
         private void UpdateSpawner()
@@ -154,7 +156,7 @@ namespace PROJECT.Scripts.Game
 
         private void UpdateCheckWordUI(string checkWord)
         {
-            currentCheckWord.SetText(checkWord);
+            currentCheckWord.text = checkWord;
         }
 
         private void UpdateReferenceWord(string refWord)
@@ -186,6 +188,7 @@ namespace PROJECT.Scripts.Game
         {
             if (word == null)
                 return;
+            // fixedWord = RtlString.GetFixedText(word);
             count = Mathf.Min(word.Length, letters.Length);
             UpdateSpawner();
         }

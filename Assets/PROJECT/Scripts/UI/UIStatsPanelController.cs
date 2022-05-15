@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using _YajuluSDK._Scripts.Essentials;
 using DG.Tweening;
 using PROJECT.Scripts.Game.Controllers;
+using RTLTMPro;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
@@ -16,8 +17,8 @@ namespace PROJECT.Scripts.UI
         [SerializeField, TitleGroup("Properties"), OnValueChanged(nameof(UpdateTitles))] private string gameModeSubtitle;
         
         
-        [SerializeField, TitleGroup("Refs")] private TextMeshProUGUI gameModeTitleText;
-        [SerializeField, TitleGroup("Refs")] private TextMeshProUGUI gameModeSubtitleText;
+        [SerializeField, TitleGroup("Refs")] private RTLTextMeshPro gameModeTitleText;
+        [SerializeField, TitleGroup("Refs")] private RTLTextMeshPro gameModeSubtitleText;
         [SerializeField, TitleGroup("Refs")] private Transform progressBarTransform;
         [SerializeField, TitleGroup("Refs"), ReadOnly] private Image[] progressBarElementsList;
 
@@ -78,15 +79,15 @@ namespace PROJECT.Scripts.UI
         [Button, TitleGroup("Properties")]
         private void UpdateTitles()
         {
-            gameModeTitleText.SetText(gameModeTitle);
-            gameModeSubtitleText.SetText(gameModeSubtitle);
+            gameModeTitleText.text = gameModeTitle;
+            gameModeSubtitleText.text = gameModeSubtitle;
         }
 
         [Button, TitleGroup("Refs")]
         private void SetRefs()
         {
-            gameModeTitleText = transform.FindDeepChild<TextMeshProUGUI>("GameModeTitle_Text");
-            gameModeSubtitleText = transform.FindDeepChild<TextMeshProUGUI>("GameModeSubtitle_Text");
+            gameModeTitleText = transform.FindDeepChild<RTLTextMeshPro>("GameModeTitle_Text");
+            gameModeSubtitleText = transform.FindDeepChild<RTLTextMeshPro>("GameModeSubtitle_Text");
             progressBarTransform = transform.FindDeepChild<Transform>("ProgressPoints");
             progressBarElementsList = progressBarTransform.GetComponentsInChildren<Image>(true);
         }
