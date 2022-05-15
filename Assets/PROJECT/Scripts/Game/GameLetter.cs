@@ -23,9 +23,9 @@ namespace PROJECT.Scripts.Game
         private bool _selected = false;
         private int _buttonIndex;
 
-        public Action<string, int, bool> OnButtonToggled;
+        public Action<GameLetter, bool> OnButtonToggled;
         public Action OnButtonUpOrDragEnded;
-        
+
         public string Letter
         {
             get => letter;
@@ -49,6 +49,16 @@ namespace PROJECT.Scripts.Game
         {
             _dummyVector3One = Vector3.one;
             _buttonIndex = transform.GetSiblingIndex();
+        }
+
+        private void OnEnable()
+        {
+            letterSpawner.OnResetWord += ResetButton;
+        }
+
+        private void OnDisable()
+        {
+            letterSpawner.OnResetWord -= ResetButton;
         }
 
         #region PointerCallBacks
@@ -107,14 +117,14 @@ namespace PROJECT.Scripts.Game
         {
             _selected = true;
             image.color = Color.gray;
-            OnButtonToggled?.Invoke(letter, _buttonIndex, true);
+            OnButtonToggled?.Invoke(this, true);
         }
 
         private void DeselectButton()
         {
             _selected = false;
             image.color = Color.white;
-            OnButtonToggled?.Invoke(letter, _buttonIndex, false);
+            OnButtonToggled?.Invoke(this, false);
         }
 
         private void ResetButton()

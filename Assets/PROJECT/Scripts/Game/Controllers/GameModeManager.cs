@@ -45,17 +45,17 @@ namespace PROJECT.Scripts.Game.Controllers
             OnGameModeWordChanged(currentReferenceWord);
         }
 
-        public void AddLetter(string letter, int gameLetterIndex)
-        {
-            _lettersDict.Add(gameLetterIndex, letter);
-            UpdateCheckWord();
-        }
-
-        public void RemoveLetter(string letter, int gameLetterIndex)
-        {
-            _lettersDict.Remove(gameLetterIndex);
-            UpdateCheckWord();
-        }
+        // public void AddLetter(string letter, int gameLetterIndex)
+        // {
+        //     _lettersDict.Add(gameLetterIndex, letter);
+        //     UpdateCheckWord();
+        // }
+        //
+        // public void RemoveLetter(string letter, int gameLetterIndex)
+        // {
+        //     _lettersDict.Remove(gameLetterIndex);
+        //     UpdateCheckWord();
+        // }
 
         public void TestCurrentCheckWord()
         {
@@ -63,13 +63,14 @@ namespace PROJECT.Scripts.Game.Controllers
                 OnGameModeCheckWord(currentCheckWord, CheckWord());
         }
 
-        private void UpdateCheckWord()
+        public void UpdateCheckWord(string newCheckWord)
         {
-            currentCheckWord = "";
-            foreach (var letter in _lettersDict.Values)
-            {
-                currentCheckWord += letter;
-            }
+            // currentCheckWord = "";
+            // foreach (var letter in _lettersDict.Values)
+            // {
+            //     currentCheckWord += letter;
+            // }
+            currentCheckWord = newCheckWord;
             OnGameModeWordUpdated(currentCheckWord);
         }
 
@@ -113,10 +114,10 @@ namespace PROJECT.Scripts.Game.Controllers
             {
                 ShowNextWord();
             }
-            else
-            {
-                OnGameModeWordChanged(currentReferenceWord);
-            }
+            // else
+            // {
+            //     OnGameModeWordChanged(currentReferenceWord);
+            // }
         }
 
         protected virtual void OnGameModeCompleted()
