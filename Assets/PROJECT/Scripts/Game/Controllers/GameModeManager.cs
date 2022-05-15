@@ -57,6 +57,12 @@ namespace PROJECT.Scripts.Game.Controllers
             UpdateCheckWord();
         }
 
+        public void TestCurrentCheckWord()
+        {
+            if(currentCheckWord.Length == currentReferenceWord.Length)
+                OnGameModeCheckWord(currentCheckWord, CheckWord());
+        }
+
         private void UpdateCheckWord()
         {
             currentCheckWord = "";
@@ -65,8 +71,6 @@ namespace PROJECT.Scripts.Game.Controllers
                 currentCheckWord += letter;
             }
             OnGameModeWordUpdated(currentCheckWord);
-            if(currentCheckWord.Length == currentReferenceWord.Length)
-                OnGameModeCheckWord(currentCheckWord, CheckWord());
         }
 
         private void ShowNextWord()

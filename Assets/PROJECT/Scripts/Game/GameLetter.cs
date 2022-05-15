@@ -1,17 +1,15 @@
 using System;
-using System.Reflection;
 using _YajuluSDK._Scripts.UI;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace PROJECT.Scripts.Game
 {
-    public class GameLetter : UIElementBase, IPointerDownHandler, IDragHandler, IPointerMoveHandler, IPointerEnterHandler, IPointerExitHandler
+    public class GameLetter : UIElementBase, IPointerDownHandler, IDragHandler, IPointerEnterHandler, IPointerExitHandler, IEndDragHandler, IPointerUpHandler
     {
         [SerializeField] private string letter = "";
         
@@ -26,9 +24,8 @@ namespace PROJECT.Scripts.Game
         private int _buttonIndex;
 
         public Action<string, int, bool> OnButtonToggled;
-
-        // private float _buttonResetTime;
-
+        public Action OnButtonUpOrDragEnded;
+        
         public string Letter
         {
             get => letter;
@@ -54,18 +51,6 @@ namespace PROJECT.Scripts.Game
             _buttonIndex = transform.GetSiblingIndex();
         }
 
-        // Start is called before the first frame update
-        void Start()
-        {
-            
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-        
-        }
-
         #region PointerCallBacks
         public void OnPointerDown(PointerEventData eventData)
         {
@@ -79,12 +64,7 @@ namespace PROJECT.Scripts.Game
                 SelectButton();
             }
         }
-
-        public void OnPointerMove(PointerEventData eventData)
-        {
-            // Debug.Log("Move");
-        }
-
+        
         public void OnDrag(PointerEventData eventData)
         {
             // if(!_selected)
@@ -95,7 +75,7 @@ namespace PROJECT.Scripts.Game
         {
             if (_selected)
                 return;
-
+    
             EnterExitAnimation(true);
             if (eventData.dragging)
             {
@@ -111,6 +91,15 @@ namespace PROJECT.Scripts.Game
             EnterExitAnimation(false);
         }
         
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            OnButtonUpOrDragEnded?.Invoke();
+        }
+
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            OnButtonUpOrDragEnded?.Invoke();
+        }
 
         #endregion
         
@@ -131,7 +120,6 @@ namespace PROJECT.Scripts.Game
         private void ResetButton()
         {
             DeselectButton();
-            // _buttonResetTime = Time.time;
             _tweener.Complete();
             transform.localScale = Vector3.one;
         }
@@ -149,8 +137,9 @@ namespace PROJECT.Scripts.Game
             else
             {
                 _tweener = transform.DOScale(1f, 0.2f)
-                    .SetEase(Ease.InBack, 2f);
+                    .SetEase(Ease.OutQuad, 2f);
             }
         }
+        
     }
 }

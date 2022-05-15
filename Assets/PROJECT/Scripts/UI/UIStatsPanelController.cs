@@ -49,8 +49,11 @@ namespace PROJECT.Scripts.UI
         
         private void OnDisable()
         {
+            if (Singleton.Quitting) return;
+            
             GameModeManager.Instance.GameModeStarted -= GameModeStarted;
             GameModeManager.Instance.GameModeCheckWord -= CheckWord;
+
         }
 
         private void GameModeStarted()
