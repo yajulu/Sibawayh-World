@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace PROJECT.Scripts.Game
 {
-    public class GameLetter : UIElementBase, IPointerDownHandler, IDragHandler, IPointerEnterHandler, IPointerExitHandler, IEndDragHandler, IPointerUpHandler
+    public class GameLetter : UIElementBase, IPointerDownHandler, IDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler
     {
         [SerializeField] private string letter = "";
         
@@ -24,7 +24,7 @@ namespace PROJECT.Scripts.Game
         private int _buttonIndex;
 
         public Action<GameLetter, bool> OnButtonToggled;
-        public Action OnButtonUpOrDragEnded;
+        public Action OnButtonUp;
 
         public string Letter
         {
@@ -101,14 +101,14 @@ namespace PROJECT.Scripts.Game
             EnterExitAnimation(false);
         }
         
-        public void OnEndDrag(PointerEventData eventData)
-        {
-            OnButtonUpOrDragEnded?.Invoke();
-        }
+        // public void OnEndDrag(PointerEventData eventData)
+        // {
+        //     OnButtonUpOrDragEnded?.Invoke();
+        // }
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            OnButtonUpOrDragEnded?.Invoke();
+            OnButtonUp?.Invoke();
         }
 
         #endregion
