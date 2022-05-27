@@ -1,4 +1,9 @@
 using System;
+using DG.Tweening;
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
+using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -15,7 +20,8 @@ namespace _YajuluSDK._Scripts.UI
     /// </remarks>
     [AddComponentMenu("UI/Tab", 30)]
     [RequireComponent(typeof(RectTransform))]
-    public class UITab : Selectable, IPointerClickHandler, ISubmitHandler, ICanvasElement
+    [ShowOdinSerializedPropertiesInInspector]
+    public class UITab : Selectable, IPointerClickHandler, ISubmitHandler, ICanvasElement, ISerializationCallbackReceiver, ISupportsPrefabSerialization
     {
         /// <summary>
         /// Display settings for when a toggle is activated or deactivated.
@@ -42,14 +48,18 @@ namespace _YajuluSDK._Scripts.UI
         /// <summary>
         /// Transition mode for the toggle.
         /// </summary>
-        public TabTransition tabTransition = TabTransition.Fade;
+        [TitleGroup("Properties")] public TabTransition tabTransition = TabTransition.Fade;
+        [SerializeField, TitleGroup("Properties")] private float m_animationDuration;
+        
 
         /// <summary>
         /// Graphic the toggle should be working with.
         /// </summary>
-        public Graphic graphic;
+        [TitleGroup("Refs")] public Graphic graphic;
 
-        [SerializeField]
+        [SerializeField, TitleGroup("Refs")] private TextMeshProUGUI m_TabText;
+
+        [SerializeField, TitleGroup("Refs")]
         private UITabGroup m_Group;
 
         /// <summary>
@@ -104,12 +114,17 @@ namespace _YajuluSDK._Scripts.UI
         /// ]]>
         ///</code>
         /// </example>
-        public UITabEvent OnValueChanged;
+        [HideInInspector] public UITabEvent OnValueChanged;
 
         // Whether the toggle is on
         [Tooltip("Is the toggle currently on or off?")]
-        [SerializeField]
+        [SerializeField, TitleGroup("Properties")]
         private bool m_IsOn;
+        
+        [SerializeField, TitleGroup("Properties"), OnValueChanged(nameof(UpdateTabText))] private string m_TabName;
+
+        [SerializeField,TitleGroup("Properties"),  InlineEditor]
+        private Image m_TabIcon;
 
         protected UITab()
         {}
@@ -210,7 +225,7 @@ namespace _YajuluSDK._Scripts.UI
             if (newGroup != null && isOn && IsActive())
                 newGroup.NotifyToggleOn(this);
         }
-
+        
         /// <summary>
         /// Whether the toggle is currently active.
         /// </summary>
@@ -261,6 +276,22 @@ namespace _YajuluSDK._Scripts.UI
             }
         }
 
+        public string TabName
+        {
+            get => m_TabName;
+            set
+            {
+                m_TabName = value;
+                m_TabText.text = m_TabName;
+            }
+        }
+
+        private void UpdateTabText(string value)
+        {
+            TabName = value;
+        }
+
+        
         /// <summary>
         /// Set isOn without invoking onValueChanged callback.
         /// </summary>
@@ -305,13 +336,27 @@ namespace _YajuluSDK._Scripts.UI
         {
             if (graphic == null)
                 return;
-
+            var value = m_IsOn ? 1f : 0f;
 #if UNITY_EDITOR
             if (!Application.isPlaying)
-                graphic.canvasRenderer.SetAlpha(m_IsOn ? 1f : 0f);
+            {
+                graphic.canvasRenderer.SetAlpha(value);
+                m_TabText.canvasRenderer.SetAlpha(value);
+                graphic.transform.localScale = Vector3.one;
+            }
             else
 #endif
-                graphic.CrossFadeAlpha(m_IsOn ? 1f : 0f, instant ? 0f : 0.1f, true);
+            {
+                
+                var duration = instant ? 0f : m_animationDuration;
+                graphic.CrossFadeAlpha(value,duration , true);
+                m_TabText.DOFade(value, duration)
+                    .SetEase(Ease.Linear);
+                graphic.transform.DOScale(value, duration)
+                    .SetEase(Ease.OutBack);
+                // transform.DOScaleX(m_IsOn ? 2f : 1f, instant ? 0f : 0.2f);
+            }
+
         }
 
         /// <summary>
@@ -324,7 +369,7 @@ namespace _YajuluSDK._Scripts.UI
 
         private void InternalToggle()
         {
-            if (!IsActive() || !IsInteractable())
+            if (!IsActive())
                 return;
 
             isOn = !isOn;
@@ -344,6 +389,21 @@ namespace _YajuluSDK._Scripts.UI
         public virtual void OnSubmit(BaseEventData eventData)
         {
             InternalToggle();
+        }
+
+        [SerializeField, HideInInspector]
+        private SerializationData serializationData;
+
+        SerializationData ISupportsPrefabSerialization.SerializationData { get { return this.serializationData; } set { this.serializationData = value; } }
+
+        void ISerializationCallbackReceiver.OnAfterDeserialize()
+        {
+            UnitySerializationUtility.DeserializeUnityObject(this, ref this.serializationData);
+        }
+
+        void ISerializationCallbackReceiver.OnBeforeSerialize()
+        {
+            UnitySerializationUtility.SerializeUnityObject(this, ref this.serializationData);
         }
     }
 }
