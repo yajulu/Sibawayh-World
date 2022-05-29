@@ -78,6 +78,10 @@ namespace _YajuluSDK._Scripts.UI
             OpenAnimation();
         }
         
+        /// <summary>
+        /// You Must Call gameObject.SetActive(true)
+        /// and OnScreenOpenEnded
+        /// </summary>
         protected virtual void OpenAnimation()
         {
             gameObject.SetActive(true);
