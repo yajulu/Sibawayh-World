@@ -126,7 +126,7 @@ namespace _YajuluSDK._Scripts.UI
 
         [SerializeField, TitleGroup("Properties"), OnValueChanged(nameof(UpdateIcon))]
         private bool m_HasIcon;
-        [SerializeField,TitleGroup("Properties"),  ShowIf(nameof(m_HasIcon)), InlineEditor]
+        [SerializeField,TitleGroup("Properties"),  EnableIf(nameof(m_HasIcon)), InlineEditor]
         private Image m_TabIcon;
 
         protected UITab()
@@ -350,33 +350,30 @@ namespace _YajuluSDK._Scripts.UI
                 return;
             var value = m_IsOn ? 1f : 0f;
 
-#if UNITY_EDITOR
-            if (!Application.isPlaying)
+
+            if (!Application.isPlaying || instant)
             {
                 graphic.canvasRenderer.SetAlpha(value);
                 
                 
                 m_TabText.canvasRenderer.SetAlpha(m_HasIcon ? value : 1);
-                m_TabIcon.canvasRenderer.SetAlpha((1 - value) * (m_HasIcon ? 1 : 0));
+                m_TabIcon.gameObject.SetActive(m_HasIcon && !m_IsOn);
 
                 graphic.transform.localScale = Vector3.one;
             }
             else
-#endif
             {
-                
-                var duration = instant ? 0f : m_animationDuration;
-                graphic.CrossFadeAlpha(value,duration , true);
+                graphic.CrossFadeAlpha(value, m_animationDuration , true);
                 
                 if (m_HasIcon)
                 {
-                    m_TabText.DOFade(value, duration)
+                    m_TabText.DOFade(value, m_animationDuration)
                         .SetEase(Ease.Linear);
-                    m_TabIcon.DOFade(1 - value, duration)
+                    m_TabIcon.DOFade(1 - value, m_animationDuration)
                         .SetEase(Ease.Linear);
                 }
 
-                graphic.transform.DOScale(value, duration)
+                graphic.transform.DOScale(value, m_animationDuration)
                     .SetEase(Ease.OutBack);
                 // transform.DOScaleX(m_IsOn ? 2f : 1f, instant ? 0f : 0.2f);
             }

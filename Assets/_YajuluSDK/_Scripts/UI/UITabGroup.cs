@@ -229,9 +229,11 @@ namespace _YajuluSDK._Scripts.UI
 
             IEnumerable<UITab> activeToggles = ActiveTabs();
 
+            UITab firstActive = null;
+
             if (activeToggles.Count() > 1)
             {
-                UITab firstActive = GetFirstActiveTab();
+                firstActive = GetFirstActiveTab();
 
                 foreach (UITab toggle in activeToggles)
                 {
@@ -242,9 +244,14 @@ namespace _YajuluSDK._Scripts.UI
 
                     toggle.isOn = false;
                 }
-                
-                UpdateContentView(firstActive, true);
             }
+            // else
+            // {
+            //     firstActive = m_Tabs[0];
+            //     firstActive.isOn = true;
+            // }
+            if(firstActive != null)
+                UpdateContentView(firstActive, true);
         }
 
         /// <summary>
