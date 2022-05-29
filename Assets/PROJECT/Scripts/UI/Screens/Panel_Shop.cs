@@ -15,6 +15,7 @@ namespace PROJECT.Scripts.UI.Screens
         [SerializeField] private Button backgroundButton;
 
         private Sequence _openSequence;
+        private Sequence _closeSequence;
 
         private void OnEnable()
         {
@@ -43,6 +44,22 @@ namespace PROJECT.Scripts.UI.Screens
             {
                 gameObject.SetActive(true);
             }
+        }
+
+
+        protected override void CloseAnimation()
+        {
+            _closeSequence = DOTween.Sequence();
+
+            
+            _closeSequence.Append(screenBackground.DOFade(0f, 0.3f)
+                .SetEase(Ease.OutQuad)
+                .From(0.5f));
+
+            _closeSequence.Insert(0.15f, mainPanel.transform.DOScale(0, 0.25f).From(1).SetEase(Ease.OutBack));
+
+            //_closeSequence.OnComplete(OnScreenCloseEnded);
+            //CloseShop();
         }
 
         private void CloseShop()
