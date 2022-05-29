@@ -1968,7 +1968,7 @@ PrefabInstance:
     - target: {fileID: 1807252640731028230, guid: 9eb8f57ab3d0fff4bb523ef3a871c759, type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1807252640731028230, guid: 9eb8f57ab3d0fff4bb523ef3a871c759, type: 3}
     - target: {fileID: 1807252640731028230, guid: 9eb8f57ab3d0fff4bb523ef3a871c759, type: 3}
       propertyPath: m_Colors.m_ColorMultiplier
       value: 1
@@ -2247,11 +2247,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1807252642454192573, guid: 9eb8f57ab3d0fff4bb523ef3a871c759, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1200
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1807252642454192573, guid: 9eb8f57ab3d0fff4bb523ef3a871c759, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -1600
+      value: -800
       objectReference: {fileID: 0}
     - target: {fileID: 1807252642454192573, guid: 9eb8f57ab3d0fff4bb523ef3a871c759, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -8342,7 +8342,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 885538350}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1200}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -13444,7 +13444,7 @@ MonoBehaviour:
   graphic: {fileID: 1663121198}
   m_TabText: {fileID: 2030498537}
   m_Group: {fileID: 1147406181}
-  m_IsOn: 1
+  m_IsOn: 0
   m_TabName: "\u0625\u062D\u0635\u0627\u0626\u064A\u0627\u062A"
   m_HasIcon: 0
   m_TabIcon: {fileID: 2069570297}

@@ -110,29 +110,25 @@ namespace _YajuluSDK._Scripts.UI
             UpdateContentView(tab);
         }
 
-        private void UpdateContentView(UITab tab)
+        private void UpdateContentView(UITab tab, bool instant = false)
         {
             _dummyTabContentTransform = null;
             
             if (_tabGroupDictionary.TryGetValue(tab, out _dummyTabContentTransform))
             {
                 var endValue = -_dummyTabContentTransform.anchoredPosition.x;
-                if (Application.isPlaying)
+                if (Application.isPlaying && !instant)
                 {
                     _contentTween =
                         tabsContentParentRectTransform.DOLocalMoveX(endValue, tabSwitchingDuration)
                             .SetEase(tabSwitchingEase);    
-                }
-                
-#if UNITY_EDITOR
-                if (!Application.isPlaying)
+                } else 
                 {
                     var newLocation = tabsContentParentRectTransform.localPosition;
                     newLocation.x = endValue;
                     tabsContentParentRectTransform.localPosition = newLocation;
                 }
-#endif
-                
+
             }
             else
             {
@@ -247,7 +243,7 @@ namespace _YajuluSDK._Scripts.UI
                     toggle.isOn = false;
                 }
                 
-                UpdateContentView(firstActive);
+                UpdateContentView(firstActive, true);
             }
         }
 

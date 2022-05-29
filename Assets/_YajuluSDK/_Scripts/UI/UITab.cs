@@ -356,7 +356,7 @@ namespace _YajuluSDK._Scripts.UI
                 graphic.canvasRenderer.SetAlpha(value);
                 
                 
-                m_TabText.canvasRenderer.SetAlpha(value * (m_HasIcon ? 1 : 0));
+                m_TabText.canvasRenderer.SetAlpha(m_HasIcon ? value : 1);
                 m_TabIcon.canvasRenderer.SetAlpha((1 - value) * (m_HasIcon ? 1 : 0));
 
                 graphic.transform.localScale = Vector3.one;
