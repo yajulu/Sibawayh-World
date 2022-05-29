@@ -21,6 +21,7 @@ namespace _YajuluSDK._Scripts.UI
     /// </remarks>
     [AddComponentMenu("UI/Tab Group", 31)]
     [DisallowMultipleComponent]
+    [ExecuteAlways]
 
     public class UITabGroup : UIBehaviour
     {
@@ -105,19 +106,33 @@ namespace _YajuluSDK._Scripts.UI
                 else
                     m_Tabs[i].SetIsOnWithoutNotify(false);
             }
-            if (Application.isPlaying)
-                UpdateContentView(tab);
+            
+            UpdateContentView(tab);
         }
 
         private void UpdateContentView(UITab tab)
         {
             _dummyTabContentTransform = null;
+            
             if (_tabGroupDictionary.TryGetValue(tab, out _dummyTabContentTransform))
             {
                 var endValue = -_dummyTabContentTransform.anchoredPosition.x;
-                _contentTween =
-                    tabsContentParentRectTransform.DOLocalMoveX(endValue, tabSwitchingDuration)
-                        .SetEase(tabSwitchingEase);
+                if (Application.isPlaying)
+                {
+                    _contentTween =
+                        tabsContentParentRectTransform.DOLocalMoveX(endValue, tabSwitchingDuration)
+                            .SetEase(tabSwitchingEase);    
+                }
+                
+#if UNITY_EDITOR
+                if (!Application.isPlaying)
+                {
+                    var newLocation = tabsContentParentRectTransform.localPosition;
+                    newLocation.x = endValue;
+                    tabsContentParentRectTransform.localPosition = newLocation;
+                }
+#endif
+                
             }
             else
             {
@@ -231,6 +246,8 @@ namespace _YajuluSDK._Scripts.UI
 
                     toggle.isOn = false;
                 }
+                
+                UpdateContentView(firstActive);
             }
         }
 

@@ -20,8 +20,9 @@ namespace _YajuluSDK._Scripts.UI
     /// </remarks>
     [AddComponentMenu("UI/Tab", 30)]
     [RequireComponent(typeof(RectTransform))]
-    [ShowOdinSerializedPropertiesInInspector]
-    public class UITab : Selectable, IPointerClickHandler, ISubmitHandler, ICanvasElement, ISerializationCallbackReceiver, ISupportsPrefabSerialization
+    [ExecuteAlways]
+    [DisallowMultipleComponent]
+    public class UITab : UIBehaviour, IPointerClickHandler, ISubmitHandler, ICanvasElement, ISerializationCallbackReceiver, ISupportsPrefabSerialization
     {
         /// <summary>
         /// Display settings for when a toggle is activated or deactivated.
@@ -48,8 +49,8 @@ namespace _YajuluSDK._Scripts.UI
         /// <summary>
         /// Transition mode for the toggle.
         /// </summary>
-        [TitleGroup("Properties")] public TabTransition tabTransition = TabTransition.Fade;
-        [SerializeField, TitleGroup("Properties")] private float m_animationDuration;
+        [TitleGroup("Animations")] public TabTransition tabTransition = TabTransition.Fade;
+        [SerializeField, TitleGroup("Animations")] private float m_animationDuration;
         
 
         /// <summary>
@@ -118,12 +119,14 @@ namespace _YajuluSDK._Scripts.UI
 
         // Whether the toggle is on
         [Tooltip("Is the toggle currently on or off?")]
-        [SerializeField, TitleGroup("Properties")]
+        [SerializeField, TitleGroup("Properties"), OnValueChanged(nameof(UpdateIsOn)), PropertyOrder(-1)]
         private bool m_IsOn;
         
         [SerializeField, TitleGroup("Properties"), OnValueChanged(nameof(UpdateTabText))] private string m_TabName;
 
-        [SerializeField,TitleGroup("Properties"),  InlineEditor]
+        [SerializeField, TitleGroup("Properties"), OnValueChanged(nameof(UpdateIcon))]
+        private bool m_HasIcon;
+        [SerializeField,TitleGroup("Properties"),  ShowIf(nameof(m_HasIcon)), InlineEditor]
         private Image m_TabIcon;
 
         protected UITab()
@@ -291,6 +294,15 @@ namespace _YajuluSDK._Scripts.UI
             TabName = value;
         }
 
+        private void UpdateIsOn(bool value)
+        {
+            Set(value, inspector:true);
+        }
+
+        private void UpdateIcon(bool value)
+        {
+            PlayEffect(true);
+        }
         
         /// <summary>
         /// Set isOn without invoking onValueChanged callback.
@@ -301,9 +313,9 @@ namespace _YajuluSDK._Scripts.UI
             Set(value, false);
         }
 
-        void Set(bool value, bool sendCallback = true)
+        void Set(bool value, bool sendCallback = true, bool inspector = false)
         {
-            if (m_IsOn == value)
+            if (m_IsOn == value && !inspector)
                 return;
 
             // if we are in a group and set to true, do group logic
@@ -337,11 +349,16 @@ namespace _YajuluSDK._Scripts.UI
             if (graphic == null)
                 return;
             var value = m_IsOn ? 1f : 0f;
+
 #if UNITY_EDITOR
             if (!Application.isPlaying)
             {
                 graphic.canvasRenderer.SetAlpha(value);
-                m_TabText.canvasRenderer.SetAlpha(value);
+                
+                
+                m_TabText.canvasRenderer.SetAlpha(value * (m_HasIcon ? 1 : 0));
+                m_TabIcon.canvasRenderer.SetAlpha((1 - value) * (m_HasIcon ? 1 : 0));
+
                 graphic.transform.localScale = Vector3.one;
             }
             else
@@ -350,8 +367,15 @@ namespace _YajuluSDK._Scripts.UI
                 
                 var duration = instant ? 0f : m_animationDuration;
                 graphic.CrossFadeAlpha(value,duration , true);
-                m_TabText.DOFade(value, duration)
-                    .SetEase(Ease.Linear);
+                
+                if (m_HasIcon)
+                {
+                    m_TabText.DOFade(value, duration)
+                        .SetEase(Ease.Linear);
+                    m_TabIcon.DOFade(1 - value, duration)
+                        .SetEase(Ease.Linear);
+                }
+
                 graphic.transform.DOScale(value, duration)
                     .SetEase(Ease.OutBack);
                 // transform.DOScaleX(m_IsOn ? 2f : 1f, instant ? 0f : 0.2f);
