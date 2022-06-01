@@ -129,6 +129,8 @@ namespace _YajuluSDK._Scripts.UI
         [SerializeField,TitleGroup("Properties"),  EnableIf(nameof(m_HasIcon)), InlineEditor]
         private Image m_TabIcon;
 
+        private RectTransform m_TabRectTransform;
+
         protected UITab()
         {}
 
@@ -158,6 +160,12 @@ namespace _YajuluSDK._Scripts.UI
 
         public virtual void GraphicUpdateComplete()
         {}
+
+        protected override void Awake()
+        {
+            base.Awake();
+            m_TabRectTransform = transform.GetComponent<RectTransform>();
+        }
 
         protected override void OnDestroy()
         {
@@ -355,11 +363,10 @@ namespace _YajuluSDK._Scripts.UI
             {
                 graphic.canvasRenderer.SetAlpha(value);
                 
-                
                 m_TabText.canvasRenderer.SetAlpha(m_HasIcon ? value : 1);
                 m_TabIcon.gameObject.SetActive(m_HasIcon && !m_IsOn);
+                m_TabRectTransform.localScale = Vector3.one * (m_HasIcon ? (m_IsOn ? 1 : 0.75f) : 1);
 
-                graphic.transform.localScale = Vector3.one;
             }
             else
             {
@@ -371,6 +378,9 @@ namespace _YajuluSDK._Scripts.UI
                         .SetEase(Ease.Linear);
                     m_TabIcon.DOFade(1 - value, m_animationDuration)
                         .SetEase(Ease.Linear);
+                    m_TabRectTransform.DOScale(m_IsOn ? 1 : 0.75f, m_animationDuration)
+                        .SetEase(Ease.Linear)
+                        .OnUpdate(() => m_Group.RefreshLayout());
                 }
 
                 graphic.transform.DOScale(value, m_animationDuration)

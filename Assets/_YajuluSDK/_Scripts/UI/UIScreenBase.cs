@@ -79,8 +79,9 @@ namespace _YajuluSDK._Scripts.UI
         }
         
         /// <summary>
-        /// You Must Call gameObject.SetActive(true)
-        /// and OnScreenOpenEnded
+        /// You Must Call:
+        /// gameObject.SetActive(true);
+        /// OnScreenOpenEnded();
         /// </summary>
         protected virtual void OpenAnimation()
         {
@@ -89,12 +90,23 @@ namespace _YajuluSDK._Scripts.UI
             OnScreenOpenEnded();
         }
         
+        
+        /// <summary>
+        /// You Must Call:
+        /// gameObject.SetActive(true);
+        /// OnScreenOpenEnded();
+        /// </summary>
         protected virtual void OnSkipOpenAnimation()
         {
             gameObject.SetActive(true);
             OnScreenOpenEnded();
         }
-
+        
+        /// <summary>
+        /// You Must Call:
+        /// base.OnScreenOpenEnded();
+        /// at the end of your logic.
+        /// </summary>
         protected virtual void OnScreenOpenEnded()
         {
             if (State == eUIScreenState.Opened)
@@ -148,6 +160,11 @@ namespace _YajuluSDK._Scripts.UI
             CloseAnimation();
         }
 
+        /// <summary>
+        /// You Must Call:
+        /// base.CloseAnimation();
+        /// at the end of your Animation.
+        /// </summary>
         protected virtual void CloseAnimation()
         {
             gameObject.SetActive(false);
@@ -155,6 +172,12 @@ namespace _YajuluSDK._Scripts.UI
             OnScreenCloseEnded();
         }
         
+        
+        /// <summary>
+        /// You Must Call:
+        /// base.OnSkipCloseAnimation();
+        /// at the end of your Animation.
+        /// </summary>
         protected virtual void OnSkipCloseAnimation()
         {
             gameObject.SetActive(false);

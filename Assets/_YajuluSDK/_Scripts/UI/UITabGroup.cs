@@ -313,6 +313,11 @@ namespace _YajuluSDK._Scripts.UI
             m_AllowSwitchOff = oldAllowSwitchOff;
         }
 
+        public void RefreshLayout()
+        {
+            LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)tabsParent);
+        }
+
         private void OnTabChanged(bool isOn, int index)
         {
 

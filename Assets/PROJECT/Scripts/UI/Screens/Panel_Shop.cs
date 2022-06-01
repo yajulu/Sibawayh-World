@@ -58,8 +58,7 @@ namespace PROJECT.Scripts.UI.Screens
 
             _closeSequence.Insert(0.15f, mainPanel.transform.DOScale(0, 0.25f).From(1).SetEase(Ease.OutBack));
 
-            //_closeSequence.OnComplete(OnScreenCloseEnded);
-            //CloseShop();
+            _closeSequence.OnComplete(base.CloseAnimation);
         }
 
         private void CloseShop()
