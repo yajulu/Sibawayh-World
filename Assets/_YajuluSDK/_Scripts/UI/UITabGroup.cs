@@ -54,11 +54,13 @@ namespace _YajuluSDK._Scripts.UI
         [SerializeField] private float tabSwitchingDuration = 0.35f;
 
         [SerializeField] private Ease tabSwitchingEase = Ease.OutQuad;
+        [SerializeField, Range(1, 2)] private float tabSelectorWidthFactor = 1f; 
 
         [TitleGroup("Refs")]
-        [SerializeField] private Transform tabsParent;
+        [SerializeField] private RectTransform tabsParent;
         [SerializeField] private Transform tabsContentParent;
         [SerializeField, Sirenix.OdinInspector.ReadOnly] private RectTransform tabsContentParentRectTransform;
+        [SerializeField] private RectTransform tabSelector;
 
 
 
@@ -107,7 +109,7 @@ namespace _YajuluSDK._Scripts.UI
                     m_Tabs[i].SetIsOnWithoutNotify(false);
             }
             
-            UpdateContentView(tab);
+            UpdateContentView(tab, !sendCallback);
         }
 
         private void UpdateContentView(UITab tab, bool instant = false)
@@ -119,14 +121,21 @@ namespace _YajuluSDK._Scripts.UI
                 var endValue = -_dummyTabContentTransform.anchoredPosition.x;
                 if (Application.isPlaying && !instant)
                 {
+                    
                     _contentTween =
                         tabsContentParentRectTransform.DOLocalMoveX(endValue, tabSwitchingDuration)
-                            .SetEase(tabSwitchingEase);    
+                            .SetEase(tabSwitchingEase);
+                    tabSelector.DOLocalMoveX(tab.transform.localPosition.x, tabSwitchingDuration);
                 } else 
                 {
                     var newLocation = tabsContentParentRectTransform.localPosition;
                     newLocation.x = endValue;
                     tabsContentParentRectTransform.localPosition = newLocation;
+                    
+                    
+                    newLocation = tabSelector.localPosition;
+                    newLocation.x = tab.transform.localPosition.x;
+                    tabSelector.localPosition = newLocation;
                 }
 
             }
@@ -145,9 +154,12 @@ namespace _YajuluSDK._Scripts.UI
         {
             if (m_Tabs.Contains(tab))
                 m_Tabs.Remove(tab);
-
+            
             if (!isDestroyed)
                 return;
+            //Update SelectorSize
+            tabSelector.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (tabsParent.rect.width / m_Tabs.Count) * tabSelectorWidthFactor);
+            
             if (_tabGroupDictionary.TryGetValue(tab, out var val))
             {
                 _tabGroupDictionary.Remove(tab);
@@ -168,6 +180,9 @@ namespace _YajuluSDK._Scripts.UI
         {
             if (!m_Tabs.Contains(tab))
                 m_Tabs.Add(tab);
+            
+            //Update SelectorSize
+            tabSelector.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (tabsParent.rect.width / m_Tabs.Count) * tabSelectorWidthFactor);
 
             var found = _tabGroupDictionary.TryGetValue(tab, out var content);
 
@@ -219,12 +234,12 @@ namespace _YajuluSDK._Scripts.UI
         /// Ensure that the toggle group still has a valid state. This is only relevant when a ToggleGroup is Started
         /// or a Toggle has been deleted from the group.
         /// </summary>
-        public void EnsureValidState()
+        public void EnsureValidState(bool instant = false)
         {
             if (!allowSwitchOff && !AnyTogglesOn() && m_Tabs.Count != 0)
             {
                 m_Tabs[0].isOn = true;
-                NotifyToggleOn(m_Tabs[0]);
+                NotifyToggleOn(m_Tabs[0], !instant);
             }
 
             IEnumerable<UITab> activeToggles = ActiveTabs();
@@ -335,8 +350,9 @@ namespace _YajuluSDK._Scripts.UI
         [Button]
         private void SetRefs()
         {
-            tabsParent = transform.FindDeepChild<Transform>("Tabs");
-            tabsContentParent = transform.FindDeepChild<Transform>("TabsContent");
+            tabsParent = transform.FindDeepChild<RectTransform>("Tabs");
+            tabSelector = transform.FindDeepChild<RectTransform>("TabSelector");
+            tabsContentParent = transform.FindDeepChild<RectTransform>("TabsContent");
             tabsContentParentRectTransform = tabsContentParent.GetComponent<RectTransform>();
         }
 

@@ -56,7 +56,7 @@ namespace _YajuluSDK._Scripts.UI
         /// <summary>
         /// Graphic the toggle should be working with.
         /// </summary>
-        [TitleGroup("Refs")] public Graphic graphic;
+        // [TitleGroup("Refs")] public Graphic graphic;
 
         [SerializeField, TitleGroup("Refs")] private TextMeshProUGUI m_TabText;
 
@@ -191,22 +191,22 @@ namespace _YajuluSDK._Scripts.UI
             base.OnDisable();
         }
         
-        protected override void OnDidApplyAnimationProperties()
-        {
-            // Check if isOn has been changed by the animation.
-            // Unfortunately there is no way to check if we don�t have a graphic.
-            if (graphic != null)
-            {
-                bool oldValue = !Mathf.Approximately(graphic.canvasRenderer.GetColor().a, 0);
-                if (m_IsOn != oldValue)
-                {
-                    m_IsOn = oldValue;
-                    Set(!oldValue);
-                }
-            }
-
-            base.OnDidApplyAnimationProperties();
-        }
+        // protected override void OnDidApplyAnimationProperties()
+        // {
+        //     // Check if isOn has been changed by the animation.
+        //     // Unfortunately there is no way to check if we don�t have a graphic.
+        //     if (graphic != null)
+        //     {
+        //         bool oldValue = !Mathf.Approximately(graphic.canvasRenderer.GetColor().a, 0);
+        //         if (m_IsOn != oldValue)
+        //         {
+        //             m_IsOn = oldValue;
+        //             Set(!oldValue);
+        //         }
+        //     }
+        //
+        //     base.OnDidApplyAnimationProperties();
+        // }
 
         public void SetTabGroup(UITabGroup newGroup, RectTransform tabContentTransform)
         {
@@ -354,23 +354,28 @@ namespace _YajuluSDK._Scripts.UI
         /// </summary>
         private void PlayEffect(bool instant)
         {
-            if (graphic == null)
-                return;
+            // if (graphic == null)
+            //     return;
             var value = m_IsOn ? 1f : 0f;
 
 
-            if (!Application.isPlaying || instant)
+            if (!Application.isPlaying)
             {
-                graphic.canvasRenderer.SetAlpha(value);
+                // graphic.canvasRenderer.SetAlpha(value);
                 
+                if(m_TabIcon != null)
+                {
+                    m_TabIcon.gameObject.SetActive(m_HasIcon);
+                    m_TabIcon.canvasRenderer.SetAlpha(m_IsOn ? 0 : 1);                
+                }
                 m_TabText.canvasRenderer.SetAlpha(m_HasIcon ? value : 1);
-                m_TabIcon.gameObject.SetActive(m_HasIcon && !m_IsOn);
-                m_TabRectTransform.localScale = Vector3.one * (m_HasIcon ? (m_IsOn ? 1 : 0.75f) : 1);
+
+                // m_TabRectTransform.localScale = Vector3.one * (m_HasIcon ? (m_IsOn ? 1 : 0.75f) : 1);
 
             }
             else
             {
-                graphic.CrossFadeAlpha(value, m_animationDuration , true);
+                // graphic.CrossFadeAlpha(value, m_animationDuration , true);
                 
                 if (m_HasIcon)
                 {
@@ -378,13 +383,13 @@ namespace _YajuluSDK._Scripts.UI
                         .SetEase(Ease.Linear);
                     m_TabIcon.DOFade(1 - value, m_animationDuration)
                         .SetEase(Ease.Linear);
-                    m_TabRectTransform.DOScale(m_IsOn ? 1 : 0.75f, m_animationDuration)
-                        .SetEase(Ease.Linear)
-                        .OnUpdate(() => m_Group.RefreshLayout());
+                    // m_TabRectTransform.DOScale(m_IsOn ? 1 : 0.75f, m_animationDuration)
+                    //     .SetEase(Ease.Linear)
+                    //     .OnUpdate(() => m_Group.RefreshLayout());
                 }
 
-                graphic.transform.DOScale(value, m_animationDuration)
-                    .SetEase(Ease.OutBack);
+                // graphic.transform.DOScale(value, m_animationDuration)
+                //     .SetEase(Ease.OutBack);
                 // transform.DOScaleX(m_IsOn ? 2f : 1f, instant ? 0f : 0.2f);
             }
 
