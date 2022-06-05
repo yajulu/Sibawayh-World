@@ -118,7 +118,11 @@ namespace _YajuluSDK._Scripts.UI
             
             if (_tabGroupDictionary.TryGetValue(tab, out _dummyTabContentTransform))
             {
+                if (_dummyTabContentTransform.rect.height == 0) //This means the layout group didn't refresh yet.
+                    return;
+                
                 var endValue = -_dummyTabContentTransform.anchoredPosition.x;
+                
                 if (Application.isPlaying && !instant)
                 {
                     
