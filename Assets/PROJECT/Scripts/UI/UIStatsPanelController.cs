@@ -65,6 +65,10 @@ namespace PROJECT.Scripts.UI
             {
                 element.color = color;
             }
+
+            gameModeTitle = GameModeManager.Instance.GetCurrentLevelTypeName();
+            gameModeSubtitle = GameModeManager.Instance.CurrentLevelData.KeyWord;
+            UpdateTitles();
         }
         
         private void CheckWord(string word, bool check)

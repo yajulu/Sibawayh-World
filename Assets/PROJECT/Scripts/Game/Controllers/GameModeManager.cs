@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using _YajuluSDK._Scripts.Essentials;
+using PROJECT.Scripts.Data;
+using PROJECT.Scripts.Enums;
+using PROJECT.Scripts.ScriptableObjects;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -20,12 +23,17 @@ namespace PROJECT.Scripts.Game.Controllers
 
         private Dictionary<int, string> _lettersDict = new Dictionary<int, string>();
 
-        [SerializeField] private List<string> currentLevelWordsList;
+        [SerializeField] private int currentLevel = 1;
+        [SerializeField] private GameData gameData;
+        [SerializeField, ReadOnly] private string []currentLevelWordsList;
         [SerializeField, ReadOnly] private int currentWordIndex = 0;
+        [SerializeField, ReadOnly] private LevelData currentLevelData;
 
         public int CurrentWordIndex => currentWordIndex;
 
         public string CurrentReferenceWord => currentReferenceWord;
+
+        public LevelData CurrentLevelData => currentLevelData;
 
         // Start is called before the first frame update
         void Start()
@@ -76,7 +84,7 @@ namespace PROJECT.Scripts.Game.Controllers
 
         private void ShowNextWord()
         {
-            if (currentWordIndex + 1 == currentLevelWordsList.Count)
+            if (currentWordIndex + 1 == currentLevelWordsList.Length)
             {
                 OnGameModeCompleted();
             }
@@ -87,6 +95,11 @@ namespace PROJECT.Scripts.Game.Controllers
             }
         }
 
+        public string GetCurrentLevelTypeName()
+        {
+            return gameData.GetLevelTypeName(currentLevelData.LevelType);
+        }
+
         protected virtual bool CheckWord()
         {
             return currentCheckWord.Equals(currentReferenceWord);
@@ -95,6 +108,8 @@ namespace PROJECT.Scripts.Game.Controllers
         protected virtual void OnGameModeStarted()
         {
             currentWordIndex = 0;
+            currentLevelData = gameData.GetLevelData(currentLevel);
+            currentLevelWordsList = currentLevelData.Words;
             currentReferenceWord = currentLevelWordsList[0];
             currentCheckWord = "";
             GameModeStarted?.Invoke();
