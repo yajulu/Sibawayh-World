@@ -76,8 +76,10 @@ namespace PROJECT.Scripts.ScriptableObjects
                     
                 List<string> wordList = new List<string>();
 
-                for (int i = 2; i < values.Length; i++)
+                for (int i = values.Length - 1; i > 1; i--)
                 {
+                    if(values[i].Equals(""))
+                        continue;
                     wordList.Add(values[i].Trim());
                 }
 
