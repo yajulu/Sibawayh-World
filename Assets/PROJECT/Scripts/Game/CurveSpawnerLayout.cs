@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace PROJECT.Scripts.Game
 {
-    public class MapController : LayoutGroup
+    public class CurveSpawnerLayout : LayoutGroup
     {
         [SerializeField, OnValueChanged(nameof(Spawn))] private AnimationCurve spawnCurve;
         [SerializeField, OnValueChanged(nameof(Spawn))] private float spawnSpacing;
@@ -47,13 +47,6 @@ namespace PROJECT.Scripts.Game
                 if (i == rectChildren.Count - 1)
                     topElement = child;
             }
-        }
-        
-        
-        // Update is called once per frame
-        void Update()
-        {
-        
         }
 
         public override void CalculateLayoutInputVertical()
