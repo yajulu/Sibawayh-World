@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using _YajuluSDK._Scripts.Essentials;
 using _YajuluSDK._Scripts.GameConfig;
+using PROJECT.Scripts.Enums;
 using Sirenix.OdinInspector;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -18,11 +19,11 @@ namespace PROJECT.Scripts.UI
         [SerializeField, FoldoutGroup("Refs")] private RectTransform starsPanel;
 
         [SerializeField, TitleGroup("Properties"), PropertyOrder(-1), OnValueChanged(nameof(OnStateChanged))]
-        private LevelButtonState buttonState;
+        private eLevelState buttonState;
 
         private LevelsVariablesEditor _levelsVariablesEditor => GameConfig.Instance.Levels;
 
-        public LevelButtonState ButtonState
+        public eLevelState ButtonState
         {
             get => buttonState;
             set
@@ -32,7 +33,7 @@ namespace PROJECT.Scripts.UI
             }
         }
 
-        private void OnStateChanged(LevelButtonState newState)
+        private void OnStateChanged(eLevelState newState)
         {
             UpdateButtonUI();
         }
@@ -62,13 +63,5 @@ namespace PROJECT.Scripts.UI
             shadowImage = transform.FindDeepChild<Image>("LevelButtonShadow_Image");
         }
         
-        public enum LevelButtonState
-        {
-            Locked,
-            Unlocked,
-            CompletedOneStar,
-            CompletedTwoStars,
-            CompletedThreeStars
-        }
     }
 }

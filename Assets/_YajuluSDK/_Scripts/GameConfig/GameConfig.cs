@@ -54,6 +54,12 @@ namespace _YajuluSDK._Scripts.GameConfig
 
             [SerializeField, TitleGroup("Level Star"), InlineEditor(InlineEditorModes.LargePreview)]
             private Sprite levelStar;
+
+            [SerializeField, TitleGroup("Prefabs"), AssetsOnly]
+            private GameObject buttonPrefab;
+            
+            [SerializeField, TitleGroup("Prefabs"), AssetsOnly]
+            private GameObject stonePrefab;
             
             public Sprite Unlocked => unlocked;
 
@@ -66,6 +72,9 @@ namespace _YajuluSDK._Scripts.GameConfig
             public Sprite RedShadow => redShadow;
 
             public Sprite LevelStar => levelStar;
+
+            public GameObject ButtonPrefab => buttonPrefab;
+            public GameObject StonePrefab => stonePrefab;
         }
     }
     
