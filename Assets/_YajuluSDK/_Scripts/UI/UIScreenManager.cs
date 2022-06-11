@@ -42,8 +42,11 @@ namespace _YajuluSDK._Scripts.UI
         private Queue<UIScreenQueueData> _screenQueue;
         private UIScreenBase _currentChangingScreen;
         private UIScreenQueueData _dummyQueueData;
-
+        private GraphicRaycaster _graphicRaycaster;
+        
         private bool _screenNavigationLock;
+
+        public GraphicRaycaster rayCaster => _graphicRaycaster;
 
         #endregion
 
@@ -54,6 +57,7 @@ namespace _YajuluSDK._Scripts.UI
             _openedScreens = new List<UIScreenBase>();
             _skipAnimationButton.onClick.AddListener(SkipCurrenScreenAnimation);
             _screenQueue = new Queue<UIScreenQueueData>();
+            _graphicRaycaster = GetComponentInChildren<GraphicRaycaster>();
         }
 
         private void Start()

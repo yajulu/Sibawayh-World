@@ -19,7 +19,7 @@ namespace PROJECT.Scripts.Game
         [Button]
         private void Spawn()
         {
-            var samplePerIteration = 1 / spawnSampling;
+            // var samplePerIteration = 1 / spawnSampling;
             var paddingV = 0f;
 
             var alignmentOnAxisShift = 1 - GetAlignmentOnAxis(0) * 2;
@@ -40,7 +40,7 @@ namespace PROJECT.Scripts.Game
                     paddingV = child.rect.height * 0.5f;
                 }
                 var newPosition = child.localPosition;
-                var evaluatedValue = spawnCurve.Evaluate((i % samplePerIteration) / samplePerIteration) + alignmentOnAxisShift;
+                var evaluatedValue = spawnCurve.Evaluate(i * spawnSampling) + alignmentOnAxisShift;
                 newPosition.y = i * spawnSpacing + paddingV + m_Padding.bottom;
                 newPosition.x = samplingAmplitude * evaluatedValue;
                 child.localPosition = newPosition;

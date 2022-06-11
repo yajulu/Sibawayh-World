@@ -29,3 +29,4 @@ MonoBehaviour:
       levelStar: {fileID: 0}
       buttonPrefab: {fileID: 4514438083478164760, guid: af97cf89e347eaa43b8151c00490a15b, type: 3}
       stonePrefab: {fileID: 7688125656863729597, guid: d9a64a1f71b0c37428dec857f0adfe20, type: 3}
+      mapElementPrefab: {fileID: 1071004372273214324, guid: 1a83fc53a72ee7d4293203eb17e56cc3, type: 3}
