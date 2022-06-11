@@ -85,7 +85,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4514438083478164761}
-  - component: {fileID: 4514438083478164767}
   - component: {fileID: 4514438083478164764}
   m_Layer: 0
   m_Name: LevelButton_Panel
@@ -118,14 +117,6 @@ RectTransform:
   m_AnchoredPosition: {x: 371.94733, y: -1705.5}
   m_SizeDelta: {x: 185, y: 140.1439}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &4514438083478164767
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4514438083478164760}
-  m_CullTransparentMesh: 1
 --- !u!114 &4514438083478164764
 MonoBehaviour:
   m_ObjectHideFlags: 0
