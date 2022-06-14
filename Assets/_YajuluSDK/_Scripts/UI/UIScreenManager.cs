@@ -36,6 +36,8 @@ namespace _YajuluSDK._Scripts.UI
 
         public UIScreenRefs ScreenRefs;
 
+        [SerializeField] private UIMiscRefs _miscRefs;
+
         private List<UIScreenBase> _openedScreens;
 
         [SerializeField] private Button _skipAnimationButton;
@@ -48,6 +50,8 @@ namespace _YajuluSDK._Scripts.UI
 
         public GraphicRaycaster rayCaster => _graphicRaycaster;
 
+        public UIMiscRefs MiscRefs => _miscRefs;
+
         #endregion
 
         protected override void OnAwake()
@@ -58,6 +62,7 @@ namespace _YajuluSDK._Scripts.UI
             _skipAnimationButton.onClick.AddListener(SkipCurrenScreenAnimation);
             _screenQueue = new Queue<UIScreenQueueData>();
             _graphicRaycaster = GetComponentInChildren<GraphicRaycaster>();
+            _miscRefs = GetComponent<UIMiscRefs>();
         }
 
         private void Start()

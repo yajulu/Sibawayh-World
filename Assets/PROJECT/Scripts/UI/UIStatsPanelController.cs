@@ -42,6 +42,8 @@ namespace PROJECT.Scripts.UI
             }
         }
 
+        public Transform GameModeProgressBar => progressBarTransform;
+
         private void OnEnable()
         {
             GameModeManager.Instance.GameModeStarted += GameModeStarted;
@@ -66,6 +68,11 @@ namespace PROJECT.Scripts.UI
                 element.color = color;
             }
 
+            UpdateTitlesToCurrentLevel();
+        }
+
+        public void UpdateTitlesToCurrentLevel()
+        {
             gameModeTitle = GameModeManager.Instance.GetCurrentLevelTypeName();
             gameModeSubtitle = GameModeManager.Instance.CurrentLevelData.KeyWord;
             UpdateTitles();

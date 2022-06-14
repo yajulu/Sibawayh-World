@@ -56,5 +56,15 @@ namespace PROJECT.Scripts.UI
             }
 
         }
+        
+        [Button]
+        private void Clear()
+        {
+            var childCount = mapStonesParent.childCount;
+            for (int i = 0; i < childCount; i++)
+            {
+                DestroyImmediate(mapStonesParent.GetChild(0).gameObject);
+            }
+        }
     }
 }
