@@ -43,7 +43,7 @@ namespace PROJECT.Scripts.UI
             {
                 _dummyPrefab = Instantiate(_buttonPrefabRef, mapStonesParent);
                 _dummyLevelButton = _dummyPrefab.transform.GetComponent<UILevelButtonController>();
-                
+                _dummyLevelButton.LevelNumber = i + 1;
                 levelButtons.Add(_dummyLevelButton);
                 
                 for (int j = 0; j < stonesPerLevel; j++)

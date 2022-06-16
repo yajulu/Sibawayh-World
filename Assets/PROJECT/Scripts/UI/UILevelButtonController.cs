@@ -2,6 +2,7 @@ using _YajuluSDK._Scripts.Essentials;
 using _YajuluSDK._Scripts.GameConfig;
 using _YajuluSDK._Scripts.UI;
 using PROJECT.Scripts.Enums;
+using PROJECT.Scripts.Game.Controllers;
 using PROJECT.Scripts.UI.Screens;
 using RTLTMPro;
 using Sirenix.OdinInspector;
@@ -55,6 +56,7 @@ namespace PROJECT.Scripts.UI
         {
             base.OnEnable();
             levelButton.onClick.AddListener(PlayLevel);
+            ButtonState = GameModeManager.Instance.GetLevelState(levelNumber);
         }
 
         protected override void OnDisable()
@@ -67,7 +69,7 @@ namespace PROJECT.Scripts.UI
 
         private void OnStateChanged(eLevelState newState)
         {
-            UpdateButtonUI();
+            UpdateButtonUI(newState);
         }
 
         private void OnLevelNumberChanged(int newLevel)
@@ -75,9 +77,9 @@ namespace PROJECT.Scripts.UI
             numberText.text = newLevel.ToString();
         }
         
-        private void UpdateButtonUI(bool instant = true)
+        private void UpdateButtonUI(eLevelState newState, bool instant = true)
         {
-            var state = (int)buttonState;
+            var state = (int)newState;
             if (instant)
             {
                 starsPanel.gameObject.SetActive(state != 0);
@@ -94,12 +96,8 @@ namespace PROJECT.Scripts.UI
 
         private void PlayLevel()
         {
-            UIScreenManager.Instance.CloseScreen(nameof(Screen_Map), OnSucceed);
-
-            void OnSucceed()
-            {
-                UIScreenManager.Instance.OpenScreen(nameof(Screen_GameMode));
-            }
+            //TODO:CHANGE
+            UIScreenManager.Instance.NavigateTo(nameof(Screen_GameMode), true);
         }
         
         
