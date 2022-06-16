@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using _YajuluSDK._Scripts.Essentials;
+using _YajuluSDK._Scripts.Tools;
 using PROJECT.Scripts.Data;
 using PROJECT.Scripts.Enums;
 using PROJECT.Scripts.ScriptableObjects;
@@ -29,22 +30,72 @@ namespace PROJECT.Scripts.Game.Controllers
         [SerializeField, ReadOnly] private int currentWordIndex = 0;
         [SerializeField, ReadOnly] private LevelData currentLevelData;
 
+        [SerializeField, ReadOnly] private eLevelState[] levelStates;
+        [SerializeField, ReadOnly] private int[] intLevelStates;
+
         public int CurrentWordIndex => currentWordIndex;
-
         public string CurrentReferenceWord => currentReferenceWord;
-
         public LevelData CurrentLevelData => currentLevelData;
 
-        // Start is called before the first frame update
-        void Start()
+        public GameData CurrentGameData => gameData;
+
+        protected override void OnAwake()
         {
-            
+            base.OnAwake();
+            LoadData();
         }
 
-        // Update is called once per frame
-        void Update()
+        public eLevelState GetLevelState(int levelNumber)
         {
+            return levelStates[levelNumber - 1];
+        }
+
+        [Button, TitleGroup("Progress")]
+        private void LoadData()
+        {
+            if (PlayerPrefs.HasKey(gameData.ProgressKey))
+            {
+                intLevelStates = SaveUtility.LoadList<int>(gameData.ProgressKey);
+                levelStates = Array.ConvertAll(intLevelStates, ConvertIntToEnum);    
+                if (levelStates.Length != gameData.GetLevelsCount)
+                {
+                    ClearProgress();
+                    LoadData();
+                }
+            }
+            else
+            {
+                levelStates = new eLevelState[gameData.GetLevelsCount];
+                levelStates[0] = eLevelState.Unlocked;
+                SaveProgress();
+                // LoadData();
+            }
+
+            eLevelState ConvertIntToEnum(int val)
+            {
+                return (eLevelState)val;
+            }
+            
+        }
         
+        [Button, TitleGroup("Progress")]
+        private void SaveProgress()
+        {
+            intLevelStates = Array.ConvertAll(levelStates, ConvertEnumToInt);
+            SaveUtility.SaveList(gameData.ProgressKey, intLevelStates);
+            
+            int ConvertEnumToInt(eLevelState val)
+            {
+                return (int)val;
+            }
+        }
+
+        [Button, TitleGroup("Progress")]
+        private void ClearProgress()
+        {
+            PlayerPrefs.DeleteKey(gameData.ProgressKey);
+            PlayerPrefs.HasKey(gameData.ProgressKey);
+            levelStates = null;
         }
 
         public void StartGameMode()
@@ -138,6 +189,7 @@ namespace PROJECT.Scripts.Game.Controllers
         protected virtual void OnGameModeCompleted()
         {
             GameModeCompleted?.Invoke();
+            SaveProgress();
         }
 
         protected virtual void OnGameModeWordUpdated(string checkWord)
