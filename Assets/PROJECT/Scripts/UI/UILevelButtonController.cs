@@ -96,8 +96,8 @@ namespace PROJECT.Scripts.UI
 
         private void PlayLevel()
         {
-            //TODO:CHANGE
-            UIScreenManager.Instance.NavigateTo(nameof(Screen_GameMode), true);
+            GameModeManager.Instance.CurrentLevel = levelNumber;
+            UIScreenManager.Instance.OpenScreen(nameof(Panel_LevelSelection));
         }
         
         

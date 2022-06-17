@@ -20,7 +20,8 @@ namespace PROJECT.Scripts.UI
         
         [SerializeField, TitleGroup("Refs")] private RTLTextMeshPro gameModeTitleText;
         [SerializeField, TitleGroup("Refs")] private RTLTextMeshPro gameModeSubtitleText;
-        [SerializeField, TitleGroup("Refs")] private Transform progressBarTransform;
+        [SerializeField, TitleGroup("Refs")] private Transform progressBarElementsParentTransform;
+        [SerializeField, TitleGroup("Refs")] private RectTransform progressBarTransform;
         [SerializeField, TitleGroup("Refs"), ReadOnly] private Image[] progressBarDotsList;
         [SerializeField, TitleGroup("Refs"), ReadOnly] private Image[] progressBarStarsList;
 
@@ -47,7 +48,7 @@ namespace PROJECT.Scripts.UI
             }
         }
 
-        public Transform GameModeProgressBar => progressBarTransform;
+        public Transform GameModeProgressTransform => progressBarTransform;
 
         private void Awake()
         {
@@ -72,7 +73,7 @@ namespace PROJECT.Scripts.UI
         private void GameModeStarted()
         {
             SetProgressBarElements(GameModeManager.Instance.CurrentLevelData);
-            progressBarTransform.gameObject.SetActive(true);
+            progressBarElementsParentTransform.gameObject.SetActive(true);
             UpdateTitlesToCurrentLevel();
         }
 
@@ -130,8 +131,9 @@ namespace PROJECT.Scripts.UI
         {
             gameModeTitleText = transform.FindDeepChild<RTLTextMeshPro>("GameModeTitle_Text");
             gameModeSubtitleText = transform.FindDeepChild<RTLTextMeshPro>("GameModeSubtitle_Text");
-            progressBarTransform = transform.FindDeepChild<Transform>("ProgressPoints");
-            var list = progressBarTransform.GetComponentsInChildren<Image>(true);
+            progressBarTransform = transform.FindDeepChild<RectTransform>("ProgressPanel");
+            progressBarElementsParentTransform = transform.FindDeepChild<Transform>("ProgressPoints");
+            var list = progressBarElementsParentTransform.GetComponentsInChildren<Image>(true);
             var starsList = new List<Image>();
             var dotsList = new List<Image>();
             

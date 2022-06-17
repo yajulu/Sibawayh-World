@@ -39,6 +39,16 @@ namespace PROJECT.Scripts.Game.Controllers
 
         public GameData CurrentGameData => gameData;
 
+        public int CurrentLevel
+        {
+            get => currentLevel;
+            set
+            {
+                currentLevel = value;
+                SetCurrentLevelData(value);
+            }
+        }
+
         protected override void OnAwake()
         {
             base.OnAwake();
@@ -48,6 +58,11 @@ namespace PROJECT.Scripts.Game.Controllers
         public eLevelState GetLevelState(int levelNumber)
         {
             return levelStates[levelNumber - 1];
+        }
+
+        private void SetCurrentLevelData(int levelNumber)
+        {
+            currentLevelData = gameData.GetLevelData(levelNumber - 1);
         }
 
         [Button, TitleGroup("Progress")]
@@ -159,7 +174,7 @@ namespace PROJECT.Scripts.Game.Controllers
         protected virtual void OnGameModeStarted()
         {
             currentWordIndex = 0;
-            currentLevelData = gameData.GetLevelData(currentLevel);
+            SetCurrentLevelData(currentLevel);
             currentLevelWordsList = currentLevelData.Words;
             currentReferenceWord = currentLevelWordsList[0];
             currentCheckWord = "";

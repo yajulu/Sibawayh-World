@@ -7,6 +7,7 @@ using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using UnityEngine;
 using UnityEngine.UI;
+using Enumerable = System.Linq.Enumerable;
 
 namespace _YajuluSDK._Scripts.UI
 {
@@ -18,9 +19,9 @@ namespace _YajuluSDK._Scripts.UI
         [OnInspectorGUI]
         private void UpdateScreenRefs()
         {
-            if (ScreenRefs.SafeIsUnityNull())
+            if (screenPanelRefs.SafeIsUnityNull())
             {
-                ScreenRefs = transform.GetComponentInChildren<UIScreenRefs>();
+                screenPanelRefs = transform.GetComponent<UIScreenPanelRefs>();
             }
 
             if (_skipAnimationButton.SafeIsUnityNull())
@@ -34,7 +35,7 @@ namespace _YajuluSDK._Scripts.UI
 
         #region Fields
 
-        public UIScreenRefs ScreenRefs;
+        public UIScreenPanelRefs screenPanelRefs;
 
         [SerializeField] private UIMiscRefs _miscRefs;
 
@@ -45,7 +46,8 @@ namespace _YajuluSDK._Scripts.UI
         private UIScreenBase _currentChangingScreen;
         private UIScreenQueueData _dummyQueueData;
         private GraphicRaycaster _graphicRaycaster;
-        
+        private UIScreenBase _dummyScreenBase;
+        private UIScreenBase _dummyLatestOpenScreen;
         private bool _screenNavigationLock;
 
         public GraphicRaycaster rayCaster => _graphicRaycaster;
@@ -155,6 +157,11 @@ namespace _YajuluSDK._Scripts.UI
             }
         }
 
+        private bool QueueContains(UIScreenBase screenBase)
+        {
+            return Enumerable.Any(_screenQueue, screenQueueData => screenQueueData.ScreenBase.Equals(screenBase));
+        }
+
         private void SkipCurrenScreenAnimation()
         {
             //TODO: Stop Spamming 
@@ -165,18 +172,22 @@ namespace _YajuluSDK._Scripts.UI
         }
         private void InitializeScreens()
         {
-            foreach (var screen in ScreenRefs.Screens.Values)
+            foreach (var screen in screenPanelRefs.Screens.Values)
             {
                 screen.gameObject.SetActive(false);
+            }
+            foreach (var panel in screenPanelRefs.Panels.Values)
+            {
+                panel.gameObject.SetActive(false);
             }
             _skipAnimationButton.gameObject.SetActive(false);
         }
 
         public void OpenScreen(string i_screen, Action onSucceeded = null, Action onFailed = null)
         {
-            var screen = ScreenRefs.Screens[i_screen];
+            _dummyScreenBase = i_screen.Contains("Screen_") ? screenPanelRefs.Screens[i_screen] : screenPanelRefs.Panels[i_screen];
 
-            OpenScreen(screen);
+            OpenScreen(_dummyScreenBase, onSucceeded, onFailed);
         }
 
         public void OpenScreen(UIScreenBase screen, Action onSucceeded = null, Action onFailed = null)
@@ -190,7 +201,8 @@ namespace _YajuluSDK._Scripts.UI
                     ScreenBase = screen,
                     IsOpening = true
                 });
-                Debug.LogError($"Screen ({screen}) is will be Queued to Open, Current State: ({screen.State})");
+                Debug.LogError($"Screen ({screen}) will be Queued to Open, Current State: ({screen.State}) -- " +
+                               $"Current Changing Screen ({_currentChangingScreen})");
                 return;
             }
 
@@ -207,9 +219,9 @@ namespace _YajuluSDK._Scripts.UI
 
         public void CloseScreen(string i_screen, Action onSucceeded = null, Action onFailed = null)
         {
-            var screen = ScreenRefs.Screens[i_screen];
-
-            CloseScreen(screen);
+            _dummyScreenBase = i_screen.Contains("Screen_") ? screenPanelRefs.Screens[i_screen] : screenPanelRefs.Panels[i_screen];
+   
+            CloseScreen(_dummyScreenBase, onSucceeded, onFailed);
         }
 
         public void CloseScreen(UIScreenBase screen, Action onSucceeded = null, Action onFailed = null)
@@ -222,7 +234,8 @@ namespace _YajuluSDK._Scripts.UI
                     ScreenBase = screen,
                     IsOpening = false
                 });
-                Debug.LogError($"Screen ({screen}) is will be Queued to Close, Current State: ({screen.State})");
+                Debug.LogError($"Screen ({screen}) will be Queued to Close, Current State: ({screen.State}) --- " +
+                               $"Current Changing Screen ({_currentChangingScreen})");
                 return;
             }
 
@@ -263,8 +276,16 @@ namespace _YajuluSDK._Scripts.UI
 
             if (_openedScreens.Count > 0 && i_closeCurrent)
             {
-                var latestScreen = _openedScreens[^1];
-                CloseScreen(latestScreen, OnSucceeded, OnFailed);
+                var i = 1;
+                do
+                {
+                    _dummyLatestOpenScreen = _openedScreens[^i];
+                    if (!QueueContains(_dummyLatestOpenScreen))
+                        break;
+                    i++;
+                } while (i <= _screenQueue.Count);
+
+                CloseScreen(_dummyLatestOpenScreen, OnSucceeded, OnFailed);
             }
             else
             {
@@ -289,7 +310,7 @@ namespace _YajuluSDK._Scripts.UI
 
         public void NavigateTo(string i_screen, bool i_closeCurrent)
         {
-            var screen = ScreenRefs.Screens[i_screen];
+            var screen = screenPanelRefs.Screens[i_screen];
             NavigateTo(screen, i_closeCurrent);
         }
 
