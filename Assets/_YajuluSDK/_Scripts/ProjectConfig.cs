@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using _YajuluSDK._Scripts.Essentials;
 using Facebook.Unity.Settings;
 using Sirenix.OdinInspector;
 using UnityEditor;
@@ -9,7 +10,7 @@ namespace _YajuluSDK._Scripts
 {
 
     [CreateAssetMenu()]
-    public class ProjectConfig : ScriptableObject
+    public class ProjectConfig : SingletonScriptableObject<ProjectConfig>
     {
         public static FacebookSettings CurrentSettings;
 #if UNITY_EDITOR

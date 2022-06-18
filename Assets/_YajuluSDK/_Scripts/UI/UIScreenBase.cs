@@ -18,6 +18,9 @@ namespace _YajuluSDK._Scripts.UI
         private Action _closeFailedAction;
 
         private UIScreenNavigatorController navController;
+        
+        protected Sequence OpenSequence;
+        protected Sequence CloseSequence;
 
         protected virtual void Awake()
         {

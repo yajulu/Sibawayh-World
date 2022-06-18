@@ -42,6 +42,6 @@ namespace _YajuluSDK._Scripts.UI
     {
         [SerializeField, ValueDropdown(nameof(ScreensList))] public UIScreenBase navigateToScreen;
         [SerializeField] public bool closeCurrent;
-        private List<UIScreenBase> ScreensList => Object.FindObjectOfType<UIScreenManager>().ScreenRefs.ScreenBaseList;
+        private List<UIScreenBase> ScreensList => Object.FindObjectOfType<UIScreenManager>().screenPanelRefs.ScreenBaseList;
     }
 }

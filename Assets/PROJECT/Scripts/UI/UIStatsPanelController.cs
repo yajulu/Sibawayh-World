@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using _YajuluSDK._Scripts.Essentials;
 using DG.Tweening;
+using PROJECT.Scripts.Data;
 using PROJECT.Scripts.Game.Controllers;
 using RTLTMPro;
 using Sirenix.OdinInspector;
@@ -19,8 +20,13 @@ namespace PROJECT.Scripts.UI
         
         [SerializeField, TitleGroup("Refs")] private RTLTextMeshPro gameModeTitleText;
         [SerializeField, TitleGroup("Refs")] private RTLTextMeshPro gameModeSubtitleText;
-        [SerializeField, TitleGroup("Refs")] private Transform progressBarTransform;
-        [SerializeField, TitleGroup("Refs"), ReadOnly] private Image[] progressBarElementsList;
+        [SerializeField, TitleGroup("Refs")] private Transform progressBarElementsParentTransform;
+        [SerializeField, TitleGroup("Refs")] private RectTransform progressBarTransform;
+        [SerializeField, TitleGroup("Refs"), ReadOnly] private Image[] progressBarDotsList;
+        [SerializeField, TitleGroup("Refs"), ReadOnly] private Image[] progressBarStarsList;
+
+        private List<Image> _currentProgressBarElements;
+        private Image _dummyProgressBarElement;
 
         public string GameModeTitle
         {
@@ -42,6 +48,13 @@ namespace PROJECT.Scripts.UI
             }
         }
 
+        public Transform GameModeProgressTransform => progressBarTransform;
+
+        private void Awake()
+        {
+            _currentProgressBarElements = new List<Image>();
+        }
+
         private void OnEnable()
         {
             GameModeManager.Instance.GameModeStarted += GameModeStarted;
@@ -59,25 +72,51 @@ namespace PROJECT.Scripts.UI
 
         private void GameModeStarted()
         {
-            var color = UnityEngine.Color.white;
-            color.a = 0.4f;
-            foreach (var element in progressBarElementsList)
-            {
-                element.color = color;
-            }
+            SetProgressBarElements(GameModeManager.Instance.CurrentLevelData);
+            progressBarElementsParentTransform.gameObject.SetActive(true);
+            UpdateTitlesToCurrentLevel();
+        }
 
+        public void UpdateTitlesToCurrentLevel()
+        {
             gameModeTitle = GameModeManager.Instance.GetCurrentLevelTypeName();
             gameModeSubtitle = GameModeManager.Instance.CurrentLevelData.KeyWord;
             UpdateTitles();
+        }
+
+        public void SetProgressBarElements(LevelData levelData)
+        {
+            _currentProgressBarElements.Clear();
+            
+            for (int i = 0; i < progressBarDotsList.Length; i++)
+            {
+                if (i < levelData.Words.Length - 3)
+                {
+                    progressBarDotsList[i].gameObject.SetActive(true);
+                    progressBarDotsList[i].canvasRenderer.SetAlpha(0.4f);
+                    _currentProgressBarElements.Add(progressBarDotsList[i]);
+                }
+                else
+                {
+                    progressBarDotsList[i].gameObject.SetActive(false);
+                }
+                
+            }
+
+            for (int i = 0; i < progressBarStarsList.Length; i++)
+            {
+                progressBarStarsList[i].transform.SetSiblingIndex(levelData.StarsCounter[i]);
+                _currentProgressBarElements.Insert(levelData.StarsCounter[i], progressBarStarsList[i]);
+            }
         }
         
         private void CheckWord(string word, bool check)
         {
             if (!check)
                 return;
-            var image = progressBarElementsList[GameModeManager.Instance.CurrentWordIndex];
-            image.color = Color.white;
-            image.transform.DOPunchScale(Vector3.one, 0.5f, 5);
+            _dummyProgressBarElement = _currentProgressBarElements[GameModeManager.Instance.CurrentWordIndex];
+            _dummyProgressBarElement.canvasRenderer.SetAlpha(1f);
+            _dummyProgressBarElement.transform.DOPunchScale(Vector3.one, 0.5f, 5);
         }
 
         [Button, TitleGroup("Properties")]
@@ -92,8 +131,26 @@ namespace PROJECT.Scripts.UI
         {
             gameModeTitleText = transform.FindDeepChild<RTLTextMeshPro>("GameModeTitle_Text");
             gameModeSubtitleText = transform.FindDeepChild<RTLTextMeshPro>("GameModeSubtitle_Text");
-            progressBarTransform = transform.FindDeepChild<Transform>("ProgressPoints");
-            progressBarElementsList = progressBarTransform.GetComponentsInChildren<Image>(true);
+            progressBarTransform = transform.FindDeepChild<RectTransform>("ProgressPanel");
+            progressBarElementsParentTransform = transform.FindDeepChild<Transform>("ProgressPoints");
+            var list = progressBarElementsParentTransform.GetComponentsInChildren<Image>(true);
+            var starsList = new List<Image>();
+            var dotsList = new List<Image>();
+            
+            foreach (var element in list)
+            {
+                if (element.name.Contains("Star"))
+                {
+                    starsList.Add(element);
+                }
+                else
+                {
+                    dotsList.Add(element);
+                }
+            }
+            
+            progressBarStarsList = starsList.ToArray();
+            progressBarDotsList = dotsList.ToArray();
         }
         
     }
