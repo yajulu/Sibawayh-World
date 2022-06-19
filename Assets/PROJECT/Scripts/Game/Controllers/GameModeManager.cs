@@ -74,7 +74,7 @@ namespace PROJECT.Scripts.Game.Controllers
         {
             if (PlayerPrefs.HasKey(gameData.ProgressKey))
             {
-                intLevelStates = SaveUtility.LoadList<int>(gameData.ProgressKey);
+                intLevelStates = SaveUtility.LoadListToInt(gameData.ProgressKey);
                 levelStates = Array.ConvertAll(intLevelStates, ConvertIntToEnum);    
                 if (levelStates.Length != gameData.GetLevelsCount)
                 {

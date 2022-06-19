@@ -72,7 +72,7 @@ namespace PROJECT.Scripts.Game.Map
             numberText.text = (newLevel + 1).ToString();
         }
 
-        private void OnMouseDown()
+        private void OnMouseUpAsButton()
         {
             if (!_interactable)
                 return;

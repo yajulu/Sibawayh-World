@@ -12,7 +12,7 @@ namespace _YajuluSDK._Scripts.Tools
     {
         public static void SaveList<T>(string key, T[] list)
         {
-            var json = JsonUtility.ToJson(list);
+            var json = Json.Serialize(list);
             PlayerPrefs.SetString(key, json);
             PlayerPrefs.Save();
         }
@@ -20,8 +20,8 @@ namespace _YajuluSDK._Scripts.Tools
         public static T[] LoadList<T>(string key)
         {
             var str = PlayerPrefs.GetString(key);
-            var array = JsonUtility.FromJson<T[]>(str);
-            // var array = Array.ConvertAll(list.ToArray(), ConvertObject);
+            var list = (List<object>)Json.Deserialize(str);
+            var array = Array.ConvertAll(list.ToArray(), ConvertObject);
             return array;
 
             T ConvertObject(object input)
@@ -34,13 +34,13 @@ namespace _YajuluSDK._Scripts.Tools
         public static int[] LoadListToInt(string key)
         {
             var str = PlayerPrefs.GetString(key);
-            var list = (List<string>)Json.Deserialize(str);
+            var list = (List<object>)Json.Deserialize(str);
             var array = Array.ConvertAll(list.ToArray(), ConvertObject);
             return array;
 
             int ConvertObject(object input)
             {
-                return int.Parse((string)input);
+                return Convert.ToInt32(input);
             }
             
         }
