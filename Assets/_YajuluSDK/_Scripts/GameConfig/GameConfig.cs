@@ -63,6 +63,15 @@ namespace _YajuluSDK._Scripts.GameConfig
             
             [SerializeField, TitleGroup("Prefabs"), AssetsOnly]
             private GameObject mapElementPrefab;
+            
+            [SerializeField, TitleGroup("Prefabs"), AssetsOnly]
+            private GameObject button2DPrefab;
+            
+            [SerializeField, TitleGroup("Prefabs"), AssetsOnly]
+            private GameObject stone2DPrefab;
+            
+            [SerializeField, TitleGroup("Prefabs"), AssetsOnly]
+            private GameObject mapElement2DPrefab;
             public Sprite Unlocked => unlocked;
             public Sprite Locked => locked;
             public Sprite Complete => complete;
@@ -72,6 +81,9 @@ namespace _YajuluSDK._Scripts.GameConfig
             public GameObject ButtonPrefab => buttonPrefab;
             public GameObject StonePrefab => stonePrefab;
             public GameObject MapElementPrefab => mapElementPrefab;
+            public GameObject MapElement2DPrefab => mapElement2DPrefab;
+            public GameObject Button2DPrefab => button2DPrefab;
+            public GameObject Stone2DPrefab => stone2DPrefab;
         }
     }
     

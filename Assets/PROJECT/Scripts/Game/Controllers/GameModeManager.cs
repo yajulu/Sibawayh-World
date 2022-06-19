@@ -4,6 +4,7 @@ using _YajuluSDK._Scripts.Essentials;
 using _YajuluSDK._Scripts.Tools;
 using PROJECT.Scripts.Data;
 using PROJECT.Scripts.Enums;
+using PROJECT.Scripts.Game.Map;
 using PROJECT.Scripts.ScriptableObjects;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -36,8 +37,9 @@ namespace PROJECT.Scripts.Game.Controllers
         public int CurrentWordIndex => currentWordIndex;
         public string CurrentReferenceWord => currentReferenceWord;
         public LevelData CurrentLevelData => currentLevelData;
-
         public GameData CurrentGameData => gameData;
+
+        public MapController2D mapController;
 
         public int CurrentLevel
         {

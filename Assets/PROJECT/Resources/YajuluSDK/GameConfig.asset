@@ -30,3 +30,6 @@ MonoBehaviour:
       buttonPrefab: {fileID: 4514438083478164760, guid: af97cf89e347eaa43b8151c00490a15b, type: 3}
       stonePrefab: {fileID: 7688125656863729597, guid: d9a64a1f71b0c37428dec857f0adfe20, type: 3}
       mapElementPrefab: {fileID: 1071004372273214324, guid: 1a83fc53a72ee7d4293203eb17e56cc3, type: 3}
+      button2DPrefab: {fileID: 7382323255686091040, guid: 6c888b6c6ce173f4bb11556081618243, type: 3}
+      stone2DPrefab: {fileID: 1867577031693910033, guid: 76a7a2993833dc341846c995cdb57cae, type: 3}
+      mapElement2DPrefab: {fileID: 5932537318764878908, guid: 5dbf33ba1020f544fa2a900bf7d3fb5a, type: 3}

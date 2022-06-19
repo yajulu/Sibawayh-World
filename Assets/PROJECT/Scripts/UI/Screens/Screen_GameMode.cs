@@ -47,6 +47,12 @@ namespace PROJECT.Scripts.UI.Screens
             GameModeManager.Instance.StartGameMode();
         }
 
+        protected override void OnScreenCloseEnded()
+        {
+            _statsPanelRef.gameObject.SetActive(false);
+            base.OnScreenCloseEnded();
+        }
+
         [Button]
         private void SetRefs()
         {

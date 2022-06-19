@@ -42,17 +42,22 @@ namespace _YajuluSDK._Scripts.UI
         private List<UIScreenBase> _openedScreens;
 
         [SerializeField] private Button _skipAnimationButton;
+        [SerializeField, Required] private Image _background;
+        
         private Queue<UIScreenQueueData> _screenQueue;
         private UIScreenBase _currentChangingScreen;
         private UIScreenQueueData _dummyQueueData;
         private GraphicRaycaster _graphicRaycaster;
         private UIScreenBase _dummyScreenBase;
         private UIScreenBase _dummyLatestOpenScreen;
+        
         private bool _screenNavigationLock;
 
         public GraphicRaycaster rayCaster => _graphicRaycaster;
 
         public UIMiscRefs MiscRefs => _miscRefs;
+
+        public Image Background => _background;
 
         #endregion
 

@@ -32,7 +32,7 @@ namespace _YajuluSDK._Scripts.UI
         private void SetRefs()
         {
             _miscParent = transform.FindDeepChild<Transform>("Misc");
-            _statsPanelController = _miscParent.GetComponentInChildren<UIStatsPanelController>();
+            _statsPanelController = _miscParent.transform.GetComponentInChildren<UIStatsPanelController>(true);
         }
     }
 }
