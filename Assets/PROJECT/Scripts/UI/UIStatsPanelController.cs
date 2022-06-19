@@ -106,6 +106,7 @@ namespace PROJECT.Scripts.UI
             for (int i = 0; i < progressBarStarsList.Length; i++)
             {
                 progressBarStarsList[i].transform.SetSiblingIndex(levelData.StarsCounter[i]);
+                progressBarStarsList[i].canvasRenderer.SetAlpha(0.4f);
                 _currentProgressBarElements.Insert(levelData.StarsCounter[i], progressBarStarsList[i]);
             }
         }

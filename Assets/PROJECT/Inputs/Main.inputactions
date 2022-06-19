@@ -1,0 +1,34 @@
+{
+    "name": "Main",
+    "maps": [
+        {
+            "name": "Map",
+            "id": "3f315e98-3ea5-4f2a-a3e5-9837a1262b8f",
+            "actions": [
+                {
+                    "name": "Scroll",
+                    "type": "Value",
+                    "id": "e50e5120-3d70-4742-a973-b42db2216146",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "6e561a21-c057-4771-88b1-afe4909a3786",
+                    "path": "<Pointer>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Scroll",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

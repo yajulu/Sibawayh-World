@@ -5,6 +5,7 @@ using _YajuluSDK._Scripts.UI;
 using PROJECT.Scripts.UI;
 using PROJECT.Scripts.UI.Screens;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -21,6 +22,12 @@ namespace PROJECT.Scripts.Game.Map
         [SerializeField, TitleGroup("Scroll"), MinValue(0)]
         private float scrollSpeed = 10f;
         
+        [SerializeField, TitleGroup("Scroll")]
+        private Vector2 minScroll;
+        
+        [SerializeField, TitleGroup("Scroll")]
+        private Vector2 maxScroll;
+        
         [SerializeField, TitleGroup("Refs")] private List<LevelButton2D> levelButtons;
         [SerializeField, TitleGroup("Refs")] private List<SpriteRenderer> stones;
         [SerializeField, TitleGroup("Refs")] private Transform mapStonesParent;
@@ -33,18 +40,36 @@ namespace PROJECT.Scripts.Game.Map
         private GameObject _buttonPrefabRef;
         private GameObject _stonePrefabRef;
 
+        private MainInput _input;
+
+        private Vector2 _dummyNewPosition;
+        private Vector2 _dummyLocalPosition;
+
+        private void Awake()
+        {
+            _input = new MainInput();
+        }
+
         private void OnEnable()
         {
             UIScreenManager.OnScreenOpenStarted += UIScreenManagerOnScreenOpenStarted;
             UIScreenManager.OnScreenCloseEnded += UIScreenManagerOnScreenCloseEnded;
             mapHolder.gameObject.SetActive(false);
         }
-
-       
+        
         private void OnDisable()
         {
             UIScreenManager.OnScreenOpenStarted -= UIScreenManagerOnScreenOpenStarted;
             UIScreenManager.OnScreenCloseEnded -= UIScreenManagerOnScreenCloseEnded;
+        }
+        
+        private void UIScreenManagerOnScreenOpenStarted(UIScreenBase obj)
+        {
+            if (obj.GetType().Name.Equals(nameof(Screen_Map)))
+            {
+                mapHolder.gameObject.SetActive(true);
+                _input.Map.Enable();
+            }
         }
         
         private void UIScreenManagerOnScreenCloseEnded(UIScreenBase obj)
@@ -52,17 +77,10 @@ namespace PROJECT.Scripts.Game.Map
             if (obj.GetType().Name.Equals(nameof(Screen_Map)))
             {
                 mapHolder.gameObject.SetActive(false);
+                _input.Map.Disable();
             }
         }
-
-        private void UIScreenManagerOnScreenOpenStarted(UIScreenBase obj)
-        {
-            if (obj.GetType().Name.Equals(nameof(Screen_Map)))
-            {
-                mapHolder.gameObject.SetActive(true);
-            }
-        }
-
+        
         [Button]
         private void SpawnLevelButtons()
         {
@@ -107,7 +125,10 @@ namespace PROJECT.Scripts.Game.Map
 
         private void OnMouseDrag()
         {
-            // Input.de
+            _dummyLocalPosition = mapHolder.localPosition;
+            _dummyNewPosition = _dummyLocalPosition + (_input.Map.Scroll.ReadValue<Vector2>() * scrollSpeed);
+            _dummyNewPosition = _dummyNewPosition.Clamp(minScroll, maxScroll) - _dummyLocalPosition;
+            mapHolder.Translate(_dummyNewPosition, Space.Self);
         }
     }
 }

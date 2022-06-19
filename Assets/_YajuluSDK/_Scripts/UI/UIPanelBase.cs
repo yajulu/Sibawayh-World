@@ -48,10 +48,10 @@ namespace _YajuluSDK._Scripts.UI
 
             
             CloseSequence.Append(screenBackground.DOFade(0f, 0.3f)
-                .SetEase(Ease.OutQuad)
+                .SetEase(Ease.InQuad)
                 .From(0.5f));
 
-            CloseSequence.Insert(0.15f, mainPanel.transform.DOScale(0, 0.25f).From(1).SetEase(Ease.OutBack));
+            CloseSequence.Insert(0.15f, mainPanel.transform.DOScale(0, 0.25f).From(1).SetEase(Ease.InBack));
 
             CloseSequence.OnComplete(base.CloseAnimation);
         }

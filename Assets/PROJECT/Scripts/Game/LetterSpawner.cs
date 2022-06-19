@@ -86,6 +86,7 @@ namespace PROJECT.Scripts.Game
         protected override void OnDisable()
         {
             base.OnDisable();
+            ResetLetters();
             if (Singleton.Quitting) return;
             GameModeManager.Instance.GameModeStarted -= OnGameModeStarted;
             GameModeManager.Instance.GameModeWordUpdated -= UpdateCheckWordUI;
@@ -106,6 +107,14 @@ namespace PROJECT.Scripts.Game
             centerPieceImage = transform.FindDeepChild<Image>("CenterPiece");
             centerPieceTransform = centerPieceImage.rectTransform;
             // separator = transform.FindDeepChild<Transform>("ClickSeparator");
+        }
+
+        private void ResetLetters()
+        {
+            foreach (var letter in letters)
+            {
+                letter.transform.localPosition = Vector3.zero;
+            }
         }
 
         private void UpdateSpawner()
