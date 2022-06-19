@@ -26,7 +26,7 @@ namespace PROJECT.Scripts.UI
         private eLevelState buttonState;
 
         [SerializeField, TitleGroup("Properties"), PropertyOrder(-1), OnValueChanged(nameof(OnLevelNumberChanged))] 
-        private int levelNumber;
+        private int levelIndex;
 
         private LevelsVariablesEditor _levelsVariablesEditor => GameConfig.Instance.Levels;
 
@@ -42,11 +42,11 @@ namespace PROJECT.Scripts.UI
 
         public int LevelNumber
         {
-            get => levelNumber;
+            get => levelIndex;
             set
             {
                 OnLevelNumberChanged(value);
-                levelNumber = value;
+                levelIndex = value;
             }
         }
 
@@ -56,7 +56,7 @@ namespace PROJECT.Scripts.UI
         {
             base.OnEnable();
             levelButton.onClick.AddListener(PlayLevel);
-            ButtonState = GameModeManager.Instance.GetLevelState(levelNumber);
+            ButtonState = GameModeManager.Instance.GetLevelState(levelIndex);
         }
 
         protected override void OnDisable()
@@ -74,7 +74,7 @@ namespace PROJECT.Scripts.UI
 
         private void OnLevelNumberChanged(int newLevel)
         {
-            numberText.text = newLevel.ToString();
+            numberText.text = (newLevel + 1).ToString();
         }
         
         private void UpdateButtonUI(eLevelState newState, bool instant = true)
@@ -96,7 +96,7 @@ namespace PROJECT.Scripts.UI
 
         private void PlayLevel()
         {
-            GameModeManager.Instance.CurrentLevel = levelNumber;
+            GameModeManager.Instance.CurrentLevel = levelIndex;
             UIScreenManager.Instance.OpenScreen(nameof(Panel_LevelSelection));
         }
         

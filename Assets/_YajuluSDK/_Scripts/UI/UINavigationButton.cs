@@ -12,7 +12,6 @@ namespace _YajuluSDK._Scripts.UI
     {
         public UINavigationData NavigationData => navigationData;
         [SerializeField] private UINavigationData navigationData = new UINavigationData();
-
         private Button _button;
 
         private void Awake()
@@ -32,7 +31,7 @@ namespace _YajuluSDK._Scripts.UI
 
         private void Navigate()
         {
-            UIScreenManager.Instance.NavigateTo(navigationData.navigateToScreen, navigationData.closeCurrent);
+            UIScreenManager.Instance.NavigateTo(navigationData.toPanel ? navigationData.navigateToPanel : navigationData.navigateToScreen, navigationData.closeCurrent);
         }
         
     }
@@ -40,8 +39,11 @@ namespace _YajuluSDK._Scripts.UI
     [Serializable]
     public class UINavigationData 
     {
-        [SerializeField, ValueDropdown(nameof(ScreensList))] public UIScreenBase navigateToScreen;
+        [SerializeField, ValueDropdown(nameof(ScreensList)), HideIf(nameof(toPanel))] public UIScreenBase navigateToScreen;
+        [SerializeField, ValueDropdown(nameof(Panellist)), ShowIf(nameof(toPanel))] public UIPanelBase navigateToPanel;
         [SerializeField] public bool closeCurrent;
+        [SerializeField] public bool toPanel;
         private List<UIScreenBase> ScreensList => Object.FindObjectOfType<UIScreenManager>().screenPanelRefs.ScreenBaseList;
+        private List<UIPanelBase> Panellist => Object.FindObjectOfType<UIScreenManager>().screenPanelRefs.PanelBaseList;
     }
 }

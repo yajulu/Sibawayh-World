@@ -41,6 +41,8 @@ namespace PROJECT.Scripts.Game.Controllers
 
         public MapController2D mapController;
 
+        private eLevelState _dummyProgress;
+
         public int CurrentLevel
         {
             get => currentLevel;
@@ -59,12 +61,12 @@ namespace PROJECT.Scripts.Game.Controllers
 
         public eLevelState GetLevelState(int levelNumber)
         {
-            return levelStates[levelNumber - 1];
+            return levelStates[levelNumber];
         }
 
         private void SetCurrentLevelData(int levelNumber)
         {
-            currentLevelData = gameData.GetLevelData(levelNumber - 1);
+            currentLevelData = gameData.GetLevelData(levelNumber);
         }
 
         [Button, TitleGroup("Progress")]
@@ -111,7 +113,7 @@ namespace PROJECT.Scripts.Game.Controllers
         private void ClearProgress()
         {
             PlayerPrefs.DeleteKey(gameData.ProgressKey);
-            PlayerPrefs.HasKey(gameData.ProgressKey);
+            PlayerPrefs.Save();
             levelStates = null;
         }
 
@@ -119,6 +121,35 @@ namespace PROJECT.Scripts.Game.Controllers
         {
             OnGameModeStarted();
             OnGameModeWordChanged(currentReferenceWord);
+        }
+
+        public void StopGameMode()
+        {
+            _dummyProgress = CalculateLevelProgress();
+            
+            //Check Unlocking of next Level
+            if (levelStates[currentLevel] == eLevelState.Unlocked && _dummyProgress > eLevelState.Unlocked &&
+                currentLevel < levelStates.Length)
+            {
+                levelStates[currentLevel + 1] = eLevelState.Unlocked;
+            }
+
+            levelStates[currentLevel] = _dummyProgress;
+            OnGameModeCompleted();
+        }
+
+        public eLevelState CalculateLevelProgress()
+        {
+            _dummyProgress = eLevelState.Unlocked;
+            foreach (var star in CurrentLevelData.StarsCounter)
+            {
+                if (currentWordIndex > star)
+                    _dummyProgress++;
+                else
+                    break;
+            }
+
+            return _dummyProgress;
         }
 
         // public void AddLetter(string letter, int gameLetterIndex)

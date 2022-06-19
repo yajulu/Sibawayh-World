@@ -94,19 +94,14 @@ namespace PROJECT.Scripts.UI
         private void StartLevel()
         {
             _levelStared = true;
-            UIScreenManager.Instance.CloseScreen(this, onSucceeded: onSucceed);
-
-            void onSucceed()
-            {
-                UIScreenManager.Instance.NavigateTo(nameof(Screen_GameMode), true);    
-            }
+            UIScreenManager.Instance.NavigateTo(nameof(Screen_GameMode), true);
         }
 
         private void UpdatePanelUI(bool instant = true)
         {
             levelSelectionTitleText.text = GameModeManager.Instance.GetCurrentLevelTypeName();
 
-            GameModeManager.Instance.GetLevelState(currentLevelNumber);
+            currentLevelState = GameModeManager.Instance.GetLevelState(currentLevelNumber);
             
             dummyIntLevelState = (int)currentLevelState;
             if (instant)

@@ -142,7 +142,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -8798198981223475417, guid: c704da261a6afbc40b0fe350ea89641b, type: 2}
+  - {fileID: -8798198981223475417, guid: cf75a2e34eac88c42aa025e40f2088b6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -186,15 +186,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u06F1"
   m_isRightToLeft: 1
-  m_fontAsset: {fileID: 11400000, guid: c704da261a6afbc40b0fe350ea89641b, type: 2}
-  m_sharedMaterial: {fileID: -8798198981223475417, guid: c704da261a6afbc40b0fe350ea89641b, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: cf75a2e34eac88c42aa025e40f2088b6, type: 2}
+  m_sharedMaterial: {fileID: -8798198981223475417, guid: cf75a2e34eac88c42aa025e40f2088b6, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4285317374
-  m_fontColor: {r: 0.9960785, g: 0.75294125, b: 0.42352945, a: 1}
+    rgba: 4288409081
+  m_fontColor: {r: 0.97647065, g: 0.9294118, b: 0.60784316, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -774,7 +774,7 @@ MonoBehaviour:
   starsPanel: {fileID: 7382323255532283542}
   numberText: {fileID: 7382323254667445665}
   buttonState: 0
-  levelNumber: 1
+  levelIndex: 0
 --- !u!70 &7382323255686091053
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

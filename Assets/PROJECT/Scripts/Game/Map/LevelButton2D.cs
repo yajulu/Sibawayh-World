@@ -24,7 +24,7 @@ namespace PROJECT.Scripts.Game.Map
         private eLevelState buttonState;
 
         [SerializeField, TitleGroup("Properties"), PropertyOrder(-1), OnValueChanged(nameof(OnLevelNumberChanged))] 
-        private int levelNumber;
+        private int levelIndex;
 
         private LevelsVariablesEditor _levelsVariablesEditor => GameConfig.Instance.Levels;
 
@@ -45,11 +45,11 @@ namespace PROJECT.Scripts.Game.Map
 
         public int LevelNumber
         {
-            get => levelNumber;
+            get => levelIndex;
             set
             {
                 OnLevelNumberChanged(value);
-                levelNumber = value;
+                levelIndex = value;
             }
         }
 
@@ -57,7 +57,7 @@ namespace PROJECT.Scripts.Game.Map
 
         protected void OnEnable()
         {
-            ButtonState = GameModeManager.Instance.GetLevelState(levelNumber);
+            ButtonState = GameModeManager.Instance.GetLevelState(levelIndex);
         }
         
         #endregion
@@ -69,7 +69,7 @@ namespace PROJECT.Scripts.Game.Map
 
         private void OnLevelNumberChanged(int newLevel)
         {
-            numberText.text = newLevel.ToString();
+            numberText.text = (newLevel + 1).ToString();
         }
 
         private void OnMouseDown()
@@ -84,12 +84,16 @@ namespace PROJECT.Scripts.Game.Map
             var state = (int)newState;
             if (instant)
             {
-                starsPanel.gameObject.SetActive(state != 0);
                 _interactable = state != 0;
-                for (int i = 0; i < stars.Length; i++)
+                if (state > 1)
                 {
-                    stars[i].color = (i < state - 1 ? enabledColor : disabledColor);
+                    starsPanel.gameObject.SetActive(true);
+                    for (int i = 0; i < stars.Length; i++)
+                    {
+                        stars[i].color = (i < state - 1 ? enabledColor : disabledColor);
+                    }    
                 }
+                
                 lightImage.sprite = state == 0 ? _levelsVariablesEditor.levelButtonUI.Locked : 
                     state > 1 ? _levelsVariablesEditor.levelButtonUI.Complete : _levelsVariablesEditor.levelButtonUI.Unlocked;
             }
@@ -98,7 +102,7 @@ namespace PROJECT.Scripts.Game.Map
 
         private void PlayLevel()
         {
-            GameModeManager.Instance.CurrentLevel = levelNumber;
+            GameModeManager.Instance.CurrentLevel = levelIndex;
             UIScreenManager.Instance.OpenScreen(nameof(Panel_LevelSelection));
         }
         

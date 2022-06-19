@@ -99,7 +99,7 @@ namespace PROJECT.Scripts.Game.Map
             {
                 _dummyPrefab = Instantiate(_buttonPrefabRef, mapStonesParent);
                 _dummyLevelButton = _dummyPrefab.transform.GetComponent<LevelButton2D>();
-                _dummyLevelButton.LevelNumber = i + 1;
+                _dummyLevelButton.LevelNumber = i;
                 levelButtons.Add(_dummyLevelButton);
                 
                 for (int j = 0; j < stonesPerLevel; j++)

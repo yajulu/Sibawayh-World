@@ -15,7 +15,7 @@ namespace _YajuluSDK._Scripts.UI
         [ReadOnly] public Dictionary<string, UIPanelBase> Panels = new Dictionary<string, UIPanelBase>();
 
         public List<UIScreenBase> ScreenBaseList => _screenBaseList;
-        public List<UIScreenBase> PanelBaseList => _screenBaseList;
+        public List<UIPanelBase> PanelBaseList => _panelBaseList;
 
         private UIScreenBase _screenBase;
         private UIPanelBase _panelBase;

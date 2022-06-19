@@ -156,9 +156,9 @@ namespace _YajuluSDK._Scripts.UI
             if (_screenQueue.TryDequeue(out _dummyQueueData))
             {
                 if (_dummyQueueData.IsOpening)
-                    OpenScreen(_dummyQueueData.ScreenBase.GetType().Name);
+                    OpenScreen(_dummyQueueData.ScreenBase.GetType().Name, _dummyQueueData.OnSucceeded, _dummyQueueData.OnFailed);
                 else
-                    CloseScreen(_dummyQueueData.ScreenBase.GetType().Name);
+                    CloseScreen(_dummyQueueData.ScreenBase.GetType().Name, _dummyQueueData.OnSucceeded, _dummyQueueData.OnFailed);
             }
         }
 
@@ -204,16 +204,18 @@ namespace _YajuluSDK._Scripts.UI
                 _screenQueue.Enqueue(new UIScreenQueueData
                 {
                     ScreenBase = screen,
-                    IsOpening = true
+                    IsOpening = true,
+                    OnSucceeded = onSucceeded,
+                    OnFailed = onFailed
                 });
-                Debug.LogError($"Screen ({screen}) will be Queued to Open, Current State: ({screen.State}) -- " +
-                               $"Current Changing Screen ({_currentChangingScreen})");
+                Debug.LogWarning($"Screen ({screen}) will be Queued to Open, Current State: ({screen.State}) -- " +
+                                 $"Current Changing Screen ({_currentChangingScreen})");
                 return;
             }
 
             if (screen.State != eUIScreenState.Closed)
             {
-                Debug.LogError($"Screen ({screen}) is already Opened or is being opened. Current Screen state ({screen.State})");
+                Debug.LogWarning($"Screen ({screen}) is already Opened or is being opened. Current Screen state ({screen.State})");
                 return;
             }
 
@@ -237,16 +239,18 @@ namespace _YajuluSDK._Scripts.UI
                 _screenQueue.Enqueue(new UIScreenQueueData
                 {
                     ScreenBase = screen,
-                    IsOpening = false
+                    IsOpening = false,
+                    OnSucceeded = onSucceeded,
+                    OnFailed = onFailed
                 });
-                Debug.LogError($"Screen ({screen}) will be Queued to Close, Current State: ({screen.State}) --- " +
-                               $"Current Changing Screen ({_currentChangingScreen})");
+                Debug.LogWarning($"Screen ({screen}) will be Queued to Close, Current State: ({screen.State}) --- " +
+                                 $"Current Changing Screen ({_currentChangingScreen})");
                 return;
             }
 
             if (screen.State != eUIScreenState.Opened)
             {
-                Debug.LogError($"Screen ({screen}) is already closed or is being closed. Current Screen state ({screen.State})");
+                Debug.LogWarning($"Screen ({screen}) is already closed or is being closed. Current Screen state ({screen.State})");
                 return;
             }
 
@@ -285,10 +289,20 @@ namespace _YajuluSDK._Scripts.UI
                 do
                 {
                     _dummyLatestOpenScreen = _openedScreens[^i];
+
                     if (!QueueContains(_dummyLatestOpenScreen))
-                        break;
+                    {
+                        if (_dummyLatestOpenScreen is UIPanelBase)
+                        {
+                            CloseScreen(_dummyLatestOpenScreen);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
                     i++;
-                } while (i <= _screenQueue.Count);
+                } while (i <= _openedScreens.Count);
 
                 CloseScreen(_dummyLatestOpenScreen, OnSucceeded, OnFailed);
             }
@@ -326,5 +340,7 @@ namespace _YajuluSDK._Scripts.UI
     {
         public UIScreenBase ScreenBase;
         public bool IsOpening;
+        public Action OnSucceeded;
+        public Action OnFailed;
     }
 }
