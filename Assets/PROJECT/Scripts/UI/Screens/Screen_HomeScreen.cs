@@ -11,28 +11,7 @@ namespace PROJECT.Scripts.UI.Screens
     {
         [SerializeField]
         Transform logo_Image, buttons_Panel;
-
-        private float buttons_panelEndValue;
-
-        protected override void Awake()
-        {
-            base.Awake();
-            buttons_panelEndValue = buttons_Panel.localPosition.x;
-
-        }
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
-
-
+        
         protected override void OnSkipOpenAnimation()
         {
             logo_Image.transform.DOComplete();
@@ -49,13 +28,14 @@ namespace PROJECT.Scripts.UI.Screens
         {
             gameObject.SetActive(true);
             logo_Image.DOScale(1, 0.6f)
-                .SetEase(Ease.OutBounce)
+                .SetEase(Ease.OutBack)
                 .From(0)
                 .OnComplete(base.OpenAnimation);
 
-            buttons_Panel.DOLocalMoveX(buttons_panelEndValue, 0.6f)
-                .SetEase(Ease.OutBounce)
-                .From(buttons_panelEndValue - 200)
+            buttons_Panel.DOLocalMoveX(buttons_Panel.transform.localPosition.x, 0.6f)
+                .SetEase(Ease.OutBack)
+                .From(-600)
+                .SetRelative(true)
                 .OnComplete(base.OpenAnimation);
         }
 

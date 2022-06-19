@@ -59,6 +59,7 @@ namespace PROJECT.Scripts.UI
         {
             GameModeManager.Instance.GameModeStarted += GameModeStarted;
             GameModeManager.Instance.GameModeCheckWord += CheckWord;
+            ResetProgressBar();
         }
         
         private void OnDisable()
@@ -108,6 +109,19 @@ namespace PROJECT.Scripts.UI
                 progressBarStarsList[i].transform.SetSiblingIndex(levelData.StarsCounter[i]);
                 progressBarStarsList[i].canvasRenderer.SetAlpha(0.4f);
                 _currentProgressBarElements.Insert(levelData.StarsCounter[i], progressBarStarsList[i]);
+            }
+        }
+
+        private void ResetProgressBar()
+        {
+            for (int i = 0; i < progressBarDotsList.Length; i++)
+            {
+                progressBarDotsList[i].canvasRenderer.SetAlpha(0.4f);
+            }
+            
+            for (int i = 0; i < progressBarStarsList.Length; i++)
+            {
+                progressBarStarsList[i].canvasRenderer.SetAlpha(0.4f);
             }
         }
         
