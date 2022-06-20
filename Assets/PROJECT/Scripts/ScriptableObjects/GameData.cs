@@ -27,10 +27,10 @@ namespace PROJECT.Scripts.ScriptableObjects
         private string _line;
         public GameData()
         {
-            _dataDict = new Dictionary<(eLevelType, string), LevelDictData>();
-            _levelDataKeys = new List<(eLevelType, string)>();
-            _levelTypesNamesDict = new Dictionary<eLevelType, string>();
-            progressKey = "levelProgress";
+            //_dataDict = new Dictionary<(eLevelType, string), LevelDictData>();
+            //_levelDataKeys = new List<(eLevelType, string)>();
+            //_levelTypesNamesDict = new Dictionary<eLevelType, string>();
+            //progressKey = "levelProgress";
         }
 
         public LevelData TryGetLevelData((eLevelType, string) key)

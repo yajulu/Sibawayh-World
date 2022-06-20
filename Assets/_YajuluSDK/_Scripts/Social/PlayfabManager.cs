@@ -35,6 +35,7 @@ namespace _YajuluSDK._Scripts.Social
         {
             GS.UserLoginSucceeded += OnGameServicesLogInSucceeded;
             GS.UserLoginFailed += OnGameServicesLogInFailed;
+            PlayFabClientAPI.;
         }
 
         private void OnDisable()

@@ -136,7 +136,10 @@ PlayerSettings:
     Others: 1
   bundleVersion: 1.0
   preloadedAssets:
-  - {fileID: -8934269119937836300, guid: be7d9ba9a3adb2d429dae78f13017016, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -252,7 +255,8 @@ PlayerSettings:
   AndroidTargetDevices: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: D:/Work/Yajulu/Sibawayh World/keystore/Sibawayh World.keystore
+  AndroidKeystoreName: D:/Game Development/Projects Assets/Yajulu/Sibawayh World/keystore/Sibawayh
+    World.keystore
   AndroidKeyaliasName: sibawayhuser
   AndroidBuildApkPerCpuArchitecture: 0
   AndroidTVCompatibility: 0

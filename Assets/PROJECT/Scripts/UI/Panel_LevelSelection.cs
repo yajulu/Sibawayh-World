@@ -69,6 +69,7 @@ namespace PROJECT.Scripts.UI
 
             void onStarted()
             {
+                _statsPanelRef.UpdateTitlesToCurrentLevel();
                 _statsPanelRef.gameObject.SetActive(true);
                 gameObject.SetActive(true);
             }

@@ -71,7 +71,7 @@ namespace PROJECT.Scripts.Game.Controllers
 
         [Button, TitleGroup("Progress")]
         private void LoadData()
-        {
+        {/*
             if (PlayerPrefs.HasKey(gameData.ProgressKey))
             {
                 intLevelStates = SaveUtility.LoadListToInt(gameData.ProgressKey);
@@ -84,11 +84,13 @@ namespace PROJECT.Scripts.Game.Controllers
             }
             else
             {
+            */
                 levelStates = new eLevelState[gameData.GetLevelsCount];
+                Debug.Log($"Count {gameData.GetLevelsCount}");
                 levelStates[0] = eLevelState.Unlocked;
                 SaveProgress();
                 // LoadData();
-            }
+            //}
 
             eLevelState ConvertIntToEnum(int val)
             {
