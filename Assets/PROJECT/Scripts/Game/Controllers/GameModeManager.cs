@@ -66,9 +66,7 @@ namespace PROJECT.Scripts.Game.Controllers
 
         private void SetCurrentLevelData(int levelNumber)
         {
-            Debug.Log($"a7a Level Data: {gameData}");
             currentLevelData = gameData.GetLevelData(levelNumber);
-            Debug.Log($"Level Data: {currentLevelData}");
         }
 
         [Button, TitleGroup("Progress")]
@@ -185,13 +183,13 @@ namespace PROJECT.Scripts.Game.Controllers
 
         private void ShowNextWord()
         {
-            if (currentWordIndex + 1 == currentLevelWordsList.Length)
+            currentWordIndex++;
+            if (currentWordIndex == currentLevelWordsList.Length)
             {
                 OnGameModeCompleted();
             }
             else
             {
-                currentWordIndex++;
                 OnGameModeWordChanged(currentLevelWordsList[currentWordIndex]);    
             }
         }

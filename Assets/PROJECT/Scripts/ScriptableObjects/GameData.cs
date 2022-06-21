@@ -32,22 +32,19 @@ namespace PROJECT.Scripts.ScriptableObjects
 
         public LevelData TryGetLevelData(LevelDictKey key)
         {
-            Debug.Log($"Data Dict: {_dataDict}");
             //if (!_dataDict.TryGetValue(key, out var levelDictData)) return null;
             var levelDictData = _dataDict[key];
-            Debug.Log($"Level Data: {levelDictData}");
+            
             var data = new LevelData(key.Type, key.KeyWord, levelDictData.words.ToArray(), levelDictData.starsCounter);
             return data;
         }
 
         public LevelData GetLevelData(int levelNumber)
         {
-            Debug.Log($"Keys {_levelDataKeys.Count} -- {levelNumber}");
             if (levelNumber > _levelDataKeys.Count || levelNumber < 0)
             {
                 return null;
             }
-            Debug.Log($"Level Key: {_levelDataKeys[levelNumber]}");
             return TryGetLevelData(_levelDataKeys[levelNumber]);
         }
 

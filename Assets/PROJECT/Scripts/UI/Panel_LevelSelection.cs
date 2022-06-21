@@ -36,7 +36,6 @@ namespace PROJECT.Scripts.UI
         private void Start()
         {
             _statsPanelRef = UIScreenManager.Instance.MiscRefs.StatsPanelController;
-            Debug.Log($"Stats Panel: {_statsPanelRef}");
         }
 
         protected override void OnEnable()
