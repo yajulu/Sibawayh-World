@@ -76,6 +76,7 @@ namespace _YajuluSDK._Scripts.UI
         {
             InitializeScreens();
             OpenScreen(nameof(Screen_HomeScreen));
+            OpenScreen(nameof(Panel_Loading));
         }
 
         #region Events

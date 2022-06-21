@@ -1,4 +1,5 @@
 using System;
+using _YajuluSDK._Scripts.UI;
 using Facebook.Unity;
 using PlayFab;
 using PlayFab.ClientModels;
@@ -7,35 +8,36 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using EasyMobile;
+using PROJECT.Scripts.UI.Screens;
 using LoginResult = PlayFab.ClientModels.LoginResult;
 
 namespace _YajuluSDK._Scripts.Social
 {
-	public class PlayFabTest : MonoBehaviour
+	public class PlayFabHandler : MonoBehaviour
 	{
 		[TitleGroup("Debug")] 
 		[ReadOnly, SerializeField] private bool isLoggedIn;
 		[ReadOnly, SerializeField] private bool isInitialized;
-		[TitleGroup("Refs")]
-		[SerializeField] private GameObject loginPanel;
-		[SerializeField] private GameObject profilePanel;
-		[SerializeField] private TextMeshProUGUI displayName;
-		[SerializeField] private TMP_InputField displayNameInputField;
-		[SerializeField] private Button displayNameUpdateButton;
+		// [TitleGroup("Refs")]
+		// [SerializeField] private GameObject loginPanel;
+		// [SerializeField] private GameObject profilePanel;
+		// [SerializeField] private TextMeshProUGUI displayName;
+		// [SerializeField] private TMP_InputField displayNameInputField;
+		// [SerializeField] private Button displayNameUpdateButton;
 		
-		[SerializeField] private TextMeshProUGUI scoreTest;
-		[SerializeField] private TMP_InputField scoreInputField;
-		[SerializeField] private Button scoreUpdateButton;
-		[SerializeField] private Button leaderboardButton;
+		// [SerializeField] private TextMeshProUGUI scoreTest;
+		// [SerializeField] private TMP_InputField scoreInputField;
+		// [SerializeField] private Button scoreUpdateButton;
+		// [SerializeField] private Button leaderboardButton;
 
 		private void OnEnable()
 		{
-			displayNameUpdateButton.onClick.AddListener(UpdatePlayerName);
-			scoreUpdateButton.onClick.AddListener(UpdatePlayerScore);
-			leaderboardButton.onClick.AddListener(ShowLeaderboard);
-
-			loginPanel.SetActive(true);
-			profilePanel.SetActive(false);
+			// displayNameUpdateButton.onClick.AddListener(UpdatePlayerName);
+			// scoreUpdateButton.onClick.AddListener(UpdatePlayerScore);
+			// leaderboardButton.onClick.AddListener(ShowLeaderboard);
+			//
+			// loginPanel.SetActive(true);
+			// profilePanel.SetActive(false);
 			
 			PlayfabManager.OnPlayerLoggedIn += OnPlayerLogin;
 			PlayfabManager.OnPlayerProfileReceived += OnPlayerProfileReceived;
@@ -51,6 +53,11 @@ namespace _YajuluSDK._Scripts.Social
 			}
 
 			
+		}
+
+		private void PlayerLoggedIn()
+		{
+			UIScreenManager.Instance.CloseScreen(nameof(Panel_Loading));
 		}
 
 		private void OnFBLoginStatusRetrieved(ILoginStatusResult obj)
@@ -72,12 +79,12 @@ namespace _YajuluSDK._Scripts.Social
 			
 			if (FB.IsLoggedIn)
 			{
-				loginPanel.SetActive(false);
-				profilePanel.SetActive(true);
+				// loginPanel.SetActive(false);
+				PlayerLoggedIn();
 			}
 			else
 			{
-				loginPanel.SetActive(true);
+				// loginPanel.SetActive(true);
 			}
 			
 		}
@@ -85,14 +92,14 @@ namespace _YajuluSDK._Scripts.Social
 
 		private void OnPlayerProfileReceived(PlayerProfileModel obj)
 		{
-			displayName.SetText(obj.DisplayName);
-			scoreTest.SetText(obj.Statistics[0].Value.ToString());
+			// displayName.SetText(obj.DisplayName);
+			// scoreTest.SetText(obj.Statistics[0].Value.ToString());
 			PlayfabManager.GetPlayerStatistics(null);
 		}
 
 		private void OnDisable()
 		{
-			displayNameUpdateButton.onClick.RemoveAllListeners();
+			// displayNameUpdateButton.onClick.RemoveAllListeners();
 			PlayfabManager.OnPlayerLoggedIn -= OnPlayerLogin;
 			PlayfabManager.OnFbInitialized -= OnFBInitialized;
 		}
@@ -107,24 +114,25 @@ namespace _YajuluSDK._Scripts.Social
 			if (isLoggedIn)
 				return;
 			// loginPanel.SetActive(false);
-			profilePanel.SetActive(true);
+			// profilePanel.SetActive(true);
+			PlayerLoggedIn();
 			isLoggedIn = true;
 			PlayfabManager.GetPlayerData(null);
 		}
 
 		private void UpdatePlayerName()
 		{
-			PlayfabManager.UpdatePlayerDisplayName(displayNameInputField.text);
+			// PlayfabManager.UpdatePlayerDisplayName(displayNameInputField.text);
 		}
 		
 		private void UpdatePlayerScore()
 		{
-			PlayfabManager.UpdateLeaderBoard("MaxScore", int.Parse(scoreInputField.text));
+			// PlayfabManager.UpdateLeaderBoard("MaxScore", int.Parse(scoreInputField.text));
 		}
 
 		private void ShowLeaderboard()
 		{
-			PlayfabManager.GetLeaderBoardData("MaxScore", 0);
+			// PlayfabManager.GetLeaderBoardData("MaxScore", 0);
 		}
 		
 		
