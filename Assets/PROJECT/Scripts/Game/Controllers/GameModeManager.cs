@@ -66,7 +66,9 @@ namespace PROJECT.Scripts.Game.Controllers
 
         private void SetCurrentLevelData(int levelNumber)
         {
+            Debug.Log($"a7a Level Data: {gameData}");
             currentLevelData = gameData.GetLevelData(levelNumber);
+            Debug.Log($"Level Data: {currentLevelData}");
         }
 
         [Button, TitleGroup("Progress")]

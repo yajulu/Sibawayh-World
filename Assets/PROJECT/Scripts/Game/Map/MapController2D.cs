@@ -40,14 +40,14 @@ namespace PROJECT.Scripts.Game.Map
         private GameObject _buttonPrefabRef;
         private GameObject _stonePrefabRef;
 
-        private MainInput _input;
+      //  private MainInput _input;
 
         private Vector2 _dummyNewPosition;
         private Vector2 _dummyLocalPosition;
 
         private void Awake()
         {
-            _input = new MainInput();
+            //_input = new MainInput();
         }
 
         private void OnEnable()
@@ -68,7 +68,7 @@ namespace PROJECT.Scripts.Game.Map
             if (obj.GetType().Name.Equals(nameof(Screen_Map)))
             {
                 mapHolder.gameObject.SetActive(true);
-                _input.Map.Enable();
+               // _input.Map.Enable();
             }
         }
         
@@ -77,7 +77,7 @@ namespace PROJECT.Scripts.Game.Map
             if (obj.GetType().Name.Equals(nameof(Screen_Map)))
             {
                 mapHolder.gameObject.SetActive(false);
-                _input.Map.Disable();
+               // _input.Map.Disable();
             }
         }
         
@@ -126,7 +126,7 @@ namespace PROJECT.Scripts.Game.Map
         private void OnMouseDrag()
         {
             _dummyLocalPosition = mapHolder.localPosition;
-            _dummyNewPosition = _dummyLocalPosition + (_input.Map.Scroll.ReadValue<Vector2>() * scrollSpeed);
+            //_dummyNewPosition = _dummyLocalPosition + (_input.Map.Scroll.ReadValue<Vector2>() * scrollSpeed);
             _dummyNewPosition = _dummyNewPosition.Clamp(minScroll, maxScroll) - _dummyLocalPosition;
             mapHolder.Translate(_dummyNewPosition, Space.Self);
         }

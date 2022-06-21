@@ -84,25 +84,6 @@ namespace PROJECT.Scripts.Game.Map
                 element.sortingOrder = i;
                 element.sortingLayerName = "Background";
             }
-            
-            // for (int i = 0; i < elements.Length; i++)
-            // {
-            //     
-            //     var minValue = float.PositiveInfinity;
-            //     var minChild = currentNormalItemsParent.GetChild(0);
-            //     for (int j = i; j < currentNormalItemsParent.childCount; j++)
-            //     {
-            //         var child = currentNormalItemsParent.GetChild(j);
-            //         if (child.transform.localPosition.y < minValue)
-            //         {
-            //             minValue = child.transform.localPosition.y;
-            //             minChild = child;
-            //         }
-            //     }
-            //     minChild.SetSiblingIndex(0);
-            // }
-            
-
 
             void PlaceElement(MapElement element, Transform elementsParent)
             {
@@ -122,20 +103,9 @@ namespace PROJECT.Scripts.Game.Map
                     
                     _dummySpriteRenderer.sprite = currentSprite;
                     _dummySpriteRenderer.transform.localPosition = newPosition;
-                    // _dummyImage.gameObject.name = $"{element.name}_({newPosition.x},{newPosition.y})";
-                    _dummySpriteRenderer.gameObject.name = element.name;
                     
-                    // var ray = cam.ScreenPointToRay(_dummyImage.rectTransform.position);
-                    // PointerEventData data = new PointerEventData(_current);
-                    // data.position = ray.origin;
-                    // _results = new List<RaycastResult>();
-                    // // UIScreenManager.Instance.rayCaster.blockingMask = _mask;
-                    // UIScreenManager.Instance.rayCaster.Raycast(data, _results);
-                    //
-                    // if (_results != null && _results.Count > 0)
-                    // {
-                    //     Debug.Log("Hello");    
-                    // }
+                    _dummySpriteRenderer.gameObject.name = element.name;
+
                 }
             }
 
@@ -158,7 +128,7 @@ namespace PROJECT.Scripts.Game.Map
             }
         }
         [Serializable]
-        public class MapElement : IComparer<MapElement>
+        public class MapElement 
         {
             public string name;
             public int layerIndex;
@@ -168,19 +138,7 @@ namespace PROJECT.Scripts.Game.Map
             public int numberOfItems;
             [MinValue(0)] public float scale = 1f; 
             public Sprite[] sprites;
-
-            public int Compare(MapElement x, MapElement y)
-            {
-                if (ReferenceEquals(x, y)) return 0;
-                if (ReferenceEquals(null, y)) return 1;
-                if (ReferenceEquals(null, x)) return -1;
-                // var nameComparison = string.Compare(x.name, y.name, StringComparison.Ordinal);
-                // if (nameComparison != 0) return nameComparison;
-                // var forceLayerIndexComparison = x.forceLayerIndex.CompareTo(y.forceLayerIndex);
-                // if (forceLayerIndexComparison != 0) return forceLayerIndexComparison;
-                var layerIndexComparison = x.layerIndex.CompareTo(y.layerIndex);
-                return layerIndexComparison;
-            }
+            
         }
 
         // [Serializable]

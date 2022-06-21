@@ -102,6 +102,7 @@ namespace PROJECT.Scripts.Game.Map
 
         private void PlayLevel()
         {
+            Debug.Log("Play Button Clicked");
             GameModeManager.Instance.CurrentLevel = levelIndex;
             UIScreenManager.Instance.OpenScreen(nameof(Panel_LevelSelection));
         }

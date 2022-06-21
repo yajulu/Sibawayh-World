@@ -32,7 +32,13 @@ namespace PROJECT.Scripts.UI
         private int dummyIntLevelState;
 
         private bool _levelStared = false;
-        
+
+        private void Start()
+        {
+            _statsPanelRef = UIScreenManager.Instance.MiscRefs.StatsPanelController;
+            Debug.Log($"Stats Panel: {_statsPanelRef}");
+        }
+
         protected override void OnEnable()
         {
             base.OnEnable();
@@ -69,6 +75,7 @@ namespace PROJECT.Scripts.UI
 
             void onStarted()
             {
+                _statsPanelRef.UpdateTitlesToCurrentLevel();
                 _statsPanelRef.gameObject.SetActive(true);
                 gameObject.SetActive(true);
             }

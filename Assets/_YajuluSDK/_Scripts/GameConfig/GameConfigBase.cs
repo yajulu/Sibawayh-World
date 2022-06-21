@@ -9,6 +9,7 @@ namespace _YajuluSDK._Scripts.GameConfig
     
     public abstract class GameConfigBase : SingletonScriptableObject<GameConfig>
     {
+        
         [PropertyOrder(100)]
         public ResolutionsData ResolutionsData = new ResolutionsData();
     }
