@@ -16,10 +16,10 @@ namespace PROJECT.Scripts.ScriptableObjects
         [SerializeField, TitleGroup("Progress")]
         private string progressKey;
         
-        [SerializeField, TitleGroup("Data")] private Dictionary<(eLevelType, string), LevelDictData> _dataDict;
-        [SerializeField, TitleGroup("Data")] private List<(eLevelType, string)> _levelDataKeys;
+        [SerializeField, TitleGroup("Data")] private GameDataDict _dataDict;
+        [SerializeField, TitleGroup("Data")] private List<LevelDictKey> _levelDataKeys;
 
-        [SerializeField, TitleGroup("Data")] private Dictionary<eLevelType, string> _levelTypesNamesDict;
+        [SerializeField, TitleGroup("Data")] private LevelNamesType _levelTypesNamesDict;
 
         [SerializeField, Sirenix.OdinInspector.FilePath, TitleGroup("Data")]
         private string filePath;
@@ -27,17 +27,15 @@ namespace PROJECT.Scripts.ScriptableObjects
         private string _line;
         public GameData()
         {
-            _dataDict = new Dictionary<(eLevelType, string), LevelDictData>();
-            _levelDataKeys = new List<(eLevelType, string)>();
-            _levelTypesNamesDict = new Dictionary<eLevelType, string>();
             progressKey = "levelProgress";
         }
 
-        public LevelData TryGetLevelData((eLevelType, string) key)
+        public LevelData TryGetLevelData(LevelDictKey key)
         {
-            if (!_dataDict.TryGetValue(key, out var levelDictData)) return null;
+            //if (!_dataDict.TryGetValue(key, out var levelDictData)) return null;
+            var levelDictData = _dataDict[key];
             
-            var data = new LevelData(key.Item1, key.Item2, levelDictData.words.ToArray(), levelDictData.starsCounter);
+            var data = new LevelData(key.Type, key.KeyWord, levelDictData.words.ToArray(), levelDictData.starsCounter);
             return data;
         }
 
@@ -47,7 +45,6 @@ namespace PROJECT.Scripts.ScriptableObjects
             {
                 return null;
             }
-            
             return TryGetLevelData(_levelDataKeys[levelNumber]);
         }
 
@@ -64,8 +61,8 @@ namespace PROJECT.Scripts.ScriptableObjects
         [Button]
         private void LoadData()
         {
-            _dataDict.Clear();
-            _levelDataKeys.Clear();
+            _dataDict = new GameDataDict();
+            _levelDataKeys = new List<LevelDictKey>();
             StreamReader streamReader = new StreamReader(filePath);
 
             bool endOfFile = false;
@@ -80,7 +77,11 @@ namespace PROJECT.Scripts.ScriptableObjects
                 }
 
                 var values = _line.Split(',');
-                var key = ((eLevelType)int.Parse(values[0]), values[1].Trim());
+                var key = new LevelDictKey
+                {
+                    Type = (eLevelType)int.Parse(values[0]),
+                    KeyWord = values[1].Trim()   
+                };
                     
                 List<string> wordList = new List<string>();
                 int[] starsIndexes = new int[3];
@@ -117,6 +118,55 @@ namespace PROJECT.Scripts.ScriptableObjects
             public List<string> words;
             public int[] starsCounter;
             
+        }
+
+        [Serializable]
+        public struct LevelDictKey
+        {
+            public eLevelType Type;
+            public string KeyWord;
+
+        }
+        
+        
+    }
+
+    [Serializable]
+    public class LevelNamesType : UnitySerializedDictionary<eLevelType, string>
+    { }
+    
+    [Serializable]
+    public class GameDataDict : UnitySerializedDictionary<GameData.LevelDictKey, GameData.LevelDictData>
+    { }
+    public abstract class UnitySerializedDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
+    {
+        [SerializeField, HideInInspector]
+        protected List<TKey> keyData = new List<TKey>();
+
+        [SerializeField, HideInInspector]
+        protected List<TValue> valueData = new List<TValue>();
+
+        void ISerializationCallbackReceiver.OnAfterDeserialize()
+        {
+            Clear();
+            //Debug.LogError(this.keyData.Count + "   " + valueData.Count);
+
+            for (int i = 0; i < this.keyData.Count; i++)
+            {
+                this[keyData[i]] = valueData[i];
+            }
+        }
+
+        void ISerializationCallbackReceiver.OnBeforeSerialize()
+        {
+            keyData.Clear();
+            valueData.Clear();
+
+            foreach (var entry in this)
+            {
+                keyData.Add(entry.Key);
+                valueData.Add(entry.Value);
+            }
         }
     }
 }

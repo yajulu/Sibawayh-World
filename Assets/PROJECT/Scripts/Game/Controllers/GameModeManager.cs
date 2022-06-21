@@ -183,13 +183,13 @@ namespace PROJECT.Scripts.Game.Controllers
 
         private void ShowNextWord()
         {
-            if (currentWordIndex + 1 == currentLevelWordsList.Length)
+            currentWordIndex++;
+            if (currentWordIndex == currentLevelWordsList.Length)
             {
                 OnGameModeCompleted();
             }
             else
             {
-                currentWordIndex++;
                 OnGameModeWordChanged(currentLevelWordsList[currentWordIndex]);    
             }
         }
