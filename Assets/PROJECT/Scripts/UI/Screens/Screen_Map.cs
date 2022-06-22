@@ -1,4 +1,5 @@
 using _YajuluSDK._Scripts.UI;
+using PROJECT.Scripts.Game.Controllers;
 
 
 namespace PROJECT.Scripts.UI.Screens
@@ -10,8 +11,14 @@ namespace PROJECT.Scripts.UI.Screens
             base.OnScreenOpenStarted();
             UIScreenManager.Instance.Background.gameObject.SetActive(false);
         }
-        
-        
+
+        protected override void OnScreenOpenEnded()
+        {
+            base.OnScreenOpenEnded();
+            GameModeManager.Instance.UnloadGameMode();
+        }
+
+
         protected override void OnScreenCloseEnded()
         {
             base.OnScreenCloseEnded();

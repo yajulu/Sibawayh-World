@@ -42,13 +42,13 @@ namespace PROJECT.Scripts.UI
         {
             base.OnEnable();
             _levelStared = false;
-            startButton.onClick.AddListener(StartLevel);
+            startButton.onClick.AddListener(LoadLevel);
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
-            startButton.onClick.RemoveListener(StartLevel);
+            startButton.onClick.RemoveListener(LoadLevel);
         }
 
         protected override void OnScreenOpenStarted()
@@ -97,10 +97,10 @@ namespace PROJECT.Scripts.UI
             }
         }
         
-        private void StartLevel()
+        private void LoadLevel()
         {
             _levelStared = true;
-            UIScreenManager.Instance.NavigateTo(nameof(Screen_GameMode), true);
+            GameModeManager.Instance.LoadGameMode();
         }
 
         private void UpdatePanelUI(bool instant = true)

@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using _YajuluSDK._Scripts.Essentials;
 using _YajuluSDK._Scripts.GameConfig;
 using _YajuluSDK._Scripts.Tools;
+using _YajuluSDK._Scripts.UI;
 using PROJECT.Scripts.Data;
 using PROJECT.Scripts.Enums;
 using PROJECT.Scripts.Game.Map;
 using PROJECT.Scripts.ScriptableObjects;
+using PROJECT.Scripts.UI.Screens;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -14,7 +16,7 @@ namespace PROJECT.Scripts.Game.Controllers
 {
     public class GameModeManager : Singleton<GameModeManager>
     {
-
+        public event Action GameModeLoaded;
         public event Action GameModeStarted;
         public event Action<string> GameModeWordChanged;
         public event Action<string> GameModeWordUpdated; 
@@ -28,18 +30,16 @@ namespace PROJECT.Scripts.Game.Controllers
 
         [SerializeField] private int currentLevel = 1;
         // [SerializeField] private GameData gameData;
-        [SerializeField, ReadOnly] private string []currentLevelWordsList;
         [SerializeField, ReadOnly] private int currentWordIndex = 0;
         [SerializeField, ReadOnly] private LevelData currentLevelData;
+        [SerializeField, ReadOnly] private eGameModeState currentGameModeState;
         
         public int CurrentWordIndex => currentWordIndex;
         public string CurrentReferenceWord => currentReferenceWord;
         public LevelData CurrentLevelData => currentLevelData;
-
-        public MapController2D mapController;
-
+        
         private eLevelState _dummyProgress;
-
+        public eGameModeState CurrentGameModeState => currentGameModeState;
         private PlayerData _playerData => DataPersistenceManager.Instance.PlayerData;
         
         public int CurrentLevel
@@ -47,11 +47,13 @@ namespace PROJECT.Scripts.Game.Controllers
             get => currentLevel;
             set
             {
+                if (currentGameModeState != eGameModeState.Unloaded)
+                    return;
                 currentLevel = value;
                 SetCurrentLevelData(value);
             }
         }
-        
+
         private void Start()
         {
             DataPersistenceManager.Instance.LoadData();
@@ -60,6 +62,17 @@ namespace PROJECT.Scripts.Game.Controllers
         private void SetCurrentLevelData(int levelNumber)
         {
             currentLevelData = GameConfig.Instance.Levels.GetLevelData(levelNumber);
+        }
+        
+        public void UnloadGameMode()
+        {
+            currentGameModeState = eGameModeState.Unloaded;
+        }
+        public void LoadGameMode()
+        {
+            currentGameModeState = eGameModeState.Loaded;
+            GameModeLoaded?.Invoke();
+            UIScreenManager.Instance.NavigateTo(nameof(Screen_GameMode), true);
         }
         
         public void StartGameMode()
@@ -79,6 +92,7 @@ namespace PROJECT.Scripts.Game.Controllers
             }
 
             _playerData.UpdateLevelState(currentLevel, _dummyProgress);
+            currentGameModeState = eGameModeState.Stopped;
             OnGameModeCompleted();
         }
 
@@ -128,13 +142,13 @@ namespace PROJECT.Scripts.Game.Controllers
         private void ShowNextWord()
         {
             currentWordIndex++;
-            if (currentWordIndex == currentLevelWordsList.Length)
+            if (currentWordIndex == currentLevelData.Words.Length)
             {
                 OnGameModeCompleted();
             }
             else
             {
-                OnGameModeWordChanged(currentLevelWordsList[currentWordIndex]);    
+                OnGameModeWordChanged(CurrentLevelData.Words[currentWordIndex]);    
             }
         }
 
@@ -152,9 +166,9 @@ namespace PROJECT.Scripts.Game.Controllers
         {
             currentWordIndex = 0;
             SetCurrentLevelData(currentLevel);
-            currentLevelWordsList = currentLevelData.Words;
-            currentReferenceWord = currentLevelWordsList[0];
+            currentReferenceWord = currentLevelData.Words[0];
             currentCheckWord = "";
+            currentGameModeState = eGameModeState.Started;
             GameModeStarted?.Invoke();
         }
 
@@ -180,6 +194,7 @@ namespace PROJECT.Scripts.Game.Controllers
 
         protected virtual void OnGameModeCompleted()
         {
+            currentGameModeState = eGameModeState.Completed;
             GameModeCompleted?.Invoke();
             DataPersistenceManager.Instance.SaveProgress();
         }

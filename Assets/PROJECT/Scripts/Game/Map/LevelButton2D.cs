@@ -7,6 +7,7 @@ using PROJECT.Scripts.UI;
 using RTLTMPro;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace PROJECT.Scripts.Game.Map
 {
@@ -74,9 +75,9 @@ namespace PROJECT.Scripts.Game.Map
 
         private void OnMouseUpAsButton()
         {
-            if (!_interactable)
+            if (!_interactable || EventSystem.current.IsPointerOverGameObject())
                 return;
-            PlayLevel();
+            ShowLevelSelection();
         }
 
         private void UpdateButtonUI(eLevelState newState, bool instant = true)
@@ -100,7 +101,7 @@ namespace PROJECT.Scripts.Game.Map
             
         }
 
-        private void PlayLevel()
+        private void ShowLevelSelection()
         {
             GameModeManager.Instance.CurrentLevel = levelIndex;
             UIScreenManager.Instance.OpenScreen(nameof(Panel_LevelSelection));
