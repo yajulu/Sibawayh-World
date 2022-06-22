@@ -1,4 +1,5 @@
 using System;
+using _YajuluSDK._Scripts.Essentials;
 using _YajuluSDK._Scripts.UI;
 using Facebook.Unity;
 using PlayFab;
@@ -8,16 +9,22 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using EasyMobile;
+using Newtonsoft.Json;
 using PROJECT.Scripts.UI.Screens;
 using LoginResult = PlayFab.ClientModels.LoginResult;
 
 namespace _YajuluSDK._Scripts.Social
 {
-	public class PlayFabHandler : MonoBehaviour
+	public class PlayFabHandler : Singleton<PlayFabHandler>
 	{
 		[TitleGroup("Debug")] 
 		[ReadOnly, SerializeField] private bool isLoggedIn;
 		[ReadOnly, SerializeField] private bool isInitialized;
+
+		private PlayerProfileModel _cachedPlayer;
+
+		public PlayerProfileModel CachedPlayer => _cachedPlayer;
+
 		// [TitleGroup("Refs")]
 		// [SerializeField] private GameObject loginPanel;
 		// [SerializeField] private GameObject profilePanel;
@@ -53,6 +60,11 @@ namespace _YajuluSDK._Scripts.Social
 			}
 
 			
+		}
+
+		private void Start()
+		{
+			PlayfabManager.SilentLogin();
 		}
 
 		private void PlayerLoggedIn()
@@ -92,9 +104,13 @@ namespace _YajuluSDK._Scripts.Social
 
 		private void OnPlayerProfileReceived(PlayerProfileModel obj)
 		{
+			PlayerLoggedIn();
+			_cachedPlayer = obj;
 			// displayName.SetText(obj.DisplayName);
 			// scoreTest.SetText(obj.Statistics[0].Value.ToString());
-			PlayfabManager.GetPlayerStatistics(null);
+
+
+			// PlayfabManager.GetPlayerStatistics(null);
 		}
 
 		private void OnDisable()
@@ -115,10 +131,15 @@ namespace _YajuluSDK._Scripts.Social
 				return;
 			// loginPanel.SetActive(false);
 			// profilePanel.SetActive(true);
-			PlayerLoggedIn();
 			isLoggedIn = true;
 			PlayfabManager.GetPlayerData(null);
 		}
+
+		private void SetPlayerData()
+		{
+			
+		}
+		
 
 		private void UpdatePlayerName()
 		{

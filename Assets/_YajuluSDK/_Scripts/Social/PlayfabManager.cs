@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _YajuluSDK._Scripts.Essentials;
 using EasyMobile;
 using Facebook.Unity;
 using GooglePlayGames;
@@ -59,7 +60,7 @@ namespace _YajuluSDK._Scripts.Social
 
         }
 
-        public void SilentLogin()
+        public static void SilentLogin()
         {
             PlayLoginWithDeviceID();
         }
@@ -149,18 +150,18 @@ namespace _YajuluSDK._Scripts.Social
 
         }
 
-        public void FacebookLogout()
+        public static void FacebookLogout()
         {
             FB.LogOut();
         }
 
-        private void OnGameServicesLogInFailed()
+        private static void OnGameServicesLogInFailed()
         {
             Debug.Log("Game Services Login Failed");
             PlayLoginWithDeviceID();
         }
 
-        private void PlayLoginWithDeviceID()
+        private static void PlayLoginWithDeviceID()
         {
             Debug.Log("Logging in with device ID.");
 #if UNITY_ANDROID
@@ -186,7 +187,7 @@ namespace _YajuluSDK._Scripts.Social
 #endif
         }
 
-        private void OnFacebookInitialized()
+        private static void OnFacebookInitialized()
         {
             if (FB.IsInitialized)
             {
@@ -194,7 +195,7 @@ namespace _YajuluSDK._Scripts.Social
                 FB.ActivateApp();
                 // Continue with Facebook SDK
                 // ...
-                SetMessage("Facebook Initialized.");
+                // SetMessage("Facebook Initialized.");
                 OnFbInitialized?.Invoke();
 #if UNITY_ANDROID
                 FB.Android.RetrieveLoginStatus(OnLoginStatusRetrieved);
@@ -227,7 +228,7 @@ namespace _YajuluSDK._Scripts.Social
             GS.ManagedInit();
         }
 
-        private void OnLoginStatusRetrieved(ILoginStatusResult result)
+        private static void OnLoginStatusRetrieved(ILoginStatusResult result)
         {
             Debug.Log($"Login Retrieved Failed: {result.Failed}");
             Debug.Log($"Login Retrieved Canceled: {result.Cancelled}");
@@ -275,12 +276,12 @@ namespace _YajuluSDK._Scripts.Social
         }
 
 
-        private void OnFacebookLoggedIn(ILoginResult result)
+        private static void OnFacebookLoggedIn(ILoginResult result)
         {
             // If result has no errors, it means we have authenticated in Facebook successfully
             if (result == null || string.IsNullOrEmpty(result.Error))
             {
-                SetMessage($"Facebook Auth Complete! Access Token: " + AccessToken.CurrentAccessToken.TokenString + $"\nLogging into PlayFab...  {AccessToken.CurrentAccessToken.UserId}");
+                // SetMessage($"Facebook Auth Complete! Access Token: " + AccessToken.CurrentAccessToken.TokenString + $"\nLogging into PlayFab...  {AccessToken.CurrentAccessToken.UserId}");
 
                 // foreach (var per in AccessToken.CurrentAccessToken.Permissions)
                 // {
@@ -306,14 +307,14 @@ namespace _YajuluSDK._Scripts.Social
                 else
                 {
                     PlayFabClientAPI.LoginWithFacebook(new LoginWithFacebookRequest
-                    {
-                        CreateAccount = true,
-                        AccessToken = AccessToken.CurrentAccessToken.TokenString,
-                        InfoRequestParameters = new GetPlayerCombinedInfoRequestParams
                         {
-                            GetPlayerProfile = true
-                        }
-                    },
+                            CreateAccount = true,
+                            AccessToken = AccessToken.CurrentAccessToken.TokenString,
+                            InfoRequestParameters = new GetPlayerCombinedInfoRequestParams
+                            {
+                                GetPlayerProfile = true
+                            }
+                        },
                         OnPlayfabAuthComplete, OnPlayfabAuthFailed);
                 }
 
@@ -322,14 +323,14 @@ namespace _YajuluSDK._Scripts.Social
             else
             {
                 // If Facebook authentication failed, we stop the cycle with the message
-                SetMessage("Facebook Auth Failed: " + result.Error + "\n" + result.RawResult, true);
+                // SetMessage("Facebook Auth Failed: " + result.Error + "\n" + result.RawResult, true);
             }
         }
 
         // When processing both results, we just set the message, explaining what's going on.
-        private void OnPlayfabAuthComplete(LoginResult result)
+        private static void OnPlayfabAuthComplete(LoginResult result)
         {
-            SetMessage("PlayFab Auth Complete. Session ticket: " + result.SessionTicket);
+            // SetMessage("PlayFab Auth Complete. Session ticket: " + result.SessionTicket);
             Debug.Log($"PlayFab ID: {result.PlayFabId}");
             OnPlayerLoggedIn?.Invoke(result);
         }
@@ -376,9 +377,9 @@ namespace _YajuluSDK._Scripts.Social
             OnPlayerProfileReceived?.Invoke(obj.PlayerProfile);
         }
 
-        private void OnPlayfabAuthFailed(PlayFabError error)
+        private static void OnPlayfabAuthFailed(PlayFabError error)
         {
-            SetMessage("PlayFab Auth Failed: " + error.GenerateErrorReport(), true);
+            // SetMessage("PlayFab Auth Failed: " + error.GenerateErrorReport(), true);
         }
 
         public void SetMessage(string message, bool error = false)
@@ -475,6 +476,19 @@ namespace _YajuluSDK._Scripts.Social
         }
 
         #endregion
+
+        private static void UpdatePlayerData()
+        {
+            // PlayFabClientAPI.UpdateUserData(new UpdateUserDataRequest
+            // {
+            //     
+            // // }, OnPlayerDataUpdated, );
+        }
+
+        private static void OnPlayerDataUpdated(UpdateUserDataResult obj)
+        {
+            
+        }
 
         // public void OnGUI()
         // {

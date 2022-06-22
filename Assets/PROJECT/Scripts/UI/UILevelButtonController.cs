@@ -56,7 +56,7 @@ namespace PROJECT.Scripts.UI
         {
             base.OnEnable();
             levelButton.onClick.AddListener(PlayLevel);
-            ButtonState = GameModeManager.Instance.GetLevelState(levelIndex);
+            ButtonState =  DataPersistenceManager.Instance.PlayerData.GetLevelState(levelIndex);
         }
 
         protected override void OnDisable()

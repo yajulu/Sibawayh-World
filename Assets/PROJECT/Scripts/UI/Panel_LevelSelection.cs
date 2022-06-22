@@ -107,7 +107,7 @@ namespace PROJECT.Scripts.UI
         {
             levelSelectionTitleText.text = GameModeManager.Instance.GetCurrentLevelTypeName();
 
-            currentLevelState = GameModeManager.Instance.GetLevelState(currentLevelNumber);
+            currentLevelState = DataPersistenceManager.Instance.PlayerData.GetLevelState(currentLevelNumber);
             
             dummyIntLevelState = (int)currentLevelState;
             if (instant)

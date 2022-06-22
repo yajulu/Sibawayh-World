@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using _YajuluSDK._Scripts.Essentials;
+using _YajuluSDK._Scripts.GameConfig;
 using _YajuluSDK._Scripts.Tools;
 using PROJECT.Scripts.Data;
 using PROJECT.Scripts.Enums;
@@ -26,23 +27,21 @@ namespace PROJECT.Scripts.Game.Controllers
         private Dictionary<int, string> _lettersDict = new Dictionary<int, string>();
 
         [SerializeField] private int currentLevel = 1;
-        [SerializeField] private GameData gameData;
+        // [SerializeField] private GameData gameData;
         [SerializeField, ReadOnly] private string []currentLevelWordsList;
         [SerializeField, ReadOnly] private int currentWordIndex = 0;
         [SerializeField, ReadOnly] private LevelData currentLevelData;
-
-        [SerializeField, ReadOnly] private eLevelState[] levelStates;
-        [SerializeField, ReadOnly] private int[] intLevelStates;
-
+        
         public int CurrentWordIndex => currentWordIndex;
         public string CurrentReferenceWord => currentReferenceWord;
         public LevelData CurrentLevelData => currentLevelData;
-        public GameData CurrentGameData => gameData;
 
         public MapController2D mapController;
 
         private eLevelState _dummyProgress;
 
+        private PlayerData _playerData => DataPersistenceManager.Instance.PlayerData;
+        
         public int CurrentLevel
         {
             get => currentLevel;
@@ -52,71 +51,17 @@ namespace PROJECT.Scripts.Game.Controllers
                 SetCurrentLevelData(value);
             }
         }
-
-        protected override void OnAwake()
+        
+        private void Start()
         {
-            base.OnAwake();
-            LoadData();
-        }
-
-        public eLevelState GetLevelState(int levelNumber)
-        {
-            return levelStates[levelNumber];
+            DataPersistenceManager.Instance.LoadData();
         }
 
         private void SetCurrentLevelData(int levelNumber)
         {
-            currentLevelData = gameData.GetLevelData(levelNumber);
-        }
-
-        [Button, TitleGroup("Progress")]
-        private void LoadData()
-        {
-            if (PlayerPrefs.HasKey(gameData.ProgressKey))
-            {
-                intLevelStates = SaveUtility.LoadListToInt(gameData.ProgressKey);
-                levelStates = Array.ConvertAll(intLevelStates, ConvertIntToEnum);    
-                if (levelStates.Length != gameData.GetLevelsCount)
-                {
-                    ClearProgress();
-                    LoadData();
-                }
-            }
-            else
-            {
-                levelStates = new eLevelState[gameData.GetLevelsCount];
-                levelStates[0] = eLevelState.Unlocked;
-                SaveProgress();
-                // LoadData();
-            }
-
-            eLevelState ConvertIntToEnum(int val)
-            {
-                return (eLevelState)val;
-            }
-            
+            currentLevelData = GameConfig.Instance.Levels.GetLevelData(levelNumber);
         }
         
-        [Button, TitleGroup("Progress")]
-        private void SaveProgress()
-        {
-            intLevelStates = Array.ConvertAll(levelStates, ConvertEnumToInt);
-            SaveUtility.SaveList(gameData.ProgressKey, intLevelStates);
-            
-            int ConvertEnumToInt(eLevelState val)
-            {
-                return (int)val;
-            }
-        }
-
-        [Button, TitleGroup("Progress")]
-        private void ClearProgress()
-        {
-            PlayerPrefs.DeleteKey(gameData.ProgressKey);
-            PlayerPrefs.Save();
-            levelStates = null;
-        }
-
         public void StartGameMode()
         {
             OnGameModeStarted();
@@ -128,13 +73,12 @@ namespace PROJECT.Scripts.Game.Controllers
             _dummyProgress = CalculateLevelProgress();
             
             //Check Unlocking of next Level
-            if (levelStates[currentLevel] == eLevelState.Unlocked && _dummyProgress > eLevelState.Unlocked &&
-                currentLevel < levelStates.Length)
+            if (_dummyProgress > _playerData.GetLevelState(currentLevel))
             {
-                levelStates[currentLevel + 1] = eLevelState.Unlocked;
+                _playerData.UpdateLevelState(currentLevel + 1, eLevelState.Unlocked);
             }
 
-            levelStates[currentLevel] = _dummyProgress;
+            _playerData.UpdateLevelState(currentLevel, _dummyProgress);
             OnGameModeCompleted();
         }
 
@@ -196,7 +140,7 @@ namespace PROJECT.Scripts.Game.Controllers
 
         public string GetCurrentLevelTypeName()
         {
-            return gameData.GetLevelTypeName(currentLevelData.LevelType);
+            return GameConfig.Instance.Levels.GetLevelTypeName(currentLevelData.LevelType);
         }
 
         protected virtual bool CheckWord()
@@ -237,7 +181,7 @@ namespace PROJECT.Scripts.Game.Controllers
         protected virtual void OnGameModeCompleted()
         {
             GameModeCompleted?.Invoke();
-            SaveProgress();
+            DataPersistenceManager.Instance.SaveProgress();
         }
 
         protected virtual void OnGameModeWordUpdated(string checkWord)
