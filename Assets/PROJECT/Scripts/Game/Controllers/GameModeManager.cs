@@ -22,6 +22,7 @@ namespace PROJECT.Scripts.Game.Controllers
         public event Action<string> GameModeWordUpdated; 
         public event Action<string, bool> GameModeCheckWord;
         public event Action GameModeCompleted;
+        public event Action GameModeStopped;
 
         [SerializeField, ReadOnly] private string currentCheckWord;
         [SerializeField, ReadOnly] private string currentReferenceWord;
@@ -83,17 +84,7 @@ namespace PROJECT.Scripts.Game.Controllers
 
         public void StopGameMode()
         {
-            _dummyProgress = CalculateLevelProgress();
-            
-            //Check Unlocking of next Level
-            if (_dummyProgress > _playerData.GetLevelState(currentLevel))
-            {
-                _playerData.UpdateLevelState(currentLevel + 1, eLevelState.Unlocked);
-            }
-
-            _playerData.UpdateLevelState(currentLevel, _dummyProgress);
-            currentGameModeState = eGameModeState.Stopped;
-            OnGameModeCompleted();
+            OnGameModeStopped();
         }
 
         public eLevelState CalculateLevelProgress()
@@ -108,6 +99,19 @@ namespace PROJECT.Scripts.Game.Controllers
             }
 
             return _dummyProgress;
+        }
+
+        private void UpdatePlayerProgress()
+        {
+            _dummyProgress = CalculateLevelProgress();
+            
+            //Check Unlocking of next Level
+            if (_dummyProgress > _playerData.GetLevelState(currentLevel))
+            {
+                _playerData.UpdateLevelState(currentLevel + 1, eLevelState.Unlocked);
+            }
+
+            _playerData.UpdateLevelState(currentLevel, _dummyProgress);
         }
 
         // public void AddLetter(string letter, int gameLetterIndex)
@@ -191,11 +195,21 @@ namespace PROJECT.Scripts.Game.Controllers
             //     OnGameModeWordChanged(currentReferenceWord);
             // }
         }
+        
+        protected virtual void OnGameModeStopped()
+        {
+            currentGameModeState = eGameModeState.Stopped;
+            UpdatePlayerProgress();
+            GameModeStopped?.Invoke();
+            DataPersistenceManager.Instance.SaveProgress();
+        }
 
         protected virtual void OnGameModeCompleted()
         {
             currentGameModeState = eGameModeState.Completed;
+            UpdatePlayerProgress();
             GameModeCompleted?.Invoke();
+            UIScreenManager.Instance.NavigateTo(nameof(Screen_Map), true);
             DataPersistenceManager.Instance.SaveProgress();
         }
 
