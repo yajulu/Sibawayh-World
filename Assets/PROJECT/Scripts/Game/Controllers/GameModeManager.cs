@@ -4,6 +4,7 @@ using _YajuluSDK._Scripts.Essentials;
 using _YajuluSDK._Scripts.GameConfig;
 using _YajuluSDK._Scripts.Tools;
 using _YajuluSDK._Scripts.UI;
+using Project.Scripts.Data;
 using PROJECT.Scripts.Data;
 using PROJECT.Scripts.Enums;
 using PROJECT.Scripts.Game.Map;
@@ -41,7 +42,7 @@ namespace PROJECT.Scripts.Game.Controllers
         
         private eLevelState _dummyProgress;
         public eGameModeState CurrentGameModeState => currentGameModeState;
-        private PlayerData _playerData => DataPersistenceManager.Instance.PlayerData;
+        private PlayerProgress _playerProgress => DataPersistenceManager.Instance.PlayerProgress;
         
         public int CurrentLevel
         {
@@ -57,7 +58,7 @@ namespace PROJECT.Scripts.Game.Controllers
 
         private void Start()
         {
-            DataPersistenceManager.Instance.LoadData();
+            DataPersistenceManager.Instance.LoadPlayerProgress();
         }
 
         private void SetCurrentLevelData(int levelNumber)
@@ -106,12 +107,12 @@ namespace PROJECT.Scripts.Game.Controllers
             _dummyProgress = CalculateLevelProgress();
             
             //Check Unlocking of next Level
-            if (_dummyProgress > _playerData.GetLevelState(currentLevel))
+            if (_dummyProgress > _playerProgress.GetLevelState(currentLevel))
             {
-                _playerData.UpdateLevelState(currentLevel + 1, eLevelState.Unlocked);
+                _playerProgress.UpdateLevelState(currentLevel + 1, eLevelState.Unlocked);
             }
 
-            _playerData.UpdateLevelState(currentLevel, _dummyProgress);
+            _playerProgress.UpdateLevelState(currentLevel, _dummyProgress);
         }
 
         // public void AddLetter(string letter, int gameLetterIndex)

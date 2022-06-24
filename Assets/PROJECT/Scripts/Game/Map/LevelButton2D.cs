@@ -58,7 +58,7 @@ namespace PROJECT.Scripts.Game.Map
 
         protected void OnEnable()
         {
-            ButtonState = DataPersistenceManager.Instance.PlayerData.GetLevelState(levelIndex);
+            ButtonState = DataPersistenceManager.Instance.PlayerProgress.GetLevelState(levelIndex);
         }
         
         #endregion

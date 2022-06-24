@@ -1,18 +1,16 @@
-using System;
 using System.Collections.Generic;
 using PROJECT.Scripts.Enums;
 using UnityEngine;
 
-namespace PROJECT.Scripts.Data
+namespace Project.Scripts.Data
 {
-    [Serializable]
-    public class PlayerData
+    public class PlayerProgress 
     {
         [SerializeField] public int playerLevel;
         [SerializeField] public int playerExperience;
         [SerializeField] public List<eLevelState> levelStates;
 
-        public PlayerData()
+        public PlayerProgress()
         {
             playerLevel = 0;
             playerExperience = 0;
@@ -57,6 +55,5 @@ namespace PROJECT.Scripts.Data
                 Debug.LogError("This Level index does not exist.");
             }
         }
-        
     }
 }
