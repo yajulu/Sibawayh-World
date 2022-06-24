@@ -7,15 +7,15 @@ namespace PROJECT.Scripts.Data.Items
     [Serializable]
     public class GameItem_Consumable : GameItem
     {
-        [SerializeField] public Sprite consumableSprite;
-        [SerializeField] public int consumableCount;
+        [SerializeField] private Sprite consumableSprite;
+        [SerializeField] private int consumableCount;
 
-        public GameItem_Consumable(int _itemID, eItemType _itemType, string _itemName,Sprite _itemIcon, Sprite _consumableSprite)
+        public Sprite ConsumableSprite => consumableSprite;
+
+        public int ConsumableCount => consumableCount;
+
+        public GameItem_Consumable(int _itemID, eItemType _itemType, string _itemName,Sprite _itemIcon, Sprite _consumableSprite) : base(_itemID, _itemType, _itemName, _itemIcon)
         {
-            itemID = _itemID;
-            itemType = _itemType;
-            itemName = _itemName;
-            itemIcon = _itemIcon;
             consumableSprite = _consumableSprite;
         }
     }
