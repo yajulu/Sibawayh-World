@@ -18,12 +18,10 @@ namespace PROJECT.Scripts.UI.Screens
         private UIStatsPanelController _statsPanelRef;
         protected override void OpenAnimation()
         {
-            OpenSequence = DOTween.Sequence();
-            
+            base.OpenAnimation();
             _statsPanelRef = UIScreenManager.Instance.MiscRefs.StatsPanelController;
-        
-            OpenSequence.OnStart(onStarted);
-            OpenSequence.OnComplete(OnScreenOpenEnded);
+            
+            OpenSequence.AppendCallback(OnStarted);
             
             OpenSequence.Append(_statsPanelRef.transform.DOMove(statsPanelPlaceHolder.transform.position, 0.5f)
                 .SetEase(Ease.OutQuad));
@@ -33,11 +31,29 @@ namespace PROJECT.Scripts.UI.Screens
                 .SetEase(Ease.Linear)
                 .From(0));
         
-            void onStarted()
+            void OnStarted()
             {
                 _statsPanelRef.gameObject.SetActive(true);
-                gameObject.SetActive(true);
             }
+        }
+        
+        protected override void CloseAnimation()
+        {
+            base.CloseAnimation();
+            
+            _statsPanelRef = UIScreenManager.Instance.MiscRefs.StatsPanelController;
+            
+            CloseSequence.Prepend(_statsPanelRef.GameModeProgressTransform
+                .DOScale(0, 0.15f)
+                .SetEase(Ease.Linear)
+                .From(1));
+            CloseSequence.Prepend(_statsPanelRef.transform.DOMove(transform.position, 0.5f)
+                .SetEase(Ease.OutQuad));
+            // CloseSequence.Prepend(UIScreenManager.Instance.BlackScreenMid.DOFade(0.3f, 0.2f)
+            //     .From(1));
+            // CloseSequence.PrependCallback(() => UIScreenManager.Instance.BlackScreenMid.gameObject.SetActive(true));
+            
+            CloseSequence.AppendCallback(() => UIScreenManager.Instance.BlackScreenMid.gameObject.SetActive(false));            
         }
         protected override void OnScreenOpenEnded()
         {

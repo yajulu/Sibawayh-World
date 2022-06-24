@@ -1,5 +1,6 @@
 using System;
 using DG.Tweening;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace _YajuluSDK._Scripts.UI
@@ -7,6 +8,9 @@ namespace _YajuluSDK._Scripts.UI
     [RequireComponent(typeof(UIScreenNavigatorController))]
     public class UIScreenBase : UIElementBase
     {
+        [SerializeField, TitleGroup("Properties")]
+        private bool useTopBlackScreen = true;
+        
         public eUIScreenState State { get; private set; } = eUIScreenState.Closed;
 
         private eUIScreenState _previousState;
@@ -88,9 +92,31 @@ namespace _YajuluSDK._Scripts.UI
         /// </summary>
         protected virtual void OpenAnimation()
         {
-            gameObject.SetActive(true);
+            OpenSequence = DOTween.Sequence();
+            if (UIScreenManager.Instance.CurrentBlackScreen != null)
+            {
+                OpenSequence.Append(UIScreenManager.Instance.CurrentBlackScreen
+                    .DOFade(0, 0.3f)
+                    .From(1)
+                    .SetEase(Ease.Linear));    
+            }
             
-            OnScreenOpenEnded();
+            OpenSequence.OnStart(OnStart);
+            OpenSequence.OnComplete(OnComplete);
+
+            void OnStart()
+            {
+                if(UIScreenManager.Instance.CurrentBlackScreen != null)
+                    UIScreenManager.Instance.CurrentBlackScreen.gameObject.SetActive(true);
+                gameObject.SetActive(true);
+            }
+
+            void OnComplete()
+            {
+                if(UIScreenManager.Instance.CurrentBlackScreen != null)
+                    UIScreenManager.Instance.CurrentBlackScreen.gameObject.SetActive(false);
+                OnScreenOpenEnded();
+            }
         }
         
         
@@ -170,9 +196,27 @@ namespace _YajuluSDK._Scripts.UI
         /// </summary>
         protected virtual void CloseAnimation()
         {
-            gameObject.SetActive(false);
+            CloseSequence = DOTween.Sequence();
             
-            OnScreenCloseEnded();
+            CloseSequence.Append((useTopBlackScreen ? UIScreenManager.Instance.BlackScreenTop : UIScreenManager.Instance.BlackScreenMid)
+                .DOFade(1, 0.3f)
+                .From(0)
+                .SetEase(Ease.Linear)
+            );
+
+            CloseSequence.OnStart(OnStart);
+            CloseSequence.OnComplete(OnComplete);
+
+            void OnStart()
+            {
+                (useTopBlackScreen ? UIScreenManager.Instance.BlackScreenTop : UIScreenManager.Instance.BlackScreenMid).gameObject.SetActive(true);    
+            }
+
+            void OnComplete()
+            {
+                gameObject.SetActive(false);
+                OnScreenCloseEnded();
+            }
         }
         
         

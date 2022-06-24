@@ -12,39 +12,26 @@ namespace PROJECT.Scripts.UI.Screens
         [SerializeField]
         Transform logo_Image, buttons_Panel;
         
-        protected override void OnSkipOpenAnimation()
-        {
-            logo_Image.transform.DOComplete();
-        }
-
-        protected override void OnSkipCloseAnimation()
-        {
-            logo_Image.transform.DOComplete();
-        }
-
-
-
         protected override void OpenAnimation()
         {
-            gameObject.SetActive(true);
-            logo_Image.DOScale(1, 0.6f)
+            base.OpenAnimation();
+            OpenSequence.Append(logo_Image.DOScale(1, 0.6f)
                 .SetEase(Ease.OutBack)
-                .From(0)
-                .OnComplete(base.OpenAnimation);
+                .From(0));
 
-            buttons_Panel.DOLocalMoveX(buttons_Panel.transform.localPosition.x, 0.6f)
+            OpenSequence.Join(buttons_Panel.DOLocalMoveX(buttons_Panel.transform.localPosition.x, 0.6f)
                 .SetEase(Ease.OutBack)
                 .From(-600)
-                .SetRelative(true)
-                .OnComplete(base.OpenAnimation);
+                .SetRelative(true));
         }
 
         protected override void CloseAnimation()
         {
-            logo_Image.transform.DOScale(0, 0.3f)
+            base.CloseAnimation();
+            CloseSequence.Prepend(logo_Image.transform
+                .DOScale(0, 0.3f)
                 .SetEase(Ease.InBack)
-                .From(1)
-                .OnComplete(base.CloseAnimation);
+                .From(1));
         }
     }
 }

@@ -24,9 +24,9 @@ namespace _YajuluSDK._Scripts.UI
                 screenPanelRefs = transform.GetComponent<UIScreenPanelRefs>();
             }
 
-            if (_skipAnimationButton.SafeIsUnityNull())
+            if (skipAnimationButton.SafeIsUnityNull())
             {
-                _skipAnimationButton = transform.FindDeepChild<Button>("SkipAnimation_Button");
+                skipAnimationButton = transform.FindDeepChild<Button>("SkipAnimation_Button");
             }
 
         }
@@ -41,8 +41,10 @@ namespace _YajuluSDK._Scripts.UI
 
         private List<UIScreenBase> _openedScreens;
 
-        [SerializeField] private Button _skipAnimationButton;
-        [SerializeField, Required] private Image _background;
+        [SerializeField] private Button skipAnimationButton;
+        [SerializeField, Required] private Image background;
+        [SerializeField, Required] private Image blackScreenTop;
+        [SerializeField, Required] private Image blackScreenMid;
         
         private Queue<UIScreenQueueData> _screenQueue;
         private UIScreenBase _currentChangingScreen;
@@ -57,7 +59,15 @@ namespace _YajuluSDK._Scripts.UI
 
         public UIMiscRefs MiscRefs => _miscRefs;
 
-        public Image Background => _background;
+        public Image Background => background;
+
+        public Image BlackScreenMid => blackScreenMid;
+
+        public Image BlackScreenTop => blackScreenTop;
+        
+        public Image CurrentBlackScreen => blackScreenTop.gameObject.activeSelf ?
+            blackScreenTop : blackScreenMid.gameObject.activeSelf ?
+                blackScreenMid : null;
 
         #endregion
 
@@ -66,7 +76,7 @@ namespace _YajuluSDK._Scripts.UI
             base.OnAwake();
 
             _openedScreens = new List<UIScreenBase>();
-            _skipAnimationButton.onClick.AddListener(SkipCurrenScreenAnimation);
+            skipAnimationButton.onClick.AddListener(SkipCurrenScreenAnimation);
             _screenQueue = new Queue<UIScreenQueueData>();
             _graphicRaycaster = GetComponentInChildren<GraphicRaycaster>();
             _miscRefs = GetComponent<UIMiscRefs>();
@@ -107,7 +117,7 @@ namespace _YajuluSDK._Scripts.UI
 
         public void ScreenOpenStarted(UIScreenBase screen)
         {
-            _skipAnimationButton.gameObject.SetActive(true);
+            skipAnimationButton.gameObject.SetActive(true);
             OnScreenOpenStarted?.Invoke(screen);
         }
 
@@ -116,7 +126,7 @@ namespace _YajuluSDK._Scripts.UI
             _openedScreens.Add(screen);
             _currentChangingScreen = null;
             _screenNavigationLock = false;
-            _skipAnimationButton.gameObject.SetActive(false);
+            skipAnimationButton.gameObject.SetActive(false);
             OnScreenOpenEnded?.Invoke(screen);
             CheckQueue();
         }
@@ -136,7 +146,7 @@ namespace _YajuluSDK._Scripts.UI
         public void ScreenCloseStarted(UIScreenBase screen)
         {
             // _startedCloseScreens.Add(screen);
-            _skipAnimationButton.gameObject.SetActive(true);
+            skipAnimationButton.gameObject.SetActive(true);
             OnScreenCloseStarted?.Invoke(screen);
         }
 
@@ -145,7 +155,7 @@ namespace _YajuluSDK._Scripts.UI
             _openedScreens.Remove(screen);
             _currentChangingScreen = null;
             _screenNavigationLock = false;
-            _skipAnimationButton.gameObject.SetActive(false);
+            skipAnimationButton.gameObject.SetActive(false);
             OnScreenCloseEnded?.Invoke(screen);
             CheckQueue();
         }
@@ -186,7 +196,7 @@ namespace _YajuluSDK._Scripts.UI
             {
                 panel.gameObject.SetActive(false);
             }
-            _skipAnimationButton.gameObject.SetActive(false);
+            skipAnimationButton.gameObject.SetActive(false);
         }
 
         public void OpenScreen(string i_screen, Action onSucceeded = null, Action onFailed = null)

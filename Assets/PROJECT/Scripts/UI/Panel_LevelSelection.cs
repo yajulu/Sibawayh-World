@@ -62,7 +62,7 @@ namespace PROJECT.Scripts.UI
         {
             base.OpenAnimation();
 
-            OpenSequence.OnStart(onStarted);
+            OpenSequence.OnStart(OnStarted);
             
             _statsPanelRef = UIScreenManager.Instance.MiscRefs.StatsPanelController;
             _statsPanelRef.GameModeProgressTransform.gameObject.SetActive(false);
@@ -72,7 +72,7 @@ namespace PROJECT.Scripts.UI
                 .From(0)
                 .SetEase(Ease.OutQuad));
 
-            void onStarted()
+            void OnStarted()
             {
                 _statsPanelRef.UpdateTitlesToCurrentLevel();
                 _statsPanelRef.gameObject.SetActive(true);
@@ -83,8 +83,13 @@ namespace PROJECT.Scripts.UI
         protected override void CloseAnimation()
         {
             base.CloseAnimation();
-
-            if (!_levelStared)
+            
+            if (_levelStared)
+            {
+                CloseSequence.Append(_statsPanelRef.transform.DOLocalMove(Vector3.zero, 0.2f)
+                    .SetEase(Ease.InSine));
+            }
+            else 
             {
                 CloseSequence.Prepend(_statsPanelRef.transform.DOScale(0, 0.15f)
                     .From(1)
