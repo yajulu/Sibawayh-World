@@ -94,6 +94,7 @@ namespace PROJECT.Scripts.Game.Map
                 for (int i = 0; i < element.numberOfItems; i++)
                 {
                     _dummySpriteRenderer = Instantiate(_mapElementPrefabRef, elementsParent).GetComponent<SpriteRenderer>();
+                    
                     var newPosition = _dummySpriteRenderer.transform.localPosition;
                     
                     newPosition.x = (Random.Range(-100, 100) > 0 ? 1 : -1) * Random.Range(element.horizontalRange.x, element.horizontalRange.y);
