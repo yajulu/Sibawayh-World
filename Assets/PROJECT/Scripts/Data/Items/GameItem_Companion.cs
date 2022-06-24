@@ -8,15 +8,15 @@ namespace PROJECT.Scripts.Data.Items
     public class GameItem_Companion : GameItem
     {
         
-        [SerializeField] public Sprite companionSprite;
-        [SerializeField] public GameObject companionPrefab;
+        [SerializeField] private Sprite companionSprite;
+        [SerializeField] private GameObject companionPrefab;
 
-        public GameItem_Companion(int _itemID, eItemType _itemType, string _itemName,Sprite _itemIcon, Sprite _companionSprite, GameObject _companionPrefab)
+        public Sprite CompanionSprite => companionSprite;
+
+        public GameObject CompanionPrefab => companionPrefab;
+
+        public GameItem_Companion(int _itemID, eItemType _itemType, string _itemName,Sprite _itemIcon, Sprite _companionSprite, GameObject _companionPrefab) : base(_itemID, _itemType, _itemName, _itemIcon)
         {
-            itemID = _itemID;
-            itemType = _itemType;
-            itemName = _itemName;
-            itemIcon = _itemIcon;
             companionSprite = _companionSprite;
             companionPrefab = _companionPrefab;
         }

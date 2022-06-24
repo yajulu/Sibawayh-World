@@ -7,21 +7,21 @@ namespace PROJECT.Scripts.Data.Items
     [Serializable]
     public class GameItem
     {
-        [SerializeField] public int itemID;
-        [SerializeField] public eItemType itemType;
-        [SerializeField] public string itemName;
-        [SerializeField] public Sprite itemIcon;
-        [SerializeField] public bool isItemOwned;
+        [SerializeField] private int itemID;
+        [SerializeField] private eItemType itemType;
+        [SerializeField] private string itemName;
+        [SerializeField] private Sprite itemIcon;
+        [SerializeField] private bool isItemOwned;
 
+        public int ItemID => itemID;
 
-        public GameItem()
-        {
-            itemID = 0;
-            itemType = eItemType.Consumable;
-            itemName = "";
-            itemIcon = null;
+        public eItemType ItemType => itemType;
 
-        }
+        public string ItemName => itemName;
+
+        public Sprite ItemIcon => itemIcon;
+
+        public bool IsItemOwned => isItemOwned;
         
         public GameItem(int _itemID, eItemType _itemType, string _itemName, Sprite _itemIcon)
         {
@@ -29,8 +29,6 @@ namespace PROJECT.Scripts.Data.Items
             itemType = _itemType;
             itemName = _itemName;
             itemIcon = _itemIcon;
-
-
         }
     }
     
