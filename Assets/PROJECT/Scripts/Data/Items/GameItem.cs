@@ -1,10 +1,8 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using PROJECT.Scripts.Enums;
 using UnityEngine;
 
-namespace PROJECT.Scripts.Data
+namespace PROJECT.Scripts.Data.Items
 {
     [Serializable]
     public class GameItem
@@ -13,6 +11,7 @@ namespace PROJECT.Scripts.Data
         [SerializeField] public eItemType itemType;
         [SerializeField] public string itemName;
         [SerializeField] public Sprite itemIcon;
+        [SerializeField] public bool isItemOwned;
 
 
         public GameItem()
@@ -24,12 +23,12 @@ namespace PROJECT.Scripts.Data
 
         }
         
-        public GameItem(int _itemID, eItemType _itemType, string _itemName)
+        public GameItem(int _itemID, eItemType _itemType, string _itemName, Sprite _itemIcon)
         {
-            _itemID = itemID;
-            _itemType = itemType;
-            _itemName = itemName;
-            itemIcon = null;
+            itemID = _itemID;
+            itemType = _itemType;
+            itemName = _itemName;
+            itemIcon = _itemIcon;
 
 
         }
