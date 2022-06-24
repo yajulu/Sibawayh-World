@@ -2,6 +2,7 @@ using System;
 using _YajuluSDK._Scripts.Essentials;
 using _YajuluSDK._Scripts.GameConfig;
 using _YajuluSDK._Scripts.Tools;
+using Project.Scripts.Data;
 using PROJECT.Scripts.Data;
 using PROJECT.Scripts.Enums;
 using Sirenix.OdinInspector;
@@ -11,22 +12,21 @@ namespace PROJECT.Scripts.Game.Controllers
 {
     public class DataPersistenceManager : Singleton<DataPersistenceManager>
     {
-        [SerializeField] private string playerDataKey;
-        [SerializeField] private PlayerData playerData;
+        [SerializeField] private PlayerProgress _playerProgress;
 
-        public PlayerData PlayerData => playerData;
+        public PlayerProgress PlayerProgress => _playerProgress;
 
         [Button, TitleGroup("Progress")]
-        public void LoadData()
+        public void LoadPlayerProgress()
         {
-            if (PlayerPrefs.HasKey(playerDataKey))
+            if (SaveUtility.HasKey(nameof(PlayerProgress)))
             {
-                playerData = SaveUtility.LoadObject<PlayerData>(playerDataKey);
+                _playerProgress = SaveUtility.LoadObject<PlayerProgress>(nameof(PlayerProgress));
             }
             else
             {
-                playerData = new PlayerData();
-                playerData.levelStates.Add(eLevelState.Unlocked);
+                _playerProgress = new PlayerProgress();
+                _playerProgress.levelStates.Add(eLevelState.Unlocked);
                 SaveProgress();
             }
         }
@@ -34,16 +34,15 @@ namespace PROJECT.Scripts.Game.Controllers
         [Button, TitleGroup("Progress")]
         public void SaveProgress()
         {
-            SaveUtility.SaveObject(playerDataKey, playerData);
+            SaveUtility.SaveObject(nameof(PlayerProgress), _playerProgress);
         }
 
         [Button, TitleGroup("Progress")]
         public void ClearProgress()
         {
-            PlayerPrefs.DeleteKey(playerDataKey);
-            PlayerPrefs.Save();
-            playerData = null;
+            SaveUtility.DeleteObject(nameof(PlayerProgress));
+            _playerProgress = null;
         }
-
+        
     }
 }
