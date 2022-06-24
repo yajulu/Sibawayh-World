@@ -8,6 +8,7 @@ using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 namespace PROJECT.Scripts.Game.Map
 {
@@ -20,7 +21,10 @@ namespace PROJECT.Scripts.Game.Map
         private int numberOfLevels;
 
         [SerializeField, TitleGroup("Scroll"), MinValue(0)]
-        private float scrollSpeed = 10f;
+        private float inertia;
+        
+        [SerializeField, TitleGroup("Scroll"), MinValue(0)]
+        private float deceleration;
         
         [SerializeField, TitleGroup("Scroll")]
         private Vector2 minScroll;
@@ -40,14 +44,31 @@ namespace PROJECT.Scripts.Game.Map
         private GameObject _buttonPrefabRef;
         private GameObject _stonePrefabRef;
 
-      //  private MainInput _input;
-
+        private MainInput _input; 
         private Vector2 _dummyNewPosition;
-        private Vector2 _dummyLocalPosition;
+        private Vector2 _dummyPosition;
+        private Vector2 _inertia;
+        private Vector3 _initialClickToObjectOriginDelta;
+        
+
+        private Camera _main;
+
+        private float _screenFactor;
+        private Vector2 _initialClick;
+        private Vector3 _initialClickWordSpace;
+        private InputAction _tab;
+        private InputAction _tabPosition;
+        private InputAction _scroll;
+        private EventSystem _current;
 
         private void Awake()
         {
-            //_input = new MainInput();
+            _input = new MainInput();
+            _main = Camera.main;
+            _tab = _input.Map.Tab;
+            _tabPosition = _input.Map.TabPosition;
+            _scroll = _input.Map.Scroll;
+            _current = EventSystem.current;
         }
 
         private void OnEnable()
@@ -68,7 +89,7 @@ namespace PROJECT.Scripts.Game.Map
             if (obj.GetType().Name.Equals(nameof(Screen_Map)))
             {
                 mapHolder.gameObject.SetActive(true);
-               // _input.Map.Enable();
+               _input.Map.Enable();
             }
         }
         
@@ -77,7 +98,7 @@ namespace PROJECT.Scripts.Game.Map
             if (obj.GetType().Name.Equals(nameof(Screen_Map)))
             {
                 mapHolder.gameObject.SetActive(false);
-               // _input.Map.Disable();
+               _input.Map.Disable();
             }
         }
         
@@ -123,12 +144,43 @@ namespace PROJECT.Scripts.Game.Map
             }
         }
 
-        private void OnMouseDrag()
+        private void LateUpdate()
         {
-            _dummyLocalPosition = mapHolder.localPosition;
-            //_dummyNewPosition = _dummyLocalPosition + (_input.Map.Scroll.ReadValue<Vector2>() * scrollSpeed);
-            _dummyNewPosition = _dummyNewPosition.Clamp(minScroll, maxScroll) - _dummyLocalPosition;
-            mapHolder.Translate(_dummyNewPosition, Space.Self);
+            DragMap();
+        }
+        
+        private void DragMap()
+        {
+            if (!_input.Map.enabled)
+                return;
+            
+            if (_tab.WasPressedThisFrame() && !_current.IsPointerOverGameObject())
+            {
+                _initialClick = _tabPosition.ReadValue<Vector2>();
+                _initialClickToObjectOriginDelta = mapHolder.transform.position - _main.ScreenToWorldPoint(_tabPosition.ReadValue<Vector2>());
+            }
+            else if (_tab.IsPressed() && !_current.IsPointerOverGameObject())
+            {
+                _dummyPosition = mapHolder.position;
+                _dummyNewPosition = _main.ScreenToWorldPoint(_tabPosition.ReadValue<Vector2>()) + _initialClickToObjectOriginDelta;
+                _dummyNewPosition = _dummyNewPosition.Clamp(minScroll, maxScroll) - _dummyPosition;
+                mapHolder.Translate(_dummyNewPosition);
+            }
+            else if (_tab.WasReleasedThisFrame() && !_current.IsPointerOverGameObject())
+            {
+                _inertia = _scroll.ReadValue<Vector2>() * inertia;
+            }
+            else if (!_tab.IsPressed())
+            {
+                _inertia += -_inertia * (deceleration * Time.deltaTime);    
+                if (_inertia.magnitude > 0.1f)
+                {
+                    _dummyPosition = mapHolder.position;
+                    _dummyNewPosition = (_inertia * Time.deltaTime) + _dummyPosition;
+                    _dummyNewPosition = _dummyNewPosition.Clamp(minScroll, maxScroll) - _dummyPosition;
+                    mapHolder.Translate(_dummyNewPosition);
+                }
+            }
         }
     }
 }
