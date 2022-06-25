@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _YajuluSDK._Scripts.Social;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ namespace _YajuluSDK._Scripts.Tools
             var json = JsonConvert.SerializeObject(obj);
             PlayerPrefs.SetString(key, json);
             PlayerPrefs.Save();
+            PlayfabManager.UpdatePlayerData(key, json);
         }
 
         public static T LoadObject<T>(string key)
@@ -26,7 +28,7 @@ namespace _YajuluSDK._Scripts.Tools
         
         public static void DeleteObject(string key)
         {
-            PlayerPrefs.DeleteKey(nameof(key));
+            PlayerPrefs.DeleteKey(key);
             PlayerPrefs.Save();
         }
 

@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using PROJECT.Scripts.Enums;
 using UnityEngine;
 
 namespace Project.Scripts.Data
 {
+    [Serializable]
     public class PlayerProgress 
     {
         [SerializeField] public int playerLevel;

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using _YajuluSDK._Scripts.Essentials;
 using _YajuluSDK._Scripts.GameConfig;
+using _YajuluSDK._Scripts.Social;
 using _YajuluSDK._Scripts.Tools;
 using _YajuluSDK._Scripts.UI;
 using Project.Scripts.Data;
@@ -42,7 +43,7 @@ namespace PROJECT.Scripts.Game.Controllers
         
         private eLevelState _dummyProgress;
         public eGameModeState CurrentGameModeState => currentGameModeState;
-        private PlayerProgress _playerProgress => DataPersistenceManager.Instance.PlayerProgress;
+        private PlayerProgress _playerProgress => DataPersistenceManager.Instance.Progress;
         
         public int CurrentLevel
         {
@@ -58,9 +59,14 @@ namespace PROJECT.Scripts.Game.Controllers
 
         private void Start()
         {
-            DataPersistenceManager.Instance.LoadPlayerProgress();
+            PlayfabManager.OnPlayerLoggedInBasic += LoadPlayerProgressData;
         }
 
+        private void LoadPlayerProgressData()
+        {
+            DataPersistenceManager.Instance.LoadPlayerProgress();
+        }
+        
         private void SetCurrentLevelData(int levelNumber)
         {
             currentLevelData = GameConfig.Instance.Levels.GetLevelData(levelNumber);

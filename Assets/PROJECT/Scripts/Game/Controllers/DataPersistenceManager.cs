@@ -1,6 +1,7 @@
 using System;
 using _YajuluSDK._Scripts.Essentials;
 using _YajuluSDK._Scripts.GameConfig;
+using _YajuluSDK._Scripts.Social;
 using _YajuluSDK._Scripts.Tools;
 using Project.Scripts.Data;
 using PROJECT.Scripts.Data;
@@ -12,21 +13,22 @@ namespace PROJECT.Scripts.Game.Controllers
 {
     public class DataPersistenceManager : Singleton<DataPersistenceManager>
     {
-        [SerializeField] private PlayerProgress _playerProgress;
+        [SerializeField] private PlayerProgress _progress;
 
-        public PlayerProgress PlayerProgress => _playerProgress;
+        public PlayerProgress Progress => _progress;
 
         [Button, TitleGroup("Progress")]
         public void LoadPlayerProgress()
         {
             if (SaveUtility.HasKey(nameof(PlayerProgress)))
             {
-                _playerProgress = SaveUtility.LoadObject<PlayerProgress>(nameof(PlayerProgress));
+                _progress = SaveUtility.LoadObject<PlayerProgress>(nameof(PlayerProgress));
+                PlayfabManager.LoadPlayerData<PlayerProgress>(nameof(PlayerProgress), (progress) => Instance._progress = progress);
             }
             else
             {
-                _playerProgress = new PlayerProgress();
-                _playerProgress.levelStates.Add(eLevelState.Unlocked);
+                _progress = new PlayerProgress();
+                _progress.levelStates.Add(eLevelState.Unlocked);
                 SaveProgress();
             }
         }
@@ -34,14 +36,14 @@ namespace PROJECT.Scripts.Game.Controllers
         [Button, TitleGroup("Progress")]
         public void SaveProgress()
         {
-            SaveUtility.SaveObject(nameof(PlayerProgress), _playerProgress);
+            SaveUtility.SaveObject(nameof(PlayerProgress), _progress);
         }
 
         [Button, TitleGroup("Progress")]
         public void ClearProgress()
         {
             SaveUtility.DeleteObject(nameof(PlayerProgress));
-            _playerProgress = null;
+            _progress = null;
         }
         
     }

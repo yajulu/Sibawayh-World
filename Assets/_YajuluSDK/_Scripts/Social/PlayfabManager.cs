@@ -5,6 +5,7 @@ using EasyMobile;
 using Facebook.Unity;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
+using Newtonsoft.Json;
 using PlayFab;
 using PlayFab.ClientModels;
 using UnityEngine;
@@ -18,6 +19,7 @@ namespace _YajuluSDK._Scripts.Social
         // holds the latest message to be displayed on the screen
         private string _message;
 
+        public static event Action OnPlayerLoggedInBasic;
         public static event Action<LoginResult> OnPlayerLoggedIn;
         public static event Action OnFbInitialized;
         public static event Action<ILoginStatusResult> OnFacebookLoginStatusRetrieved;
@@ -333,6 +335,7 @@ namespace _YajuluSDK._Scripts.Social
             // SetMessage("PlayFab Auth Complete. Session ticket: " + result.SessionTicket);
             Debug.Log($"PlayFab ID: {result.PlayFabId}");
             OnPlayerLoggedIn?.Invoke(result);
+            OnPlayerLoggedInBasic?.Invoke();
         }
 
         public static void UpdatePlayerDisplayName(string displayName)
@@ -477,12 +480,36 @@ namespace _YajuluSDK._Scripts.Social
 
         #endregion
 
-        private static void UpdatePlayerData()
+        public static void UpdatePlayerData(string key, string data)
         {
-            // PlayFabClientAPI.UpdateUserData(new UpdateUserDataRequest
-            // {
-            //     
-            // // }, OnPlayerDataUpdated, );
+            var dict = new Dictionary<string, string> { { key, data } };
+            PlayFabClientAPI.UpdateUserData(new UpdateUserDataRequest{
+                Data = dict}, OnPlayerDataUpdated, OnError);
+        }
+
+        public static void LoadPlayerData<T>(string key, Action<T> onSuccess, Action onFailure = null)
+        {
+            PlayFabClientAPI.GetUserData(new GetUserDataRequest
+            {
+                Keys = new List<string>(){key}
+            }, Success, Failed);
+
+            void Success(GetUserDataResult result)
+            {
+                if (result.Data.ContainsKey(key))
+                {
+                    onSuccess?.Invoke(JsonConvert.DeserializeObject<T>(result.Data[key].Value));   
+                }
+                else
+                {
+                    onFailure?.Invoke();
+                }
+            }
+
+            void Failed(PlayFabError error)
+            {
+                onFailure?.Invoke();
+            }
         }
 
         private static void OnPlayerDataUpdated(UpdateUserDataResult obj)
