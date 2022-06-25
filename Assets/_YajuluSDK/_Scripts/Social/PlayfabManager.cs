@@ -8,6 +8,7 @@ using GooglePlayGames.BasicApi;
 using Newtonsoft.Json;
 using PlayFab;
 using PlayFab.ClientModels;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using GS = EasyMobile.GameServices;
 using LoginResult = PlayFab.ClientModels.LoginResult;
@@ -512,6 +513,40 @@ namespace _YajuluSDK._Scripts.Social
             }
         }
 
+        [Button]
+        public static void LoadPlayerInventory()
+        {
+            PlayFabClientAPI.GetUserInventory(new GetUserInventoryRequest(), Success, Failed);
+
+            void Success(GetUserInventoryResult result)
+            {
+                Debug.Log(result.Inventory);
+            }
+
+            void Failed(PlayFabError error)
+            {
+                
+            }
+            
+        }
+
+        [Button]
+        public static void LoadCatalogData()
+        {
+            
+            PlayFabClientAPI.GetCatalogItems(new GetCatalogItemsRequest(), Success, Failed);
+
+            void Success(GetCatalogItemsResult result)
+            {
+                Debug.Log(result.Catalog);    
+            }
+
+            void Failed(PlayFabError error)
+            {
+                
+            }
+        }
+        
         private static void OnPlayerDataUpdated(UpdateUserDataResult obj)
         {
             
