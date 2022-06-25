@@ -19,9 +19,6 @@ namespace PROJECT.Scripts.Game.Map
         
         [SerializeField, TitleGroup("Properties")]
         private int numberOfLevels;
-
-        [SerializeField, TitleGroup("Scroll"), MinValue(0)]
-        private float inertia;
         
         [SerializeField, TitleGroup("Scroll"), MinValue(0)]
         private float deceleration;
@@ -54,7 +51,6 @@ namespace PROJECT.Scripts.Game.Map
         private Camera _main;
 
         private float _screenFactor;
-        private Vector2 _initialClick;
         private Vector3 _initialClickWordSpace;
         private InputAction _tab;
         private InputAction _tabPosition;
@@ -156,7 +152,6 @@ namespace PROJECT.Scripts.Game.Map
             
             if (_tab.WasPressedThisFrame() && !_current.IsPointerOverGameObject())
             {
-                _initialClick = _tabPosition.ReadValue<Vector2>();
                 _initialClickToObjectOriginDelta = mapHolder.transform.position - _main.ScreenToWorldPoint(_tabPosition.ReadValue<Vector2>());
             }
             else if (_tab.IsPressed() && !_current.IsPointerOverGameObject())
@@ -165,10 +160,12 @@ namespace PROJECT.Scripts.Game.Map
                 _dummyNewPosition = _main.ScreenToWorldPoint(_tabPosition.ReadValue<Vector2>()) + _initialClickToObjectOriginDelta;
                 _dummyNewPosition = _dummyNewPosition.Clamp(minScroll, maxScroll) - _dummyPosition;
                 mapHolder.Translate(_dummyNewPosition);
+                _inertia = (_inertia + (_dummyNewPosition / Time.deltaTime)) * 0.5f;
             }
             else if (_tab.WasReleasedThisFrame() && !_current.IsPointerOverGameObject())
             {
-                _inertia = _scroll.ReadValue<Vector2>() * inertia;
+                // var scroll = _scroll.ReadValue<Vector2>();
+                // _inertia = scroll.normalized * (_main.ScreenToWorldPoint(scroll).magnitude / Time.deltaTime);
             }
             else if (!_tab.IsPressed())
             {
