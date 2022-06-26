@@ -1,0 +1,211 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: UI
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 0
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 4096
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 2
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    - serializedVersion: 3
+      m_BuildTarget: iPhone
+      m_MaxTextureSize: 4096
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 48
+      m_TextureCompression: 1
+      m_CompressionQuality: 100
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 1
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    - serializedVersion: 3
+      m_BuildTarget: Android
+      m_MaxTextureSize: 4096
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 48
+      m_TextureCompression: 1
+      m_CompressionQuality: 100
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 1
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 8
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 0
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 9743784bc7c228e4aa31d601c5420564, type: 3}
+    - {fileID: 102900000, guid: 9467443e6185c05418d99c5325d37721, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 67dfdb606dd415a4b8f6cdf84b7a7981, type: 3}
+  - {fileID: 21300000, guid: c21ce0f0e904fdc43a52ca329a34c026, type: 3}
+  - {fileID: 21300000, guid: 9e9de0117aa1485479e6515f74d6f5c2, type: 3}
+  - {fileID: 21300000, guid: 82a85131b637b7141b9d9d7749e393bc, type: 3}
+  - {fileID: 21300000, guid: cff0eca1b2d8344429bdaeac4a6f4dae, type: 3}
+  - {fileID: 21300000, guid: 6a6c9f326e53c1f49b2369385a53201e, type: 3}
+  - {fileID: 21300000, guid: 0d2a23425b777494d9e6713a20906516, type: 3}
+  - {fileID: 21300000, guid: 3c91c982798d813479a0ac3b1a4440f4, type: 3}
+  - {fileID: 21300000, guid: 15c180a2690998e42b32b9d9ba9da79a, type: 3}
+  - {fileID: 21300000, guid: 386f17b2ca22589498987c83cb1ad71f, type: 3}
+  - {fileID: 21300000, guid: 213c91e2b5b171e49a1118a99bd4d457, type: 3}
+  - {fileID: 21300000, guid: 39e2e303930cd2f48ba3df01d0a30721, type: 3}
+  - {fileID: 21300000, guid: 46acee93d429d0846b1ac01d6dd6ad63, type: 3}
+  - {fileID: 21300000, guid: 9b3e2ae3135bcb041b1b13e57972bb23, type: 3}
+  - {fileID: 21300000, guid: 06d82204a8b8a93438a8c9fb1e8a37c2, type: 3}
+  - {fileID: 21300000, guid: 01d5083416505124e96a7cb509f58844, type: 3}
+  - {fileID: 21300000, guid: eecfa044360263b4593962c2150caeb6, type: 3}
+  - {fileID: 21300000, guid: 9c967f447d711fd4382235634a037d32, type: 3}
+  - {fileID: 21300000, guid: a2e29764e4574c349a098ec3ee55bc41, type: 3}
+  - {fileID: 21300000, guid: 49575e941ffccb240a53777a646fb64e, type: 3}
+  - {fileID: 21300000, guid: 2076cbc42cfa01043993004e2d2553a3, type: 3}
+  - {fileID: 21300000, guid: 6f3b57e49d5bf68409404fb971e0b204, type: 3}
+  - {fileID: 21300000, guid: 376abdf43b115144094853e92725a950, type: 3}
+  - {fileID: 21300000, guid: 98674a75577ad4840828f7a48655a5b5, type: 3}
+  - {fileID: 21300000, guid: a45d1595061f36b46b478e5795e44e45, type: 3}
+  - {fileID: 21300000, guid: b8a50f165805ba148b042d42e6af8a85, type: 3}
+  - {fileID: 21300000, guid: 1acdaf1684ddfd048aba994255ea6edb, type: 3}
+  - {fileID: 21300000, guid: 93736ed694b68554fbba3509458d8477, type: 3}
+  - {fileID: 21300000, guid: ebe1b4f6a01f21d429ab2204b498f208, type: 3}
+  - {fileID: 21300000, guid: 99323ff635a383047a91a97f0bd1f4fe, type: 3}
+  - {fileID: 21300000, guid: 52ed1e1795991e849b86f05d19e61ae5, type: 3}
+  - {fileID: 21300000, guid: eb41398772dd3fd4a85410fb81d3125d, type: 3}
+  - {fileID: 21300000, guid: 9fdce9970cad0d941b50b0962f1f03ae, type: 3}
+  - {fileID: 21300000, guid: 930b95b7fbaa12345a855e549cb14b60, type: 3}
+  - {fileID: 21300000, guid: ab8362e796b74474585d6ff161263962, type: 3}
+  - {fileID: 21300000, guid: 296a17f7b0ccc86469920e9877039edb, type: 3}
+  - {fileID: 21300000, guid: ca50584821aebfe48a2c1af8d58486dc, type: 3}
+  - {fileID: 21300000, guid: 63a3ea686d723b646b8ba5d60239d951, type: 3}
+  - {fileID: 21300000, guid: ec4e3be821d001440a7635305edbf213, type: 3}
+  - {fileID: 21300000, guid: ec6492297150ae342962ce988f1b452a, type: 3}
+  - {fileID: 21300000, guid: 4c3ed7798c0a27646b19c4ee7f1d86c2, type: 3}
+  - {fileID: 21300000, guid: ba29e9e9171d1d04bb9439f0bed0bb55, type: 3}
+  - {fileID: 21300000, guid: 48d2d70a6c1113a419d77294e6cf8e66, type: 3}
+  - {fileID: 21300000, guid: 3276c71a10308974fa30795a12c0b5f2, type: 3}
+  - {fileID: 21300000, guid: 00febc1a7628c7947b89bfd0faea07b0, type: 3}
+  - {fileID: 21300000, guid: 06bec9caf787b2343a8414ad2499159c, type: 3}
+  - {fileID: 21300000, guid: c106d0eab87c3ed47b5117a55afffc18, type: 3}
+  - {fileID: 21300000, guid: bd98f62b2f079714aaca476158910432, type: 3}
+  - {fileID: 21300000, guid: 031de03be9d0aab4ea9904561824611c, type: 3}
+  - {fileID: 21300000, guid: d9c4743ba689f2447a732e798643701a, type: 3}
+  - {fileID: 21300000, guid: 1cad95bb25f0945409f5919286bf0c0e, type: 3}
+  - {fileID: 21300000, guid: cff91d3caae0b3a4a88b51e37a7d071d, type: 3}
+  - {fileID: 21300000, guid: ccc4c88caae6852449d0f1e2828b549b, type: 3}
+  - {fileID: 21300000, guid: 6ce4ed9ca2c85e04c8882f52c1abb91e, type: 3}
+  - {fileID: 21300000, guid: d39a82fcaf023dd45b945baeb9da10fc, type: 3}
+  - {fileID: 21300000, guid: c049ef4d85397a743b7de5eeebf4af14, type: 3}
+  - {fileID: 21300000, guid: e1804e6d9fd8a4a4cb17d1e8f378409f, type: 3}
+  - {fileID: 21300000, guid: 5cddbd3e9f7d6f04a83f1ea3b5c0cc50, type: 3}
+  - {fileID: 21300000, guid: d446d45ecaf58ca4984a0ad6713cbf2f, type: 3}
+  - {fileID: 21300000, guid: 86a2958ed5fd5e343b341f7ddf1f15ac, type: 3}
+  - {fileID: 21300000, guid: c379531f09abf9443acecd2403afad2c, type: 3}
+  - {fileID: 21300000, guid: 9da1173f2e5852f4cb54a0dc3f0e66c7, type: 3}
+  - {fileID: 21300000, guid: 4adbcd3fb6aa11b4c9795639b5497205, type: 3}
+  - {fileID: 21300000, guid: d028026f1d99cf74596b1ebd93628eea, type: 3}
+  - {fileID: 21300000, guid: 81b2897f3d8a6ed44adf0298966b9de2, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - General_frame_red
+  - Slider_bg_red-8
+  - Siwa_Letter circle
+  - General_Blue gem_empty-frame 1
+  - Header_Coins small
+  - Icons_Restart
+  - Siwa_Bottom bottons
+  - Profilepicture_bg-8
+  - Profile_Tabs orange
+  - General_Profile icon
+  - Icons_Coin
+  - Profile_Friends_Frame red
+  - Profilepicture_levelIndicator-8
+  - Slider_bg_w_frame_orange-8
+  - Icons_Shop
+  - Icons_Gem
+  - Slider_fill_blue-8
+  - Icons_Settings
+  - Home_Magic 2
+  - Profile_Tab selector red
+  - Slider_fill_orange-8
+  - Profile_ProfileCard_frame_mask
+  - Profile_Tab selector red_cropped
+  - General_frame_orange
+  - Profile_Progress number orange
+  - Slider_bg_w_frame_red-8
+  - Achievements_frame-8
+  - Home_Island
+  - Header_Coins
+  - Home_Portal
+  - Header_Progress small
+  - Slider_fill_green-8
+  - Profilepicture_glitter-8
+  - General_Blue gem_specular
+  - POP_BTN_HOME
+  - WhitePixel
+  - Icons_Home
+  - Profilepicture_wings-8
+  - Icons_Pause
+  - Achievements_Artboard 107-8
+  - Profile_Player profile name
+  - Home_Siwa title
+  - Header_Progress
+  - Achievements_mask-8
+  - General_Blue gem
+  - Icons_Star
+  - General_Blue gem_frame
+  - Icons_Hint
+  - Slider_bg_orange-8
+  - Profile_Friends_Frame orange
+  - Achievements_Achievement placeholder-8
+  - Home_Logo
+  - Siwa_Level title
+  - Home_Magic 1
+  - Profile_ProfileCard_frame
+  - Siwa_Level Subtitle
+  - Siwa_Progress point
+  - POP_LVLSTRT_PLAY
+  - Profile_Progress number red
+  - Icons_Plus
+  - General_Blue gem_center
+  - Achievements_Slider_bg_w_frame_red-8
+  - Profilepicture_mask-8
+  - Siwa BG
+  - Siwa_Progress point copy
+  m_RenderDataMap: {}
+  m_Tag: UI
+  m_IsVariant: 0

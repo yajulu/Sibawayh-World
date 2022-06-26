@@ -1,0 +1,140 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Map
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 4096
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: afed7ea16cfcb9a40bd682690ad16a38, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 6c16120008438eb4982cc624a7b8b2f3, type: 3}
+  - {fileID: 21300000, guid: fa2b6740381a0204aa298e71fe3ae251, type: 3}
+  - {fileID: 21300000, guid: 0f97d3b0cbc425644891433d45bbe91f, type: 3}
+  - {fileID: 21300000, guid: 6564a8613d2630c40ad08e8378b6a8dc, type: 3}
+  - {fileID: 21300000, guid: 5c524d81f3f1c204b8eb321b6f7a8368, type: 3}
+  - {fileID: 21300000, guid: 6b1323e1018d92a46b74449a4bfce571, type: 3}
+  - {fileID: 21300000, guid: 39c9b1826dbabf34f99d8ea193cc9a9b, type: 3}
+  - {fileID: 21300000, guid: 91a56b14cb7987542bf80aad182d3446, type: 3}
+  - {fileID: 21300000, guid: 7dbd9c245d6e99f4e9c88afde1270655, type: 3}
+  - {fileID: 21300000, guid: d9128744e32f1164794c8bed3fe84f30, type: 3}
+  - {fileID: 21300000, guid: 99e353d5c3a92004cb497325aef1826b, type: 3}
+  - {fileID: 21300000, guid: a1550ff52c075ec4e9c58e49846c45b0, type: 3}
+  - {fileID: 21300000, guid: 238280c680784d4428bbe749102cbdeb, type: 3}
+  - {fileID: 21300000, guid: 8b841267216bfaa4f9c5d216045ac9e2, type: 3}
+  - {fileID: 21300000, guid: 779634c7fab82624681a3a0c81874f4b, type: 3}
+  - {fileID: 21300000, guid: d3de75281dd0bfd4abac5174796386c2, type: 3}
+  - {fileID: 21300000, guid: 8e435b38486cbac499ba19f0770f8090, type: 3}
+  - {fileID: 21300000, guid: 82693d48e6c1ea34397b01db03705de7, type: 3}
+  - {fileID: 21300000, guid: 828cf858475dbbc47ab54e2a965cb982, type: 3}
+  - {fileID: 21300000, guid: 636f8ba8f60ed8841a599b81d57d6863, type: 3}
+  - {fileID: 21300000, guid: ef183ec884a326b4ea667a6c614a2bdb, type: 3}
+  - {fileID: 21300000, guid: d6c1fff82d64d554f9f71a4f65cf6cdb, type: 3}
+  - {fileID: 21300000, guid: d98ff9195e43df947a2a3a45d379586f, type: 3}
+  - {fileID: 21300000, guid: f200ac995aa20d140ba1aeb4c8a60805, type: 3}
+  - {fileID: 21300000, guid: a2c6e86ac9a5815409e943976757ecfe, type: 3}
+  - {fileID: 21300000, guid: 027250ba2d0c39e4bb1b4e04bbe5f592, type: 3}
+  - {fileID: 21300000, guid: e735115b03c59614ebe0e8520b0719b1, type: 3}
+  - {fileID: 21300000, guid: 7b35996b335356f46acad61ebe2b6974, type: 3}
+  - {fileID: 21300000, guid: 0191bbcb4f9af3f43a2762924a97337e, type: 3}
+  - {fileID: 21300000, guid: d264296c59aae114db4f5dd44c051f7d, type: 3}
+  - {fileID: 21300000, guid: fe93aaad9f02748479c9d7c76df6a951, type: 3}
+  - {fileID: 21300000, guid: 221b330e16b497f4b931d70d7924bc93, type: 3}
+  - {fileID: 21300000, guid: 3a85c11e7a9c00844ae7f2b1e02333fb, type: 3}
+  - {fileID: 21300000, guid: fc93991ee3b1e794ba07c4295150f3b5, type: 3}
+  - {fileID: 21300000, guid: 8e15623e945dc674aa9072218f8f0db5, type: 3}
+  - {fileID: 21300000, guid: 9280044e5e9553a4bad4b41a82612f6a, type: 3}
+  - {fileID: 21300000, guid: 6c5e8f6e033eacd47a9d7967e89d46e0, type: 3}
+  - {fileID: 21300000, guid: c7e4c6ae7f01321488712835a4b6b5a8, type: 3}
+  - {fileID: 21300000, guid: 5a9a47aebf2f8204d8f8fed786bcb8b9, type: 3}
+  - {fileID: 21300000, guid: e2dd1ebe90395024096d6976ec92eb38, type: 3}
+  - {fileID: 21300000, guid: 8dcf76de07745414eb59553de4359ec2, type: 3}
+  - {fileID: 21300000, guid: 76ed7f0f1d61acf40be1ff9f4da50923, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - Water 1
+  - Magic 3 stars +
+  - Glow general
+  - House 5
+  - House 7
+  - Magic 3 stars
+  - Shrub 1
+  - House 2
+  - Tree 1
+  - Glow
+  - Tree 3
+  - House 1
+  - Shrub 3
+  - Level shadow red
+  - Shrub 2
+  - Rock 1
+  - Sand 2
+  - Glow 3 star +(1)
+  - Rock 3
+  - Rock 4
+  - Sand 1
+  - House 8
+  - Rock 2
+  - House 6
+  - Level locked
+  - Sand 3
+  - Tree 2
+  - Water 3
+  - Pebble red
+  - Glow 3 star +
+  - Level shadow blue
+  - Level base
+  - Water 2
+  - Level complete
+  - Magic 2 stars
+  - Glow level complete
+  - Pebble blue
+  - Star
+  - House 3
+  - Level unlocked
+  - Tree 4
+  - House 4
+  m_RenderDataMap: {}
+  m_Tag: Map
+  m_IsVariant: 0
