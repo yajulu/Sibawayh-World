@@ -23,7 +23,7 @@ namespace PROJECT.Scripts.UI.Screens
             
             OpenSequence.AppendCallback(OnStarted);
             
-            OpenSequence.Append(_statsPanelRef.transform.DOMove(statsPanelPlaceHolder.transform.position, 0.5f)
+            OpenSequence.Append(_statsPanelRef.transform.DOMove(statsPanelPlaceHolder.transform.position, 0.7f)
                 .SetEase(Ease.OutQuad));
             OpenSequence.AppendCallback(() => _statsPanelRef.GameModeProgressTransform.gameObject.SetActive(true));
             OpenSequence.Append(_statsPanelRef.GameModeProgressTransform
@@ -47,8 +47,8 @@ namespace PROJECT.Scripts.UI.Screens
                 .DOScale(0, 0.15f)
                 .SetEase(Ease.Linear)
                 .From(1));
-            CloseSequence.Prepend(_statsPanelRef.transform.DOMove(transform.position, 0.5f)
-                .SetEase(Ease.OutQuad));
+            // CloseSequence.Prepend(_statsPanelRef.transform.DOMove(transform.position, 0.5f)
+            //     .SetEase(Ease.OutQuad));
             // CloseSequence.Prepend(UIScreenManager.Instance.BlackScreenMid.DOFade(0.3f, 0.2f)
             //     .From(1));
             // CloseSequence.PrependCallback(() => UIScreenManager.Instance.BlackScreenMid.gameObject.SetActive(true));

@@ -86,8 +86,8 @@ namespace PROJECT.Scripts.UI
             
             if (_levelStared)
             {
-                CloseSequence.Append(_statsPanelRef.transform.DOLocalMove(Vector3.zero, 0.2f)
-                    .SetEase(Ease.InSine));
+                // CloseSequence.Append(_statsPanelRef.transform.DOLocalMove(Vector3.zero, 0.2f)
+                //     .SetEase(Ease.InSine));
             }
             else 
             {

@@ -96,7 +96,7 @@ namespace _YajuluSDK._Scripts.UI
             if (UIScreenManager.Instance.CurrentBlackScreen != null)
             {
                 OpenSequence.Append(UIScreenManager.Instance.CurrentBlackScreen
-                    .DOFade(0, 0.3f)
+                    .DOFade(0, 0.2f)
                     .From(1)
                     .SetEase(Ease.Linear));    
             }
@@ -199,7 +199,7 @@ namespace _YajuluSDK._Scripts.UI
             CloseSequence = DOTween.Sequence();
             
             CloseSequence.Append((useTopBlackScreen ? UIScreenManager.Instance.BlackScreenTop : UIScreenManager.Instance.BlackScreenMid)
-                .DOFade(1, 0.3f)
+                .DOFade(1, 0.2f)
                 .From(0)
                 .SetEase(Ease.Linear)
             );
