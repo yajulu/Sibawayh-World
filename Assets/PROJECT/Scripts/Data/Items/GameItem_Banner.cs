@@ -11,9 +11,9 @@ namespace PROJECT.Scripts.Data.Items
         
         public Sprite BannerSprite => bannerSprite;
         
-        public GameItem_Banner(int _itemID, eItemType _itemType, string _itemName,Sprite _itemIcon, Sprite _bannerSprite) : base(_itemID, _itemType, _itemName, _itemIcon)
+        public GameItem_Banner(int itemID, eItemType type, string displayName, Sprite icon, Sprite bannerSprite) : base(itemID, type, displayName, icon)
         {
-            bannerSprite = _bannerSprite;
+            this.bannerSprite = bannerSprite;
         }
     }
 }

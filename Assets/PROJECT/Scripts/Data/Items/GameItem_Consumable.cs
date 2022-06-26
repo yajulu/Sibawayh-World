@@ -14,7 +14,7 @@ namespace PROJECT.Scripts.Data.Items
 
         public int ConsumableCount => consumableCount;
 
-        public GameItem_Consumable(int _itemID, eItemType _itemType, string _itemName,Sprite _itemIcon, Sprite _consumableSprite) : base(_itemID, _itemType, _itemName, _itemIcon)
+        public GameItem_Consumable(int _itemID, eItemType type, string displayName,Sprite icon, Sprite _consumableSprite) : base(_itemID, type, displayName, icon)
         {
             consumableSprite = _consumableSprite;
         }

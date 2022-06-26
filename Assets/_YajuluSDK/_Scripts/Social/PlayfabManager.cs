@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using _YajuluSDK._Scripts.Essentials;
 using EasyMobile;
 using Facebook.Unity;
@@ -25,6 +26,27 @@ namespace _YajuluSDK._Scripts.Social
         public static event Action OnFbInitialized;
         public static event Action<ILoginStatusResult> OnFacebookLoginStatusRetrieved;
         public static event Action<PlayerProfileModel> OnPlayerProfileReceived;
+
+        public static event Action<GetPlayerCombinedInfoResultPayload> OnPlayerCombinedInfoLoaded;
+
+        private static GetPlayerCombinedInfoResultPayload _playerCombinedInfo;
+        public static GetPlayerCombinedInfoResultPayload PlayerCombinedInfo
+        {
+            get
+            {
+                if (_playerCombinedInfo == null)
+                {
+                    LoadPlayerDataCombined();
+                    return null;
+                }
+                else
+                {
+                    return _playerCombinedInfo;
+                }
+            }
+        }
+
+        private static bool _playerCombinedRequestLock = false;
         
         public void Awake()
         {
@@ -47,9 +69,12 @@ namespace _YajuluSDK._Scripts.Social
             GS.UserLoginFailed -= OnGameServicesLogInFailed;
         }
 
-        private void FacebookInitialization()
+
+        #region Facebook SDK
+        
+        private static void FacebookInitialization()
         {
-            SetMessage("Initializing Facebook..."); // logs the given message and displays it on the screen using OnGUI method
+            // SetMessage("Initializing Facebook..."); // logs the given message and displays it on the screen using OnGUI method
             if (!FB.IsInitialized)
             {
                 // This call is required before any other calls to the Facebook API. We pass in the callback to be invoked once initialization is finished
@@ -60,14 +85,70 @@ namespace _YajuluSDK._Scripts.Social
                 // Already initialized, signal an app activation App Event
                 FB.ActivateApp();
             }
+            
+            static void OnFacebookInitialized()
+            {
+                if (FB.IsInitialized)
+                {
+                    // Signal an app activation App Event
+                    FB.ActivateApp();
+                    // Continue with Facebook SDK
+                    // ...
+                    // SetMessage("Facebook Initialized.");
+                    OnFbInitialized?.Invoke();
+#if UNITY_ANDROID
+                    FB.Android.RetrieveLoginStatus(OnFacebookLoginStatusRetrievedHandler);
+#endif
+                    // Once Facebook SDK is initialized, if we are logged in, we log out to demonstrate the entire authentication cycle.
+                    // if (FB.IsLoggedIn)
+                    // {
+                    //     FB.LogOut();
+                    //     SetMessage("Logging Out.");
+                    // }
+                }
+                else
+                {
+                    Debug.Log("Failed to Initialize the Facebook SDK");
+                }
+                
+                static void OnFacebookLoginStatusRetrievedHandler(ILoginStatusResult result)
+                {
+                    Debug.Log($"Login Retrieved Failed: {result.Failed}");
+                    Debug.Log($"Login Retrieved Canceled: {result.Cancelled}");
+                    if (!result.Failed && !result.Cancelled)
+                    {
+                        OnFacebookLoggedIn(result);
+                    }
 
+                    OnFacebookLoginStatusRetrieved?.Invoke(result);
+                }
+
+            }
+            
+            static void OnHideUnity(bool isGameShown)
+            {
+                if (!isGameShown)
+                {
+                    // Pause the game - we will need to hide
+                    Time.timeScale = 0;
+                }
+                else
+                {
+                    // Resume the game - we're getting focus again
+                    Time.timeScale = 1;
+                }
+            }
         }
-
-        public static void SilentLogin()
+        
+        public static void FacebookLogout()
         {
-            PlayLoginWithDeviceID();
+            FB.LogOut();
         }
-
+        
+        #endregion
+        
+        #region GameServices
+        
         public void GameServicesInitialization()
         {
 #if UNITY_ANDROID
@@ -88,7 +169,6 @@ namespace _YajuluSDK._Scripts.Social
             // }
 #endif
         }
-
         private void OnGameServicesLogInSucceeded()
         {
 #if UNITY_ANDROID
@@ -120,7 +200,7 @@ namespace _YajuluSDK._Scripts.Social
                             ServerAuthCode = authCode,
                             CreateAccount = true
                         };
-                        PlayFabClientAPI.LoginWithGoogleAccount(req, OnPlayfabAuthComplete, OnPlayfabAuthFailed);
+                        PlayFabClientAPI.LoginWithGoogleAccount(req, OnPlayFabLoginSucceeded, OnPlayfabAuthFailed);
                     }
                 });
 
@@ -152,19 +232,17 @@ namespace _YajuluSDK._Scripts.Social
 #endif
 
         }
-
-        public static void FacebookLogout()
-        {
-            FB.LogOut();
-        }
-
+        
         private static void OnGameServicesLogInFailed()
         {
             Debug.Log("Game Services Login Failed");
-            PlayLoginWithDeviceID();
+            PlayfabLoginWithDeviceID();
         }
+        
 
-        private static void PlayLoginWithDeviceID()
+        #endregion
+
+        public static void PlayfabLoginWithDeviceID()
         {
             Debug.Log("Logging in with device ID.");
 #if UNITY_ANDROID
@@ -174,7 +252,7 @@ namespace _YajuluSDK._Scripts.Social
                 AndroidDeviceId = SystemInfo.deviceUniqueIdentifier,
                 AndroidDevice = SystemInfo.deviceModel,
             };
-            PlayFabClientAPI.LoginWithAndroidDeviceID(req, OnPlayfabAuthComplete, OnPlayfabAuthFailed);
+            PlayFabClientAPI.LoginWithAndroidDeviceID(req, OnPlayFabLoginSucceeded, OnPlayfabAuthFailed);
 #elif UNITY_IOS
             var req = new LoginWithIOSDeviceIDRequest
             {
@@ -189,87 +267,26 @@ namespace _YajuluSDK._Scripts.Social
             PlayFabClientAPI.LoginWithIOSDeviceID(req, OnPlayfabAuthComplete, OnPlayfabAuthFailed);
 #endif
         }
-
-        private static void OnFacebookInitialized()
+        
+        public static void LoginWithFacebook()
         {
-            if (FB.IsInitialized)
-            {
-                // Signal an app activation App Event
-                FB.ActivateApp();
-                // Continue with Facebook SDK
-                // ...
-                // SetMessage("Facebook Initialized.");
-                OnFbInitialized?.Invoke();
-#if UNITY_ANDROID
-                FB.Android.RetrieveLoginStatus(OnLoginStatusRetrieved);
-#endif
-                // Once Facebook SDK is initialized, if we are logged in, we log out to demonstrate the entire authentication cycle.
-                // if (FB.IsLoggedIn)
-                // {
-                //     FB.LogOut();
-                //     SetMessage("Logging Out.");
-                // }
-            }
-            else
-            {
-                Debug.Log("Failed to Initialize the Facebook SDK");
-            }
-
-        }
-
-        public void LoginWithFacebook()
-        {
-            SetMessage("Logging into Facebook...");
+            // SetMessage("Logging into Facebook...");
             //FB.Android.RetrieveLoginStatus(LoginStatusCallback);
             var perms = new List<string>() { "public_profile", "email" };
             // We invoke basic login procedure and pass in the callback to process the result
             FB.LogInWithReadPermissions(perms, OnFacebookLoggedIn);
         }
 
-        public void LoginWithGameServices()
+        public static void LoginWithGameServices()
         {
-            GS.ManagedInit();
+            GS.Init();
         }
-
-        private static void OnLoginStatusRetrieved(ILoginStatusResult result)
-        {
-            Debug.Log($"Login Retrieved Failed: {result.Failed}");
-            Debug.Log($"Login Retrieved Canceled: {result.Cancelled}");
-            if (!result.Failed && !result.Cancelled)
-            {
-                OnFacebookLoggedIn(result);
-            }
-
-            OnFacebookLoginStatusRetrieved?.Invoke(result);
-        }
-        private void OnHideUnity(bool isGameShown)
-        {
-            if (!isGameShown)
-            {
-                // Pause the game - we will need to hide
-                Time.timeScale = 0;
-            }
-            else
-            {
-                // Resume the game - we're getting focus again
-                Time.timeScale = 1;
-            }
-        }
-
-        private void PlayFabLoginWithGameServices()
-        {
-
-        }
-
+        
         private static void OnError(PlayFabError playFabError)
         {
             Debug.LogError(playFabError.GenerateErrorReport());
         }
         
-        
-
-
-
         public void TestRequestAuthCode()
         {
             GS.GetAnotherServerAuthCode(true, s =>
@@ -278,6 +295,11 @@ namespace _YajuluSDK._Scripts.Social
             });
         }
 
+        #region PlayFab Login Handlers
+
+        
+
+        #endregion
 
         private static void OnFacebookLoggedIn(ILoginResult result)
         {
@@ -318,7 +340,7 @@ namespace _YajuluSDK._Scripts.Social
                                 GetPlayerProfile = true
                             }
                         },
-                        OnPlayfabAuthComplete, OnPlayfabAuthFailed);
+                        OnPlayFabLoginSucceeded, OnPlayfabAuthFailed);
                 }
 
 
@@ -329,16 +351,16 @@ namespace _YajuluSDK._Scripts.Social
                 // SetMessage("Facebook Auth Failed: " + result.Error + "\n" + result.RawResult, true);
             }
         }
-
-        // When processing both results, we just set the message, explaining what's going on.
-        private static void OnPlayfabAuthComplete(LoginResult result)
+        
+        
+        private static void OnPlayFabLoginSucceeded(LoginResult result)
         {
             // SetMessage("PlayFab Auth Complete. Session ticket: " + result.SessionTicket);
             Debug.Log($"PlayFab ID: {result.PlayFabId}");
             OnPlayerLoggedIn?.Invoke(result);
             OnPlayerLoggedInBasic?.Invoke();
         }
-
+        
         public static void UpdatePlayerDisplayName(string displayName)
         {
             var request = new UpdateUserTitleDisplayNameRequest
@@ -346,13 +368,18 @@ namespace _YajuluSDK._Scripts.Social
                 DisplayName = displayName
             };
             //TODO: Update Callbacks
-            PlayFabClientAPI.UpdateUserTitleDisplayName(request,
-                nameResult =>
-                {
-                    Debug.Log($"Name Updated: {nameResult.DisplayName}");
-                    GetPlayerData(null);
-                },
-                error => Debug.LogError(error.GenerateErrorReport()));
+            PlayFabClientAPI.UpdateUserTitleDisplayName(request, Succeeded, Failed);
+
+            static void Succeeded(UpdateUserTitleDisplayNameResult result)
+            {
+                Debug.Log($"Name Updated: {result.DisplayName}");
+                GetPlayerData(null);
+            }
+
+            static void Failed(PlayFabError error)
+            {
+                
+            }
         }
 
         public static void GetPlayerData(string playFabID)
@@ -367,42 +394,32 @@ namespace _YajuluSDK._Scripts.Social
                 }
             };
             PlayFabClientAPI.GetPlayerProfile(request, OnPlayerDataReceived, OnPlayerProfileRequestError);
+            
+            void OnPlayerProfileRequestError(PlayFabError obj)
+            {
+                Debug.LogError(obj.GenerateErrorReport());
+
+            }
+
+            void OnPlayerDataReceived(GetPlayerProfileResult obj)
+            {
+                Debug.Log(obj.PlayerProfile.ToString());
+                OnPlayerProfileReceived?.Invoke(obj.PlayerProfile);
+            }
         }
-
-        private static void OnPlayerProfileRequestError(PlayFabError obj)
-        {
-            Debug.LogError(obj.GenerateErrorReport());
-
-        }
-
-        private static void OnPlayerDataReceived(GetPlayerProfileResult obj)
-        {
-            Debug.Log(obj.PlayerProfile.ToString());
-            OnPlayerProfileReceived?.Invoke(obj.PlayerProfile);
-        }
-
+        
         private static void OnPlayfabAuthFailed(PlayFabError error)
         {
+            Debug.LogError(error.GenerateErrorReport());
             // SetMessage("PlayFab Auth Failed: " + error.GenerateErrorReport(), true);
         }
-
-        public void SetMessage(string message, bool error = false)
-        {
-            _message = message;
-            if (error)
-                Debug.LogError(_message);
-            else
-                Debug.Log(_message);
-        }
-
         public void GameServices()
         {
             Debug.Log(EasyMobile.GameServices.LocalUser.userName);
         }
 
         #region Leaderboards
-
-        public static void GetLeaderBoardData(string statisticName, int startPosition)
+        public static void GetLeaderboardData(string statisticName, int startPosition)
         {
             var request  = new GetLeaderboardRequest
             {
@@ -412,21 +429,20 @@ namespace _YajuluSDK._Scripts.Social
             };
             
             PlayFabClientAPI.GetLeaderboard(request, OnGetLeaderboardSuccess, OnError );
-        }
-
-        private static void OnGetLeaderboardSuccess(GetLeaderboardResult obj)
-        {
-            Debug.Log("---- LeaderBoard Start ----");
-            foreach (var leaderboardEntry in obj.Leaderboard)
+            
+            static void OnGetLeaderboardSuccess(GetLeaderboardResult obj)
             {
-                Debug.Log($"{leaderboardEntry.Position} - " +
-                          $"{leaderboardEntry.PlayFabId} - " +
-                          $"{leaderboardEntry.StatValue} - " +
-                          $"{leaderboardEntry.DisplayName}");
+                Debug.Log("---- LeaderBoard Start ----");
+                foreach (var leaderboardEntry in obj.Leaderboard)
+                {
+                    Debug.Log($"{leaderboardEntry.Position} - " +
+                              $"{leaderboardEntry.PlayFabId} - " +
+                              $"{leaderboardEntry.StatValue} - " +
+                              $"{leaderboardEntry.DisplayName}");
+                }
+                Debug.Log("---- LeaderBoard End ----");
             }
-            Debug.Log("---- LeaderBoard End ----");
         }
-
         public static void UpdateLeaderBoard(string statistics, int value)
         {
             var request = new UpdatePlayerStatisticsRequest
@@ -442,15 +458,14 @@ namespace _YajuluSDK._Scripts.Social
             };
             
             PlayFabClientAPI.UpdatePlayerStatistics(request, OnUpdatePlayerStatisticsSuccess, OnError);
+            
+            static void OnUpdatePlayerStatisticsSuccess(UpdatePlayerStatisticsResult obj)
+            {
+                Debug.Log($"Player Statistics Updated Successfully");
+                //TODO: maybe update the leaderboard to reflect the change.
+                GetPlayerData(null);
+            }
         }
-
-        private static void OnUpdatePlayerStatisticsSuccess(UpdatePlayerStatisticsResult obj)
-        {
-            Debug.Log($"Player Statistics Updated Successfully");
-            //TODO: maybe update the leaderboard to reflect the change.
-            GetPlayerData(null);
-        }
-
         public static void GetPlayerStatistics(List<string> statisticNames)
         {
             GetPlayerStatisticsRequest request;
@@ -467,18 +482,18 @@ namespace _YajuluSDK._Scripts.Social
             }
             
             PlayFabClientAPI.GetPlayerStatistics(request, OnGetPlayerStatisticsSuccess, OnError);
-        }
-
-        private static void OnGetPlayerStatisticsSuccess(GetPlayerStatisticsResult obj)
-        {
-            Debug.Log("---------- Statistics Start -------------");
-            foreach (var statisticValue in obj.Statistics)
+            
+            static void OnGetPlayerStatisticsSuccess(GetPlayerStatisticsResult obj)
             {
-                Debug.Log($"{statisticValue.StatisticName}: {statisticValue.Value}");
+                Debug.Log("---------- Statistics Start -------------");
+                foreach (var statisticValue in obj.Statistics)
+                {
+                    Debug.Log($"{statisticValue.StatisticName}: {statisticValue.Value}");
+                }
+                Debug.Log("---------- Statistics End -------------");
             }
-            Debug.Log("---------- Statistics End -------------");
         }
-
+        
         #endregion
 
         public static void UpdatePlayerData(string key, string data)
@@ -486,6 +501,12 @@ namespace _YajuluSDK._Scripts.Social
             var dict = new Dictionary<string, string> { { key, data } };
             PlayFabClientAPI.UpdateUserData(new UpdateUserDataRequest{
                 Data = dict}, OnPlayerDataUpdated, OnError);
+            
+            static void OnPlayerDataUpdated(UpdateUserDataResult obj)
+            {
+                
+            }
+
         }
 
         public static void LoadPlayerData<T>(string key, Action<T> onSuccess, Action onFailure = null)
@@ -525,7 +546,7 @@ namespace _YajuluSDK._Scripts.Social
 
             void Failed(PlayFabError error)
             {
-                
+                Debug.LogError(error.GenerateErrorReport());
             }
             
         }
@@ -533,33 +554,112 @@ namespace _YajuluSDK._Scripts.Social
         [Button]
         public static void LoadCatalogData()
         {
-            
             PlayFabClientAPI.GetCatalogItems(new GetCatalogItemsRequest(), Success, Failed);
 
-            void Success(GetCatalogItemsResult result)
+            static void Success(GetCatalogItemsResult result)
             {
                 Debug.Log(result.Catalog);    
             }
 
-            void Failed(PlayFabError error)
+            static void Failed(PlayFabError error)
             {
-                
+                Debug.Log(error.GenerateErrorReport());
             }
         }
         
-        private static void OnPlayerDataUpdated(UpdateUserDataResult obj)
+        [Button]
+        public static void LoadPlayerDataCombined()
         {
+            if(_playerCombinedRequestLock)
+                return;
+            _playerCombinedRequestLock = true;
             
+            PlayFabClientAPI.GetPlayerCombinedInfo(new GetPlayerCombinedInfoRequest
+            {
+                InfoRequestParameters = new GetPlayerCombinedInfoRequestParams
+                {
+                    GetPlayerProfile = true,
+                    GetPlayerStatistics = true,
+                    GetUserData = true,
+                    GetUserInventory = true,
+                    GetUserVirtualCurrency = true
+                }
+            }, Success, Failed);
+            
+            
+            void Success(GetPlayerCombinedInfoResult result)
+            {
+                Debug.Log(result.InfoResultPayload);
+                _playerCombinedRequestLock = false; 
+            }
+
+            void Failed(PlayFabError error)
+            {
+                Debug.LogError(error.GenerateErrorReport());
+                _playerCombinedRequestLock = false;
+            }
         }
+        
+        [Button]
+        public static void ConsumeItem(string instanceID)
+        {
+            PlayFabClientAPI.ConsumeItem(new ConsumeItemRequest
+            {
+                ItemInstanceId = instanceID,
+                ConsumeCount = 1
+            }, Success, Failure);
+            
+            void Success(ConsumeItemResult result)
+            {
+                Debug.Log(result.ItemInstanceId);
+            }
 
-        // public void OnGUI()
-        // {
-        //     var style = new GUIStyle { fontSize = 40, normal = new GUIStyleState { textColor = Color.white }, alignment = TextAnchor.MiddleCenter, wordWrap = true };
-        //     var area = new Rect(0,0,Screen.width,Screen.height);
-        //     GUI.Label(area, _message,style);
-        // }
+            void Failure(PlayFabError error)
+            {
+                Debug.LogError(error.GenerateErrorReport());
+            }
+        }
+        
+        [Button]
+        public static void PurchaseItem(string itemID, int price)
+        {
+            PlayFabClientAPI.PurchaseItem(new PurchaseItemRequest
+            {
+                ItemId = itemID,
+                Price = price
+            }, Success, Failure);
+            
+            void Success(PurchaseItemResult result)
+            {
+                Debug.Log(result.Items);
+            }
 
+            void Failure(PlayFabError error)
+            {
+                Debug.LogError(error.GenerateErrorReport());
+            }
+        }
+        
+        [Button]
+        public static void GetOtherUserData(string playfabID)
+        {
+            PlayFabClientAPI.GetUserReadOnlyData(new GetUserDataRequest
+            {
+                PlayFabId = playfabID,
+                Keys = new List<string> { "Equipped" }
+            }, Success, Failure);
+            
+            void Success(GetUserDataResult result)
+            {
+                Debug.Log(result.ToJson());
+            }
 
+            void Failure(PlayFabError error)
+            {
+                Debug.LogError(error.GenerateErrorReport());
+            }
+        }
+        
         //Should be moved to another script
         public void RateUs()
         {

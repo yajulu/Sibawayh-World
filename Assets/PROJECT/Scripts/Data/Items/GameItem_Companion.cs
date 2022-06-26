@@ -15,7 +15,7 @@ namespace PROJECT.Scripts.Data.Items
 
         public GameObject CompanionPrefab => companionPrefab;
 
-        public GameItem_Companion(int _itemID, eItemType _itemType, string _itemName,Sprite _itemIcon, Sprite _companionSprite, GameObject _companionPrefab) : base(_itemID, _itemType, _itemName, _itemIcon)
+        public GameItem_Companion(int _itemID, eItemType type, string displayName,Sprite icon, Sprite _companionSprite, GameObject _companionPrefab) : base(_itemID, type, displayName, icon)
         {
             companionSprite = _companionSprite;
             companionPrefab = _companionPrefab;

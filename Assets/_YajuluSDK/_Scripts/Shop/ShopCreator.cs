@@ -6,31 +6,17 @@ using UnityEngine;
 
 namespace _YajuluSDK._Scripts.Shop
 {
-    [CreateAssetMenu()]
-    public class ShopCreator : ScriptableObject
+    public class ShopCreator 
     {
         [SerializeField] private CatalogInstance _catalogInstance;
         [SerializeField, TextArea] private string Json;
 
         [SerializeField] private List<GameItem> items;
         
-        
-        
-        void Start()
-        {
-        
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-        
-        }
-
         [Button]
-        private void CreateShopJSON()
+        private void CreateShopJson()
         {
-            var list = new List<CatalogItem>();
+            
             
         }
     }

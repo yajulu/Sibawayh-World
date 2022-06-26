@@ -8,7 +8,7 @@ namespace PROJECT.Scripts.Data.Items
     public class GameItem_PlayerIcon : GameItem
     {
       
-        public GameItem_PlayerIcon(int _itemID, eItemType _itemType, string _itemName,Sprite _itemIcon) : base(_itemID, _itemType, _itemName, _itemIcon)
+        public GameItem_PlayerIcon(int _itemID, eItemType type, string displayName,Sprite icon) : base(_itemID, type, displayName, icon)
         {
         }
     }

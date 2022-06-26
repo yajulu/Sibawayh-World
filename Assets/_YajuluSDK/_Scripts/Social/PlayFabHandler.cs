@@ -64,7 +64,7 @@ namespace _YajuluSDK._Scripts.Social
 
 		private void Start()
 		{
-			PlayfabManager.SilentLogin();
+			PlayfabManager.PlayfabLoginWithDeviceID();
 		}
 
 		private void PlayerLoggedIn()

@@ -8,7 +8,9 @@ namespace PROJECT.Scripts.Enums
         PlayerIcon,
         Banner,
         Companion,
-        Consumable
-        
+        Consumable,
+        Flag,
+        Coins,
+        Gems
     }
 }

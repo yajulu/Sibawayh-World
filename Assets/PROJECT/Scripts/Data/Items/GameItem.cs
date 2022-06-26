@@ -8,28 +8,29 @@ namespace PROJECT.Scripts.Data.Items
     public class GameItem
     {
         [SerializeField] private int itemID;
-        [SerializeField] private eItemType itemType;
-        [SerializeField] private string itemName;
-        [SerializeField] private Sprite itemIcon;
+        [SerializeField] private eItemType type;
+        [SerializeField] private string displayName;
+        [SerializeField] private Sprite icon;
         [SerializeField] private bool isItemOwned;
 
         public int ItemID => itemID;
 
-        public eItemType ItemType => itemType;
+        public eItemType Type => type;
 
-        public string ItemName => itemName;
+        public string DisplayName => displayName;
 
-        public Sprite ItemIcon => itemIcon;
+        public Sprite Icon => icon;
 
         public bool IsItemOwned => isItemOwned;
         
-        public GameItem(int _itemID, eItemType _itemType, string _itemName, Sprite _itemIcon)
+        public GameItem(int itemID, eItemType type, string displayName, Sprite icon)
         {
-            itemID = _itemID;
-            itemType = _itemType;
-            itemName = _itemName;
-            itemIcon = _itemIcon;
+            this.itemID = itemID;
+            this.type = type;
+            this.displayName = displayName;
+            this.icon = icon;
         }
+
     }
     
     

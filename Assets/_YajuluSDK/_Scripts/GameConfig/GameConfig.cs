@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using _YajuluSDK._Scripts.Essentials;
 using PROJECT.Scripts.Data;
+using PROJECT.Scripts.Data.Items;
 using PROJECT.Scripts.Enums;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -18,6 +19,7 @@ namespace _YajuluSDK._Scripts.GameConfig
 		public InputVariablesEditor Input = new InputVariablesEditor();
 		public GamePlayVariablesEditor GamePlay = new GamePlayVariablesEditor();
 		public LevelsVariablesEditor Levels = new LevelsVariablesEditor();
+		public ShopVariableEditor Shop = new ShopVariableEditor();
 		public HUDVariablesEditor HUD = new HUDVariablesEditor();
 		public PlayerVariablesEditor Player = new PlayerVariablesEditor();
 		public CameraVariablesEditor Camera = new CameraVariablesEditor();
@@ -207,6 +209,26 @@ namespace _YajuluSDK._Scripts.GameConfig
 		}
 	}
 
+	[Serializable]
+	public class ShopVariableEditor
+	{
+		[SerializeField] private ShopSpritesDictionary shopDictionary;
+		public ShopSpritesDictionary ShopDictionary => shopDictionary;
+
+		[Serializable]
+		public class ShopSpritesDictionary : UnitySerializedDictionary<eItemType, ItemSpriteList>
+		{
+		}
+
+		[Serializable]
+		public class ItemSpriteList
+		{
+			public List<Sprite> spriteList;
+		}
+
+	}
+	
+	
 	[Serializable]
 	public class GamePlayVariablesEditor : GamePlayVariablesEditorBase
 	{
