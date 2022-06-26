@@ -104,8 +104,8 @@ namespace PROJECT.Scripts.Game
         private void SetRefs()
         {
             currentCheckWord = transform.FindDeepChild<RTLTextMeshPro>("CheckWord_Text");
-            centerPieceImage = transform.FindDeepChild<Image>("CenterPiece");
-            centerPieceTransform = centerPieceImage.rectTransform;
+            centerPieceImage = transform.FindDeepChild<Image>("CenterPiece_Center");
+            centerPieceTransform = transform.FindDeepChild<RectTransform>("CenterPiece");
             // separator = transform.FindDeepChild<Transform>("ClickSeparator");
         }
 
