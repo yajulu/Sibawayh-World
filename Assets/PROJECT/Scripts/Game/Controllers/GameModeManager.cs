@@ -57,6 +57,16 @@ namespace PROJECT.Scripts.Game.Controllers
             }
         }
 
+        protected override void OnAwake()
+        {
+            base.OnAwake();
+#if UNITY_EDITOR
+            Application.targetFrameRate = -1;
+#else
+            Application.targetFrameRate = 75;
+#endif
+        }
+
         private void Start()
         {
             PlayfabManager.OnPlayerLoggedInBasic += LoadPlayerProgressData;
