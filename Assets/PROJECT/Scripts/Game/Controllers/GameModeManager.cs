@@ -9,6 +9,7 @@ using Project.Scripts.Data;
 using PROJECT.Scripts.Data;
 using PROJECT.Scripts.Enums;
 using PROJECT.Scripts.Game.Map;
+using Project.Scripts.Inventory;
 using PROJECT.Scripts.ScriptableObjects;
 using PROJECT.Scripts.UI.Screens;
 using Sirenix.OdinInspector;
@@ -67,15 +68,6 @@ namespace PROJECT.Scripts.Game.Controllers
 #endif
         }
 
-        private void Start()
-        {
-            PlayfabManager.OnPlayerLoggedInBasic += LoadPlayerProgressData;
-        }
-
-        private void LoadPlayerProgressData()
-        {
-            DataPersistenceManager.Instance.LoadPlayerProgress();
-        }
         
         private void SetCurrentLevelData(int levelNumber)
         {
