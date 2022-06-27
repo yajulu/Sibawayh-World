@@ -34,7 +34,7 @@ namespace PROJECT.Scripts.Game.Controllers
             LoadProfileData();
         }
 
-        [Button, TitleGroup("ProfileData")]
+        [Button, TitleGroup("ProfileDa")]
         public void LoadProfileData()
         {
             profileData = Instance.LoadObject<ProfileData>(Success);

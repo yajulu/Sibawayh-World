@@ -12,6 +12,7 @@ namespace PROJECT.Scripts.UI
         [SerializeField, TitleGroup("Refs")] private RTLTextMeshPro playerLevelText;
         [SerializeField, TitleGroup("Refs")] private RTLTextMeshPro expValText;
         [SerializeField, TitleGroup("Refs")] private Image profileIconImage;
+        [SerializeField, TitleGroup("Refs")] private Image bannerImage;
 
 
         public void SetPlayerData(string displayName, int level, int currExp, int maxExp, Sprite icon)
@@ -19,6 +20,11 @@ namespace PROJECT.Scripts.UI
             playerLevelText.text = level.ToString();
             playerDisplayNameText.text = displayName;
             expValText.text = currExp.ToString() +"/"+ maxExp.ToString();
+        }
+
+        public void SetPlayerProfileItems(Sprite banner, Sprite icon)
+        {
+            bannerImage.sprite = banner;
             profileIconImage.sprite = icon;
         }
 
@@ -34,6 +40,7 @@ namespace PROJECT.Scripts.UI
             playerLevelText = transform.FindDeepChild<RTLTextMeshPro>("ProfileName_Text");
             expValText = transform.FindDeepChild<RTLTextMeshPro>("ProgressPanel_Text");
             profileIconImage = transform.FindDeepChild<Image>("ProfileIcon_Image");
+            bannerImage = transform.FindDeepChild<Image>("ProfileBanner_Image");
         }
     }
 }

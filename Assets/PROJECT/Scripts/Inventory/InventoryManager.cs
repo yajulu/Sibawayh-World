@@ -10,7 +10,16 @@ namespace Project.Scripts.Inventory
     public class InventoryManager : Singleton<InventoryManager>
     {
         [SerializeField] private ProfileData currentProfile;
-        
+
+        private void Start()
+        {
+            DataPersistenceManager.OnProfileDataUpdated += OnProfileUpdated;
+        }
+
+        private void OnDestroy()
+        {
+            DataPersistenceManager.OnProfileDataUpdated -= OnProfileUpdated;
+        }
 
         private void OnProfileUpdated(ProfileData profile)
         {
