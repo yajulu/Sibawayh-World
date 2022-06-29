@@ -227,7 +227,7 @@ namespace _YajuluSDK._Scripts.Social
                     CreateAccount = true,
                     PlayerId = GS.LocalUser.id
                 };
-                PlayFabClientAPI.LoginWithGameCenter(req, OnPlayfabAuthComplete, OnPlayfabAuthFailed);
+                PlayFabClientAPI.LoginWithGameCenter(req, OnPlayFabLoginSucceeded, OnPlayfabAuthFailed);
             }
 #endif
 
@@ -264,7 +264,7 @@ namespace _YajuluSDK._Scripts.Social
                 //     
                 // }
             };
-            PlayFabClientAPI.LoginWithIOSDeviceID(req, OnPlayfabAuthComplete, OnPlayfabAuthFailed);
+            PlayFabClientAPI.LoginWithIOSDeviceID(req, OnPlayFabLoginSucceeded, OnPlayfabAuthFailed);
 #endif
         }
         
