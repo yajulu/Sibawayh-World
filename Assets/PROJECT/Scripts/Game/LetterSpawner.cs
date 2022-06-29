@@ -115,6 +115,8 @@ namespace PROJECT.Scripts.Game
             {
                 letter.transform.localPosition = Vector3.zero;
             }
+
+            currentCheckWord.text = "";
         }
 
         private void UpdateSpawner()

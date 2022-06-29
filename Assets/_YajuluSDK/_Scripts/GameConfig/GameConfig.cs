@@ -172,9 +172,9 @@ namespace _YajuluSDK._Scripts.GameConfig
 					wordList.Add(values[i].Trim());
 				}
 
-				starsIndexes[0] = values[3].Equals("") ? 2 : 3;
-				starsIndexes[1] = values[7].Equals("") ? 6 : 7;
-				starsIndexes[2] = 9;
+				starsIndexes[0] = values[4].Equals("") ? 2 : 3;
+				starsIndexes[1] = values[8].Equals("") ? 5 : 6;
+				starsIndexes[2] = wordList.Count - 1;
 
 				if (!_dataDict.ContainsKey(key))
 				{

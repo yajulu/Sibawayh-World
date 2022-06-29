@@ -108,14 +108,15 @@ namespace PROJECT.Scripts.UI
             {
                 progressBarStarsList[i].transform.SetSiblingIndex(levelData.StarsCounter[i]);
                 progressBarStarsList[i].canvasRenderer.SetAlpha(0.4f);
-                if (i == 2)
-                {
-                    _currentProgressBarElements.Add(progressBarStarsList[i]);
-                }
-                else
-                {
-                    _currentProgressBarElements.Insert(levelData.StarsCounter[i], progressBarStarsList[i]);
-                }
+                _currentProgressBarElements.Insert(levelData.StarsCounter[i], progressBarStarsList[i]);
+                // if (i == 2)
+                // {
+                //     _currentProgressBarElements.Add(progressBarStarsList[i]);
+                // }
+                // else
+                // {
+                //     _currentProgressBarElements.Insert(levelData.StarsCounter[i], progressBarStarsList[i]);
+                // }
             }
         }
 
