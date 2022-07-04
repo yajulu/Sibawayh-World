@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using _YajuluSDK._Scripts.Essentials;
 using EasyMobile;
 using Facebook.Unity;
 using GooglePlayGames;
@@ -9,16 +7,24 @@ using GooglePlayGames.BasicApi;
 using Newtonsoft.Json;
 using PlayFab;
 using PlayFab.ClientModels;
+using PlayFab.CloudScriptModels;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using EntityKey = PlayFab.CloudScriptModels.EntityKey;
 using GS = EasyMobile.GameServices;
 using LoginResult = PlayFab.ClientModels.LoginResult;
+using PlayerProfileModel = PlayFab.ClientModels.PlayerProfileModel;
 
 namespace _YajuluSDK._Scripts.Social
 {
     public class PlayfabManager : MonoBehaviour
     {
         // holds the latest message to be displayed on the screen
+
+        private static class Constants
+        {
+            public static string EQUIP_ITEM_METHOD { get; private set; } = "EquipItem";
+        }
         private string _message;
 
         public static event Action OnPlayerLoggedInBasic;
@@ -508,6 +514,31 @@ namespace _YajuluSDK._Scripts.Social
             }
 
         }
+        
+        public static void LoadPlayerReadOnlyData<T>(string key, Action<T> onSuccess, Action onFailure = null)
+        {
+            PlayFabClientAPI.GetUserReadOnlyData(new GetUserDataRequest
+            {
+                Keys = new List<string>(){key}
+            }, Success, Failed);
+
+            void Success(GetUserDataResult result)
+            {
+                if (result.Data.ContainsKey(key))
+                {
+                    onSuccess?.Invoke(JsonConvert.DeserializeObject<T>(result.Data[key].Value));   
+                }
+                else
+                {
+                    onFailure?.Invoke();
+                }
+            }
+
+            void Failed(PlayFabError error)
+            {
+                onFailure?.Invoke();
+            }
+        }
 
         public static void LoadPlayerData<T>(string key, Action<T> onSuccess, Action onFailure = null)
         {
@@ -657,6 +688,42 @@ namespace _YajuluSDK._Scripts.Social
             void Failure(PlayFabError error)
             {
                 Debug.LogError(error.GenerateErrorReport());
+            }
+            
+        }
+
+        [Button]
+        public static void EquipItem(string itemID, Action<ExecuteFunctionResult> resultCallBack, Action<PlayFabError> errorCallBack)
+        {
+            Dictionary<string, object> body = new Dictionary<string, object>
+            {
+                { "itemID", itemID }
+            };
+            
+            ExecuteFunction(body, Constants.EQUIP_ITEM_METHOD, resultCallBack, errorCallBack);
+        }
+
+        private static void ExecuteFunction(object body, string functionName,
+            Action<ExecuteFunctionResult> resultCallBack, Action<PlayFabError> errorCallBack,
+            bool generatePlayStreamEvent = true)
+        {
+            PlayFabCloudScriptAPI.ExecuteFunction(new ExecuteFunctionRequest
+            {
+                FunctionName = functionName,
+                FunctionParameter = body,
+                GeneratePlayStreamEvent = generatePlayStreamEvent
+            }, Success, Failure);
+
+            void Success(ExecuteFunctionResult response)
+            {
+                Debug.Log($"Func {functionName} Success, Result: {response.FunctionResult} -- Execution Time: {response.ExecutionTimeMilliseconds}");
+                resultCallBack?.Invoke(response);
+            }
+            
+            void Failure(PlayFabError error)
+            {
+                Debug.LogError(error.GenerateErrorReport());
+                errorCallBack?.Invoke(error);
             }
         }
         

@@ -84,7 +84,7 @@ namespace PROJECT.Scripts.Game.Controllers
             if (SaveUtility.HasKey(typeof(T).Name))
             {
                 obj = SaveUtility.LoadObject<T>(typeof(T).Name);
-                PlayfabManager.LoadPlayerData<T>(typeof(T).Name, (res) =>
+                PlayfabManager.LoadPlayerReadOnlyData<T>(typeof(T).Name, (res) =>
                 {
                     obj = res;
                     complete?.Invoke(obj);
