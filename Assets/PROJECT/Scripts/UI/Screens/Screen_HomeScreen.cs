@@ -3,6 +3,7 @@ using DG.Tweening;
 using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
+using PROJECT.Scripts.Game.Controllers;
 using UnityEngine;
 
 namespace PROJECT.Scripts.UI.Screens

@@ -1,8 +1,13 @@
 using System;
+using System.Collections.Generic;
 using _YajuluSDK._Scripts.Essentials;
 using _YajuluSDK._Scripts.GameConfig;
 using _YajuluSDK._Scripts.Social;
 using _YajuluSDK._Scripts.Tools;
+using Newtonsoft.Json;
+using PlayFab;
+using PlayFab.ClientModels;
+using PlayFab.CloudScriptModels;
 using Project.Scripts.Data;
 using PROJECT.Scripts.Data;
 using PROJECT.Scripts.Enums;
@@ -17,12 +22,27 @@ namespace PROJECT.Scripts.Game.Controllers
         [SerializeField] private PlayerProgress progress;
         [SerializeField] private ProfileData profileData;
         public PlayerProgress Progress => progress;
-
-        public ProfileData ProfileData => profileData;
+        public ProfileData ProfileData
+        {
+            get => profileData;
+            private set
+            {
+                profileData = value;
+                OnProfileDataUpdated?.Invoke(value);
+            }
+        }
 
         public static event Action<PlayerProgress> OnPlayerProgressUpdated;
         public static event Action<ProfileData> OnProfileDataUpdated;
-        
+        public static event Action OnPlayerInventoryUpdated;
+
+        private List<ItemInstance> _inventory;
+        private Dictionary<string, int> _virtualCurrency;
+
+        public List<ItemInstance> Inventory => _inventory;
+
+        public Dictionary<string, int> VirtualCurrency => _virtualCurrency;
+
         private void Start()
         {
             PlayfabManager.OnPlayerLoggedInBasic += LoadPlayerData;
@@ -34,15 +54,54 @@ namespace PROJECT.Scripts.Game.Controllers
             LoadProfileData();
         }
 
+        public void LoadPlayerInventory()
+        {
+            PlayfabManager.LoadPlayerInventory(Success);
+
+            void Success(GetUserInventoryResult result)
+            {
+                _inventory = result.Inventory;
+                _virtualCurrency = result.VirtualCurrency;
+                OnPlayerInventoryUpdated?.Invoke();
+            }
+
+            void Failure(PlayFabError error)
+            {
+                
+            }
+        }
+
+        public void UpdatePlayerGameProfileData(ProfileData newProfileData)
+        {
+            PlayfabManager.UpdatePlayerGameProfile(newProfileData, Success, Failure);
+            ProfileData = newProfileData;
+            void Success(ExecuteFunctionResult result)
+            {
+                var dict = (Dictionary<string, object>) JsonConvert.DeserializeObject<Dictionary<string, object>>(result.FunctionResult.ToString());
+                if ((bool)dict["profileUpdated"])
+                {
+                    profileData = JsonConvert.DeserializeObject<ProfileData>(dict["currentProfile"].ToString());
+                    OnProfileDataUpdated?.Invoke(profileData);
+                }
+            }
+            
+            void Failure(PlayFabError error)
+            {
+                // throw new NotImplementedException();
+            }
+        }
+
+        
+
+
         [Button, TitleGroup("ProfileDa")]
         public void LoadProfileData()
         {
-            profileData = Instance.LoadObject<ProfileData>(Success);
+            PlayfabManager.LoadPlayerReadOnlyData<ProfileData>(nameof(ProfileData), Success);
 
             void Success(ProfileData data)
             {
-                profileData = data;
-                OnProfileDataUpdated?.Invoke(data);
+                ProfileData = data;
             }
         }
 

@@ -162,7 +162,7 @@ namespace _YajuluSDK._Scripts.UI
             
             var prevState = State;
             State = eUIScreenState.PreClose;
-            var preClose = OnScreenPreOpen();
+            var preClose = OnScreenPreClose();
             UIScreenManager.Instance.ScreenPreClosed(this, preClose);
             
             if (preClose)

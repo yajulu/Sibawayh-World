@@ -21,7 +21,7 @@ namespace PROJECT.Scripts.UI.Screens
             base.Awake();
             DataPersistenceManager.OnProfileDataUpdated += OnProfileFataUpdated;
         }
-
+        
         private void OnDestroy()
         {
             DataPersistenceManager.OnProfileDataUpdated -= OnProfileFataUpdated;
@@ -34,10 +34,17 @@ namespace PROJECT.Scripts.UI.Screens
                 GameConfig.Instance.Shop.ShopDictionary[profileData.Icon.Type].spriteList[profileData.Icon.Index]);
         }
 
+        protected override bool OnScreenPreOpen()
+        {
+            DataPersistenceManager.Instance.LoadProfileData();
+            return base.OnScreenPreOpen();
+        }
+
         protected override void OnScreenOpenStarted()
         {
             playerDisplayCard.UpdatePlayerDisplayName(PlayFabHandler.Instance.CachedPlayer.DisplayName);
             OnProfileFataUpdated(DataPersistenceManager.Instance.ProfileData);
+            DataPersistenceManager.Instance.LoadPlayerInventory();
             base.OnScreenOpenStarted();
         }
 

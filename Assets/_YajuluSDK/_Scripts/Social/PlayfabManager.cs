@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using PlayFab;
 using PlayFab.ClientModels;
 using PlayFab.CloudScriptModels;
+using Project.Scripts.Inventory;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using EntityKey = PlayFab.CloudScriptModels.EntityKey;
@@ -24,6 +25,7 @@ namespace _YajuluSDK._Scripts.Social
         private static class Constants
         {
             public static string EQUIP_ITEM_METHOD { get; private set; } = "EquipItem";
+            public static string UPDATE_PLAYER_GAME_PROFILE { get; } = "UpdatePlayerGameProfile";
         }
         private string _message;
 
@@ -566,20 +568,21 @@ namespace _YajuluSDK._Scripts.Social
         }
 
         [Button]
-        public static void LoadPlayerInventory()
+        public static void LoadPlayerInventory(Action<GetUserInventoryResult> resultCallBack, Action<PlayFabError> errorCallBack = null)
         {
             PlayFabClientAPI.GetUserInventory(new GetUserInventoryRequest(), Success, Failed);
 
             void Success(GetUserInventoryResult result)
             {
                 Debug.Log(result.Inventory);
+                resultCallBack?.Invoke(result);
             }
 
             void Failed(PlayFabError error)
             {
                 Debug.LogError(error.GenerateErrorReport());
+                errorCallBack?.Invoke(error);
             }
-            
         }
 
         [Button]
@@ -691,6 +694,16 @@ namespace _YajuluSDK._Scripts.Social
             }
             
         }
+        
+        public static void UpdatePlayerGameProfile(ProfileData profileData, Action<ExecuteFunctionResult> resultCallBack, Action<PlayFabError> errorCallBack)
+        {
+            Dictionary<string, object> body = new Dictionary<string, object>
+            {
+                { nameof(ProfileData), JsonConvert.SerializeObject(profileData) }
+            };
+            Debug.Log($"Updating PlayerProfile: {profileData}");
+            ExecuteFunction(body, Constants.UPDATE_PLAYER_GAME_PROFILE, resultCallBack, errorCallBack);
+        }
 
         [Button]
         public static void EquipItem(string itemID, Action<ExecuteFunctionResult> resultCallBack, Action<PlayFabError> errorCallBack)
@@ -702,7 +715,8 @@ namespace _YajuluSDK._Scripts.Social
             
             ExecuteFunction(body, Constants.EQUIP_ITEM_METHOD, resultCallBack, errorCallBack);
         }
-
+        
+        [Button]
         private static void ExecuteFunction(object body, string functionName,
             Action<ExecuteFunctionResult> resultCallBack, Action<PlayFabError> errorCallBack,
             bool generatePlayStreamEvent = true)
