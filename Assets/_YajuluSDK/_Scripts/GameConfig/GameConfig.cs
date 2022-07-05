@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using _YajuluSDK._Scripts.Essentials;
+using _YajuluSDK._Scripts.Social;
+using Newtonsoft.Json;
 using PROJECT.Scripts.Data;
 using PROJECT.Scripts.Data.Items;
 using PROJECT.Scripts.Enums;
@@ -139,6 +141,27 @@ namespace _YajuluSDK._Scripts.GameConfig
 			return _levelTypesNamesDict[type];
 		}
 
+		public void FetchLevelsData()
+		{
+			PlayfabManager.FetchTitleData(null, Success);
+			
+			void Success(Dictionary<string, string> obj)
+			{
+				if (obj.ContainsKey("LevelDict"))
+				{
+					_dataDict = JsonConvert.DeserializeObject<LevelDataDict>(obj["LevelDict"]);
+					Debug.Log("Levels Updated Successfully.");
+				}
+				
+				if (obj.ContainsKey("LevelDictKeys"))
+				{
+					_levelDataKeys = JsonConvert.DeserializeObject<List<LevelDictKey>>(obj["LevelDictKeys"]);
+					Debug.Log("Levels Keys Updated Successfully.");
+				}
+				
+			}
+		}
+		
 		[Button]
 		private void LoadData()
 		{
@@ -159,7 +182,7 @@ namespace _YajuluSDK._Scripts.GameConfig
 
 				var values = _line.Split(',');
 				var key = new LevelDictKey { Type = (eLevelType)int.Parse(values[0]), KeyWord = values[1].Trim() };
-
+				
 				List<string> wordList = new List<string>();
 				int[] starsIndexes = new int[3];
 
@@ -171,9 +194,12 @@ namespace _YajuluSDK._Scripts.GameConfig
 					if (values[i].Equals("")) continue;
 					wordList.Add(values[i].Trim());
 				}
-
+				
+				if( wordList.Count < 7 )
+					continue;
+				
 				starsIndexes[0] = values[4].Equals("") ? 2 : 3;
-				starsIndexes[1] = values[8].Equals("") ? 5 : 6;
+				starsIndexes[1] = values[8].Equals("") ? 4 : 5;
 				starsIndexes[2] = wordList.Count - 1;
 
 				if (!_dataDict.ContainsKey(key))
@@ -183,6 +209,22 @@ namespace _YajuluSDK._Scripts.GameConfig
 				}
 			}
 		}
+
+		[Button]
+		private void RandomizeLevels()
+		{
+			_levelDataKeys.Shuffle();
+		}
+
+		[Button]
+		private void ExportLevelsAsJSON()
+		{
+			levelsDictJson = JsonConvert.SerializeObject(_dataDict);
+			levelsKeysJson = JsonConvert.SerializeObject(_levelDataKeys);
+		}
+
+		[SerializeField, TextArea, FoldoutGroup("JSON")] private string levelsDictJson;
+		[SerializeField, TextArea, FoldoutGroup("JSON")] private string levelsKeysJson;
 
 		[Serializable]
 		public struct LevelDictData

@@ -365,6 +365,7 @@ namespace _YajuluSDK._Scripts.Social
         {
             // SetMessage("PlayFab Auth Complete. Session ticket: " + result.SessionTicket);
             Debug.Log($"PlayFab ID: {result.PlayFabId}");
+            // GameConfig.GameConfig.Instance.Levels.FetchLevelsData();
             OnPlayerLoggedIn?.Invoke(result);
             OnPlayerLoggedInBasic?.Invoke();
         }
@@ -738,6 +739,25 @@ namespace _YajuluSDK._Scripts.Social
             {
                 Debug.LogError(error.GenerateErrorReport());
                 errorCallBack?.Invoke(error);
+            }
+        }
+
+        [Button]
+        public static void FetchTitleData(List<string> keys, Action<Dictionary<string, string>> resultCallBack)
+        {
+            PlayFabClientAPI.GetTitleData(new GetTitleDataRequest
+            {
+                Keys = keys
+            }, Success, Failure);
+
+            void Success(GetTitleDataResult getTitleDataResult)
+            {
+                resultCallBack?.Invoke(getTitleDataResult.Data);
+            }
+
+            void Failure(PlayFabError playFabError)
+            {
+                Debug.Log(playFabError.GenerateErrorReport());
             }
         }
         
