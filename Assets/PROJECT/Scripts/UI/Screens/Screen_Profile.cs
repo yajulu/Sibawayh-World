@@ -3,6 +3,7 @@ using _YajuluSDK._Scripts.Essentials;
 using _YajuluSDK._Scripts.GameConfig;
 using _YajuluSDK._Scripts.Social;
 using _YajuluSDK._Scripts.UI;
+using PROJECT.Scripts.Enums;
 using PROJECT.Scripts.Game.Controllers;
 using Project.Scripts.Inventory;
 using RTLTMPro;
@@ -19,31 +20,27 @@ namespace PROJECT.Scripts.UI.Screens
         protected override void Awake()
         {
             base.Awake();
-            DataPersistenceManager.OnProfileDataUpdated += OnProfileFataUpdated;
+            DataPersistenceManager.OnProfileDataUpdated += OnProfileDataUpdated;
         }
         
         private void OnDestroy()
         {
-            DataPersistenceManager.OnProfileDataUpdated -= OnProfileFataUpdated;
+            DataPersistenceManager.OnProfileDataUpdated -= OnProfileDataUpdated;
         }
 
-        private void OnProfileFataUpdated(ProfileData profileData)
+        private void OnProfileDataUpdated(ProfileData profileData)
         {
             playerDisplayCard.SetPlayerProfileItems(
-                GameConfig.Instance.Shop.ShopDictionary[profileData.Banner.Type].spriteList[profileData.Banner.Index],
-                GameConfig.Instance.Shop.ShopDictionary[profileData.Icon.Type].spriteList[profileData.Icon.Index]);
+                GameConfig.Instance.Shop.ShopDictionary[eItemType.Banner].spriteList[profileData.Banner.Index],
+                GameConfig.Instance.Shop.ShopDictionary[eItemType.PlayerIcon].spriteList[profileData.Icon.Index]);
         }
-
-        protected override bool OnScreenPreOpen()
-        {
-            DataPersistenceManager.Instance.LoadProfileData();
-            return base.OnScreenPreOpen();
-        }
-
+        
         protected override void OnScreenOpenStarted()
         {
+            if (!DataPersistenceManager.Instance.IsPlayerUpdating)
+                DataPersistenceManager.Instance.LoadProfileData();
             playerDisplayCard.UpdatePlayerDisplayName(PlayFabHandler.Instance.CachedPlayer.DisplayName);
-            OnProfileFataUpdated(DataPersistenceManager.Instance.ProfileData);
+            OnProfileDataUpdated(DataPersistenceManager.Instance.ProfileData);
             DataPersistenceManager.Instance.LoadPlayerInventory();
             base.OnScreenOpenStarted();
         }
