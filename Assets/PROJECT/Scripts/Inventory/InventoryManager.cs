@@ -47,6 +47,27 @@ namespace Project.Scripts.Inventory
         public ProfileItem Icon => icon;
 
         public ProfileItem Companion => companion;
+
+        public ProfileItem GetProfileItemWithType(eItemType type)
+        {
+            ProfileItem item;
+            switch (type)
+            {
+                case eItemType.PlayerIcon:
+                    item = icon;
+                    break;
+                case eItemType.Banner:
+                    item = banner;
+                    break;
+                case eItemType.Companion:
+                    item = companion;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
+            }
+
+            return item;
+        }
     }
 
     [Serializable]
