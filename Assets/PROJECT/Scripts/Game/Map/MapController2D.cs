@@ -74,7 +74,6 @@ namespace PROJECT.Scripts.Game.Map
             UIScreenManager.OnScreenOpenStarted += UIScreenManagerOnScreenOpenStarted;
             UIScreenManager.OnScreenCloseEnded += UIScreenManagerOnScreenCloseEnded;
             mapHolder.gameObject.SetActive(false);
-            UpdateButtonsAsync();
         }
         
         private void OnDisable()
@@ -83,18 +82,18 @@ namespace PROJECT.Scripts.Game.Map
             UIScreenManager.OnScreenCloseEnded -= UIScreenManagerOnScreenCloseEnded;
         }
 
-        private async void UpdateButtonsAsync()
-        {
-            await Task.Run(Activate);
-
-            void Activate()
-            {
-                for (int i = 0; i < levelButtons.Count; i++)
-                {
-                    levelButtons[i].ButtonState = DataPersistenceManager.Instance.Progress.GetLevelState(i);
-                }
-            }
-        }
+        // private async void UpdateButtonsAsync()
+        // {
+        //     await Task.Run(Activate);
+        //
+        //     void Activate()
+        //     {
+        //         for (int i = 0; i < levelButtons.Count; i++)
+        //         {
+        //             levelButtons[i].ButtonState = DataPersistenceManager.Instance.Progress.GetLevelState(i);
+        //         }
+        //     }
+        // }
 
         private void UIScreenManagerOnScreenOpenStarted(UIScreenBase obj)
         {
