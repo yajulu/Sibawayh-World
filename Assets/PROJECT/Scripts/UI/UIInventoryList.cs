@@ -20,12 +20,17 @@ namespace PROJECT.Scripts.UI
         [SerializeField, ReadOnly] private List<Toggle> toggleList;
         
         private IEnumerable<Tuple<Toggle, ItemInstance>> _zippedList;
+        private eItemType _listType;
         private int _dummySpriteIndex;
-        
+
+        private int _currentToggleIndex;
+
+        public event Action<eItemType, string> OnValueChanged;
+         
         public void SetItemList(IEnumerable<ItemInstance> _itemList, eItemType type)
         {
             itemList = _itemList.ToList();
-
+            _listType = type;
             for (int i = itemList.Count(); i < toggleParent.childCount; i++)
             {
                 toggleList[i].gameObject.SetActive(false);
@@ -41,7 +46,17 @@ namespace PROJECT.Scripts.UI
                 toggleList[i].gameObject.SetActive(true);
             }
         }
-        
+
+        public void TriggerOnValueChanged()
+        {
+            if (!gameObject.activeSelf)
+                return;
+            _currentToggleIndex = toggleGroup.GetFirstActiveToggle().transform.GetSiblingIndex();
+            OnValueChanged?.Invoke(_listType, itemList[_currentToggleIndex].ItemId);
+            gameObject.SetActive(false);
+        }
+            
+
         [Button]
         private void SetRefs()
         {

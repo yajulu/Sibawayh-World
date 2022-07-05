@@ -43,6 +43,10 @@ namespace PROJECT.Scripts.Game.Controllers
 
         public Dictionary<string, int> VirtualCurrency => _virtualCurrency;
 
+        public bool IsPlayerUpdating => _isPlayerUpdating;
+
+        private bool _isPlayerUpdating = false;
+
         private void Start()
         {
             PlayfabManager.OnPlayerLoggedInBasic += LoadPlayerData;
@@ -71,12 +75,21 @@ namespace PROJECT.Scripts.Game.Controllers
             }
         }
 
+        public void UpdateLocalPlayerData(ProfileData newProfileData)
+        {
+            OnProfileDataUpdated?.Invoke(newProfileData);
+        }
+
         public void UpdatePlayerGameProfileData(ProfileData newProfileData)
         {
+            if (_isPlayerUpdating)
+                return;
+            _isPlayerUpdating = true;
             PlayfabManager.UpdatePlayerGameProfile(newProfileData, Success, Failure);
             ProfileData = newProfileData;
             void Success(ExecuteFunctionResult result)
             {
+                _isPlayerUpdating = false;
                 var dict = (Dictionary<string, object>) JsonConvert.DeserializeObject<Dictionary<string, object>>(result.FunctionResult.ToString());
                 if ((bool)dict["profileUpdated"])
                 {
@@ -87,7 +100,7 @@ namespace PROJECT.Scripts.Game.Controllers
             
             void Failure(PlayFabError error)
             {
-                // throw new NotImplementedException();
+                _isPlayerUpdating = false;
             }
         }
 
