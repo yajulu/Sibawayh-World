@@ -10,19 +10,19 @@ namespace _YajuluSDK._Scripts.UI
     {
         [SerializeField, TitleGroup("Properties")]
         private bool useTopBlackScreen = true;
-        
+
         public eUIScreenState State { get; private set; } = eUIScreenState.Closed;
 
         private eUIScreenState _previousState;
 
         private Action _openSucceedsAction;
         private Action _openFailedAction;
-        
+
         private Action _closeSuccessAction;
         private Action _closeFailedAction;
 
         private UIScreenNavigatorController navController;
-        
+
         protected Sequence OpenSequence;
         protected Sequence CloseSequence;
 
@@ -57,7 +57,7 @@ namespace _YajuluSDK._Scripts.UI
 
             _openSucceedsAction = onSucceeded;
             _openFailedAction = onFailed;
-            
+
             var prevState = State;
             State = eUIScreenState.PreOpen;
             var preOpen = OnScreenPreOpen();
@@ -76,15 +76,15 @@ namespace _YajuluSDK._Scripts.UI
         {
             return true;
         }
-        
+
         protected virtual void OnScreenOpenStarted()
         {
             State = eUIScreenState.OpenStarted;
             UIScreenManager.Instance.ScreenOpenStarted(this);
-            
+
             OpenAnimation();
         }
-        
+
         /// <summary>
         /// You Must Call:
         /// gameObject.SetActive(true);
@@ -96,30 +96,30 @@ namespace _YajuluSDK._Scripts.UI
             if (UIScreenManager.Instance.CurrentBlackScreen != null)
             {
                 OpenSequence.Append(UIScreenManager.Instance.CurrentBlackScreen
-                    .DOFade(0, 0.2f)
+                    .DOFade(0, 0.5f)
                     .From(1)
-                    .SetEase(Ease.Linear));    
+                    .SetEase(Ease.Linear));
             }
-            
+
             OpenSequence.OnStart(OnStart);
             OpenSequence.OnComplete(OnComplete);
 
             void OnStart()
             {
-                if(UIScreenManager.Instance.CurrentBlackScreen != null)
+                if (UIScreenManager.Instance.CurrentBlackScreen != null)
                     UIScreenManager.Instance.CurrentBlackScreen.gameObject.SetActive(true);
                 gameObject.SetActive(true);
             }
 
             void OnComplete()
             {
-                if(UIScreenManager.Instance.CurrentBlackScreen != null)
+                if (UIScreenManager.Instance.CurrentBlackScreen != null)
                     UIScreenManager.Instance.CurrentBlackScreen.gameObject.SetActive(false);
                 OnScreenOpenEnded();
             }
         }
-        
-        
+
+
         /// <summary>
         /// You Must Call:
         /// gameObject.SetActive(true);
@@ -130,7 +130,7 @@ namespace _YajuluSDK._Scripts.UI
             gameObject.SetActive(true);
             OnScreenOpenEnded();
         }
-        
+
         /// <summary>
         /// You Must Call:
         /// base.OnScreenOpenEnded();
@@ -140,9 +140,9 @@ namespace _YajuluSDK._Scripts.UI
         {
             if (State == eUIScreenState.Opened)
                 return;
-            
+
             State = eUIScreenState.Opened;
-            
+
             UIScreenManager.Instance.ScreenOpenEnded(this);
             _openSucceedsAction?.Invoke();
             _openSucceedsAction = null;
@@ -150,21 +150,21 @@ namespace _YajuluSDK._Scripts.UI
 
         public void Close(Action onSucceeded = null, Action onFailed = null)
         {
-            
+
             if (State != eUIScreenState.Opened)
             {
                 Debug.LogWarning($"Screen {this.GetType().Name} cannot be closed!, Current State {State}");
                 return;
             }
-            
+
             _closeSuccessAction = onSucceeded;
             _closeFailedAction = onFailed;
-            
+
             var prevState = State;
             State = eUIScreenState.PreClose;
             var preClose = OnScreenPreClose();
             UIScreenManager.Instance.ScreenPreClosed(this, preClose);
-            
+
             if (preClose)
             {
                 OnScreenCloseStarted();
@@ -177,7 +177,7 @@ namespace _YajuluSDK._Scripts.UI
 
         protected virtual bool OnScreenPreClose()
         {
-            
+
             return true;
         }
 
@@ -185,7 +185,7 @@ namespace _YajuluSDK._Scripts.UI
         {
             State = eUIScreenState.CloseStarted;
             UIScreenManager.Instance.ScreenCloseStarted(this);
-            
+
             CloseAnimation();
         }
 
@@ -197,9 +197,9 @@ namespace _YajuluSDK._Scripts.UI
         protected virtual void CloseAnimation()
         {
             CloseSequence = DOTween.Sequence();
-            
+
             CloseSequence.Append((useTopBlackScreen ? UIScreenManager.Instance.BlackScreenTop : UIScreenManager.Instance.BlackScreenMid)
-                .DOFade(1, 0.2f)
+                .DOFade(1, 0.5f)
                 .From(0)
                 .SetEase(Ease.Linear)
             );
@@ -209,7 +209,7 @@ namespace _YajuluSDK._Scripts.UI
 
             void OnStart()
             {
-                (useTopBlackScreen ? UIScreenManager.Instance.BlackScreenTop : UIScreenManager.Instance.BlackScreenMid).gameObject.SetActive(true);    
+                (useTopBlackScreen ? UIScreenManager.Instance.BlackScreenTop : UIScreenManager.Instance.BlackScreenMid).gameObject.SetActive(true);
             }
 
             void OnComplete()
@@ -218,8 +218,8 @@ namespace _YajuluSDK._Scripts.UI
                 OnScreenCloseEnded();
             }
         }
-        
-        
+
+
         /// <summary>
         /// You Must Call:
         /// base.OnSkipCloseAnimation();
@@ -228,7 +228,7 @@ namespace _YajuluSDK._Scripts.UI
         protected virtual void OnSkipCloseAnimation()
         {
             gameObject.SetActive(false);
-            
+
             OnScreenCloseEnded();
         }
 
@@ -239,6 +239,6 @@ namespace _YajuluSDK._Scripts.UI
             _closeSuccessAction?.Invoke();
             _closeSuccessAction = null;
         }
-        
+
     }
 }
