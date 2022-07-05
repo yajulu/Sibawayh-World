@@ -9,7 +9,6 @@ namespace PROJECT.Scripts.Enums
         Banner,
         Companion,
         Consumable,
-        Flag,
         Coins,
         Gems
     }

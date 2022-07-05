@@ -2323,7 +2323,7 @@ MonoBehaviour:
     filePath: Assets/Project/Resources/YajuluSDK/GameData/words.csv
   Shop:
     shopDictionary:
-      keyData: 0100000000000000050000000400000006000000
+      keyData: 01000000000000000500000004000000
       valueData:
       - spriteList:
         - {fileID: 21300000, guid: b0db7de18c9a20b43924c882dffcb080, type: 3}
@@ -2346,6 +2346,14 @@ MonoBehaviour:
         - {fileID: 21300000, guid: ef3cef798a033544a9121b2199ee32f2, type: 3}
         - {fileID: 21300000, guid: f26e4c35dad52cc409b0f892bcdbe8c0, type: 3}
         - {fileID: 21300000, guid: 57e9de6275cd009469aad22224c37a27, type: 3}
+        - {fileID: 21300000, guid: cada594cb8efcac4bbcba6fca52fe311, type: 3}
+        - {fileID: 21300000, guid: 01c083c7387fe3b4ea95be682465d099, type: 3}
+        - {fileID: 21300000, guid: 55adbee3577636745815137c37151259, type: 3}
+        - {fileID: 21300000, guid: cf015056c6b060a4b83fcee7e87e9117, type: 3}
+        - {fileID: 21300000, guid: 388eeaa0a77be0d44a338bcf136ace2d, type: 3}
+        - {fileID: 21300000, guid: 4af50278c588fd244ac558b1c0483f8c, type: 3}
+        - {fileID: 21300000, guid: 992e252f1b37d81448afa3abcde3e9bf, type: 3}
+        - {fileID: 21300000, guid: 2a014be1b609bb24da6c62dec1e051f5, type: 3}
       - spriteList:
         - {fileID: 21300000, guid: a24f2abc724719d49b8543f4618d434f, type: 3}
         - {fileID: 21300000, guid: a6862b3fd15ca574a999d68e20e41f1d, type: 3}
@@ -2362,10 +2370,3 @@ MonoBehaviour:
         - {fileID: 21300000, guid: 4af50278c588fd244ac558b1c0483f8c, type: 3}
         - {fileID: 21300000, guid: 992e252f1b37d81448afa3abcde3e9bf, type: 3}
         - {fileID: 21300000, guid: 2a014be1b609bb24da6c62dec1e051f5, type: 3}
-      - spriteList:
-        - {fileID: 21300000, guid: d4d3d14b6227d6447a553f7d0aa7a2e0, type: 3}
-        - {fileID: 21300000, guid: bf1db2ff06917134294fa533db127d9c, type: 3}
-        - {fileID: 21300000, guid: 9bf9317365e5e9144af7399181dec0a0, type: 3}
-        - {fileID: 21300000, guid: cdc05c3919d9b4b4b93efed4abd70b87, type: 3}
-        - {fileID: 21300000, guid: daf043eabbe9c95478105ed0e74ca958, type: 3}
-        - {fileID: 21300000, guid: 02fd7b7b13e622b45974bbe1e1762c89, type: 3}
