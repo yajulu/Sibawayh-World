@@ -5,6 +5,7 @@ using _YajuluSDK._Scripts.Essentials;
 using _YajuluSDK._Scripts.GameConfig;
 using PlayFab.ClientModels;
 using PROJECT.Scripts.Enums;
+using PROJECT.Scripts.Game.Controllers;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -25,6 +26,8 @@ namespace PROJECT.Scripts.UI
 
         private int _currentToggleIndex;
 
+        private int _currentPlayerItemIndex;
+
         public event Action<eItemType, string> OnValueChanged;
          
         public void SetItemList(IEnumerable<ItemInstance> _itemList, eItemType type)
@@ -38,9 +41,15 @@ namespace PROJECT.Scripts.UI
             
             _zippedList = toggleList.Zip(itemList, Tuple.Create);
 
+            _currentPlayerItemIndex = DataPersistenceManager.Instance.ProfileData.GetProfileItemWithType(type).Index;
+
             for (int i = 0; i < itemList.Count; i++)
             {
                 _dummySpriteIndex = int.Parse(itemList[i].ItemId.Split("_")[1]);
+
+                if (_dummySpriteIndex == _currentPlayerItemIndex)
+                    _currentToggleIndex = i;
+                
                 ((Image)(toggleList[i].targetGraphic)).sprite =
                     GameConfig.Instance.Shop.ShopDictionary[type].spriteList[_dummySpriteIndex];
                 toggleList[i].gameObject.SetActive(true);
@@ -55,7 +64,14 @@ namespace PROJECT.Scripts.UI
             OnValueChanged?.Invoke(_listType, itemList[_currentToggleIndex].ItemId);
             gameObject.SetActive(false);
         }
-            
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            toggleGroup.EnsureValidState();
+            toggleList[_currentToggleIndex].isOn = true;
+        }
+
 
         [Button]
         private void SetRefs()
