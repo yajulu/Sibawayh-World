@@ -70,6 +70,7 @@ SpriteAtlas:
     packables:
     - {fileID: 102900000, guid: 9743784bc7c228e4aa31d601c5420564, type: 3}
     - {fileID: 102900000, guid: 9467443e6185c05418d99c5325d37721, type: 3}
+    - {fileID: 102900000, guid: 7b73012fc81b292458181c974196d592, type: 3}
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -80,53 +81,77 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 9e9de0117aa1485479e6515f74d6f5c2, type: 3}
   - {fileID: 21300000, guid: 82a85131b637b7141b9d9d7749e393bc, type: 3}
   - {fileID: 21300000, guid: cff0eca1b2d8344429bdaeac4a6f4dae, type: 3}
+  - {fileID: 21300000, guid: 0d091e32f29af7a40b09e84c376b0de8, type: 3}
   - {fileID: 21300000, guid: 6a6c9f326e53c1f49b2369385a53201e, type: 3}
   - {fileID: 21300000, guid: 0d2a23425b777494d9e6713a20906516, type: 3}
   - {fileID: 21300000, guid: 3c91c982798d813479a0ac3b1a4440f4, type: 3}
   - {fileID: 21300000, guid: 15c180a2690998e42b32b9d9ba9da79a, type: 3}
   - {fileID: 21300000, guid: 386f17b2ca22589498987c83cb1ad71f, type: 3}
+  - {fileID: 21300000, guid: 6ce539c26ec7b734c82a36554ca0b776, type: 3}
+  - {fileID: 21300000, guid: 021f18d2ccb344040a679e2c0a105b11, type: 3}
   - {fileID: 21300000, guid: 213c91e2b5b171e49a1118a99bd4d457, type: 3}
   - {fileID: 21300000, guid: 39e2e303930cd2f48ba3df01d0a30721, type: 3}
+  - {fileID: 21300000, guid: 2e24e2839462f38409c9b11c9c27bb49, type: 3}
   - {fileID: 21300000, guid: 46acee93d429d0846b1ac01d6dd6ad63, type: 3}
   - {fileID: 21300000, guid: 9b3e2ae3135bcb041b1b13e57972bb23, type: 3}
+  - {fileID: 21300000, guid: cb1f5de38cfdf324c9e4da1b736df54a, type: 3}
   - {fileID: 21300000, guid: 06d82204a8b8a93438a8c9fb1e8a37c2, type: 3}
   - {fileID: 21300000, guid: 01d5083416505124e96a7cb509f58844, type: 3}
   - {fileID: 21300000, guid: eecfa044360263b4593962c2150caeb6, type: 3}
   - {fileID: 21300000, guid: 9c967f447d711fd4382235634a037d32, type: 3}
   - {fileID: 21300000, guid: a2e29764e4574c349a098ec3ee55bc41, type: 3}
+  - {fileID: 21300000, guid: 9db7ea9477601d646b2903feb8794dad, type: 3}
   - {fileID: 21300000, guid: 49575e941ffccb240a53777a646fb64e, type: 3}
   - {fileID: 21300000, guid: 2076cbc42cfa01043993004e2d2553a3, type: 3}
   - {fileID: 21300000, guid: 6f3b57e49d5bf68409404fb971e0b204, type: 3}
   - {fileID: 21300000, guid: 376abdf43b115144094853e92725a950, type: 3}
+  - {fileID: 21300000, guid: 87259b65d4dd9b84c931917a53df0a63, type: 3}
   - {fileID: 21300000, guid: 98674a75577ad4840828f7a48655a5b5, type: 3}
+  - {fileID: 21300000, guid: 50c69c759817c2f4b9512009ebe66f42, type: 3}
   - {fileID: 21300000, guid: a45d1595061f36b46b478e5795e44e45, type: 3}
+  - {fileID: 21300000, guid: 7464f1d58450e194bb8adaa2d699f46c, type: 3}
+  - {fileID: 21300000, guid: 0d3a42d53bc1af143a950b33cdae4cd3, type: 3}
+  - {fileID: 21300000, guid: ef91dff573fcc3c42a4eabba27f3fd53, type: 3}
   - {fileID: 21300000, guid: b8a50f165805ba148b042d42e6af8a85, type: 3}
   - {fileID: 21300000, guid: 1acdaf1684ddfd048aba994255ea6edb, type: 3}
+  - {fileID: 21300000, guid: 700219961686f8d43b2b1132e3cf8ac3, type: 3}
+  - {fileID: 21300000, guid: 10d327c670c794a4dbc8aff82a37c252, type: 3}
   - {fileID: 21300000, guid: 93736ed694b68554fbba3509458d8477, type: 3}
+  - {fileID: 21300000, guid: ffe6f1f637f20b847b5279f35d04fe62, type: 3}
   - {fileID: 21300000, guid: ebe1b4f6a01f21d429ab2204b498f208, type: 3}
   - {fileID: 21300000, guid: 99323ff635a383047a91a97f0bd1f4fe, type: 3}
   - {fileID: 21300000, guid: 52ed1e1795991e849b86f05d19e61ae5, type: 3}
+  - {fileID: 21300000, guid: d72502471d8aafd4cb6ac587d756202a, type: 3}
   - {fileID: 21300000, guid: eb41398772dd3fd4a85410fb81d3125d, type: 3}
   - {fileID: 21300000, guid: 9fdce9970cad0d941b50b0962f1f03ae, type: 3}
   - {fileID: 21300000, guid: 930b95b7fbaa12345a855e549cb14b60, type: 3}
   - {fileID: 21300000, guid: ab8362e796b74474585d6ff161263962, type: 3}
+  - {fileID: 21300000, guid: b660fce7c4e2e1341acb5b615b5daf61, type: 3}
+  - {fileID: 21300000, guid: 4e7591f74dfe05748a5aaa637bf8640f, type: 3}
   - {fileID: 21300000, guid: 296a17f7b0ccc86469920e9877039edb, type: 3}
   - {fileID: 21300000, guid: ca50584821aebfe48a2c1af8d58486dc, type: 3}
+  - {fileID: 21300000, guid: ac07d3680bc27014b929957de4ff57bb, type: 3}
   - {fileID: 21300000, guid: 63a3ea686d723b646b8ba5d60239d951, type: 3}
   - {fileID: 21300000, guid: ec4e3be821d001440a7635305edbf213, type: 3}
   - {fileID: 21300000, guid: ec6492297150ae342962ce988f1b452a, type: 3}
+  - {fileID: 21300000, guid: 571e043985ac06a408ed45f07970ce81, type: 3}
+  - {fileID: 21300000, guid: 67b6a9694f37931418f0b1d6ce97f92c, type: 3}
   - {fileID: 21300000, guid: 4c3ed7798c0a27646b19c4ee7f1d86c2, type: 3}
   - {fileID: 21300000, guid: ba29e9e9171d1d04bb9439f0bed0bb55, type: 3}
   - {fileID: 21300000, guid: 48d2d70a6c1113a419d77294e6cf8e66, type: 3}
   - {fileID: 21300000, guid: 3276c71a10308974fa30795a12c0b5f2, type: 3}
   - {fileID: 21300000, guid: 00febc1a7628c7947b89bfd0faea07b0, type: 3}
+  - {fileID: 21300000, guid: 47e30d4a0feb3a741a8c38ff28401783, type: 3}
+  - {fileID: 21300000, guid: 4d5656aa91c05904e85b7b749ac574c9, type: 3}
   - {fileID: 21300000, guid: 06bec9caf787b2343a8414ad2499159c, type: 3}
   - {fileID: 21300000, guid: c106d0eab87c3ed47b5117a55afffc18, type: 3}
+  - {fileID: 21300000, guid: 544879eac295f7f498e64636e71f3b00, type: 3}
   - {fileID: 21300000, guid: bd98f62b2f079714aaca476158910432, type: 3}
   - {fileID: 21300000, guid: 031de03be9d0aab4ea9904561824611c, type: 3}
   - {fileID: 21300000, guid: d9c4743ba689f2447a732e798643701a, type: 3}
   - {fileID: 21300000, guid: 1cad95bb25f0945409f5919286bf0c0e, type: 3}
   - {fileID: 21300000, guid: cff91d3caae0b3a4a88b51e37a7d071d, type: 3}
+  - {fileID: 21300000, guid: b14e785cdd7832748b9d4d0ef85e247b, type: 3}
   - {fileID: 21300000, guid: ccc4c88caae6852449d0f1e2828b549b, type: 3}
   - {fileID: 21300000, guid: 6ce4ed9ca2c85e04c8882f52c1abb91e, type: 3}
   - {fileID: 21300000, guid: d39a82fcaf023dd45b945baeb9da10fc, type: 3}
@@ -136,63 +161,89 @@ SpriteAtlas:
   - {fileID: 21300000, guid: d446d45ecaf58ca4984a0ad6713cbf2f, type: 3}
   - {fileID: 21300000, guid: 86a2958ed5fd5e343b341f7ddf1f15ac, type: 3}
   - {fileID: 21300000, guid: c379531f09abf9443acecd2403afad2c, type: 3}
+  - {fileID: 21300000, guid: f29e502fef1da94498e570d34c962b14, type: 3}
   - {fileID: 21300000, guid: 9da1173f2e5852f4cb54a0dc3f0e66c7, type: 3}
   - {fileID: 21300000, guid: 4adbcd3fb6aa11b4c9795639b5497205, type: 3}
   - {fileID: 21300000, guid: d028026f1d99cf74596b1ebd93628eea, type: 3}
   - {fileID: 21300000, guid: 81b2897f3d8a6ed44adf0298966b9de2, type: 3}
+  - {fileID: 21300000, guid: d8692eafe4e2c96498dc95d8f7a3e859, type: 3}
   m_PackedSpriteNamesToIndex:
   - General_frame_red
   - Slider_bg_red-8
   - Siwa_Letter circle
   - General_Blue gem_empty-frame 1
   - Header_Coins small
+  - C3M
   - Icons_Restart
   - Siwa_Bottom bottons
   - Profilepicture_bg-8
   - Profile_Tabs orange
   - General_Profile icon
+  - Bronze
+  - light
   - Icons_Coin
   - Profile_Friends_Frame red
+  - C1B
   - Profilepicture_levelIndicator-8
   - Slider_bg_w_frame_orange-8
+  - leaderButton
   - Icons_Shop
   - Icons_Gem
   - Slider_fill_blue-8
   - Icons_Settings
   - Home_Magic 2
+  - C3B
   - Profile_Tab selector red
   - Slider_fill_orange-8
   - Profile_ProfileCard_frame_mask
   - Profile_Tab selector red_cropped
+  - CamelWithCrown
   - General_frame_orange
+  - TabSelectorA
   - Profile_Progress number orange
+  - EditButton
+  - C5B
+  - R1M
   - Slider_bg_w_frame_red-8
   - Achievements_frame-8
+  - C2B
+  - C5
   - Home_Island
+  - R1A
   - Header_Coins
   - Home_Portal
   - Header_Progress small
+  - leaf
   - Slider_fill_green-8
   - Profilepicture_glitter-8
   - General_Blue gem_specular
   - POP_BTN_HOME
+  - Mask_Gradient
+  - Silver
   - WhitePixel
   - Icons_Home
+  - R1S
   - Profilepicture_wings-8
   - Icons_Pause
   - Achievements_Artboard 107-8
+  - C4B
+  - BackButton
   - Profile_Player profile name
   - Home_Siwa title
   - Header_Progress
   - Achievements_mask-8
   - General_Blue gem
+  - Gold
+  - C2A
   - Icons_Star
   - General_Blue gem_frame
+  - C3A
   - Icons_Hint
   - Slider_bg_orange-8
   - Profile_Friends_Frame orange
   - Achievements_Achievement placeholder-8
   - Home_Logo
+  - Checkmark
   - Siwa_Level title
   - Home_Magic 1
   - Profile_ProfileCard_frame
@@ -202,10 +253,12 @@ SpriteAtlas:
   - Profile_Progress number red
   - Icons_Plus
   - General_Blue gem_center
+  - R1B
   - Achievements_Slider_bg_w_frame_red-8
   - Profilepicture_mask-8
   - Siwa BG
   - Siwa_Progress point copy
+  - translucentLeaf
   m_RenderDataMap: {}
   m_Tag: UI
   m_IsVariant: 0
