@@ -18,7 +18,6 @@ namespace EasyMobile
         private static ChartboostClientImpl sChartboostClient;
         private static AudienceNetworkClientImpl sAudienceNetworkClient;
         private static FairBidClientImpl sFairBidClient;
-        private static MoPubClientImpl sMoPubClient;
         private static IronSourceClientImpl sIronSourceClient;
         private static TapjoyClientImpl sTapjoyClient;
         private static UnityAdsClientImpl sUnityAdsClient;
@@ -192,22 +191,6 @@ namespace EasyMobile
                 if (sFairBidClient == null)
                     sFairBidClient = SetupAdClient(AdNetwork.FairBid) as FairBidClientImpl;
                 return sFairBidClient;
-            }
-        }
-
-        /// <summary>
-        /// Gets the MoPub client.
-        /// </summary>
-        /// <value>The mo pub client.</value>
-        public static MoPubClientImpl MoPubClient
-        {
-            get
-            {
-                if (!InitializationClientCheck())
-                    return null;
-                if (sMoPubClient == null)
-                    sMoPubClient = SetupAdClient(AdNetwork.MoPub) as MoPubClientImpl;
-                return sMoPubClient;
             }
         }
 
@@ -1452,8 +1435,6 @@ namespace EasyMobile
                     return FairBidClientImpl.CreateClient();
                 case AdNetwork.IronSource:
                     return IronSourceClientImpl.CreateClient();
-                case AdNetwork.MoPub:
-                    return MoPubClientImpl.CreateClient();
                 case AdNetwork.TapJoy:
                     return TapjoyClientImpl.CreateClient();
                 case AdNetwork.UnityAds:
@@ -1515,8 +1496,6 @@ namespace EasyMobile
                     return AudienceNetworkClient;
                 case AdNetwork.FairBid:
                     return FairBidClient;
-                case AdNetwork.MoPub:
-                    return MoPubClient;
                 case AdNetwork.IronSource:
                     return IronSourceClient;
                 case AdNetwork.UnityAds:

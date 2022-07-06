@@ -189,6 +189,7 @@ namespace EasyMobile
 #endif
 
 #elif UNITY_ANDROID && EM_GPGS
+#if !EM_GPGS_v2
             PlayGamesClientConfiguration.Builder gpgsConfigBuilder = new PlayGamesClientConfiguration.Builder();
 #if EASY_MOBILE_PRO
             // Enable Saved Games.
@@ -234,6 +235,13 @@ namespace EasyMobile
 
             // Now authenticate
             Social.localUser.Authenticate(ProcessAuthentication);
+#else
+            //GPGS v2 init
+            PlayGamesPlatform.Activate();
+            Social.localUser.Authenticate(ProcessAuthentication);
+#endif
+
+
 #elif UNITY_ANDROID && !EM_GPGS
             Debug.LogError("SDK missing. Please import Google Play Games plugin for Unity.");
 #else
@@ -295,7 +303,7 @@ namespace EasyMobile
 
 #if UNITY_IOS
             GameCenterPlatform.ShowLeaderboardUI(ldb.Id, timeScope);
-#elif UNITY_ANDROID && EM_GPGS
+#elif UNITY_ANDROID && EM_GPGS && !EM_GPGS_v2
             PlayGamesPlatform.Instance.ShowLeaderboardUI(ldb.Id, ToGpgsLeaderboardTimeSpan(timeScope), null);
 #else
             // Fallback
@@ -651,7 +659,11 @@ namespace EasyMobile
             }
 
 #if UNITY_ANDROID && EM_GPGS
+    #if EM_GPGS_v2
+            return string.Empty;
+    #else
             return PlayGamesPlatform.Instance.GetServerAuthCode();
+    #endif
 #elif UNITY_ANDROID && !EM_GPGS
             Debug.LogError("SDK missing. Please import Google Play Games plugin for Unity.");
             return string.Empty;
@@ -674,7 +686,11 @@ namespace EasyMobile
             }
 
 #if UNITY_ANDROID && EM_GPGS
+    #if EM_GPGS_v2
+            PlayGamesPlatform.Instance.RequestServerSideAccess(true, callback);
+    #else
             PlayGamesPlatform.Instance.GetAnotherServerAuthCode(reAuthenticateIfNeeded, callback);
+    #endif
 #elif UNITY_ANDROID && !EM_GPGS
             Debug.LogError("SDK missing. Please import Google Play Games plugin for Unity.");
 #else
@@ -692,14 +708,17 @@ namespace EasyMobile
                 return;
             }
 
-#if UNITY_ANDROID && EM_GPGS
+#if UNITY_ANDROID && EM_GPGS && !EM_GPGS_v2
             PlayGamesPlatform.Instance.SignOut();
 #elif UNITY_ANDROID && !EM_GPGS
             Debug.LogError("SDK missing. Please import Google Play Games plugin for Unity.");
 #else
             Debug.Log("Signing out from script is not available on this platform.");
 #endif
+
+#if !EM_GPGS_v2
             StorageUtil.SetInt(USER_CALLED_LOG_OUT_IN_PREVIOUS_SESSION, 1);
+#endif
         }
 
 #if UNITY_ANDROID && EM_GPGS
@@ -895,7 +914,7 @@ namespace EasyMobile
 #endif
 
                 // Set GPGS popup gravity, this needs to be done after authentication.
-#if UNITY_ANDROID && EM_GPGS
+#if UNITY_ANDROID && EM_GPGS && !EM_GPGS_v2
                 PlayGamesPlatform.Instance.SetGravityForPopups(ToGpgsGravity(EM_Settings.GameServices.GpgsPopupGravity));
 #endif
                 StorageUtil.SetInt(USER_CALLED_LOG_OUT_IN_PREVIOUS_SESSION, 0);
@@ -924,7 +943,7 @@ namespace EasyMobile
 
         #region Helpers
 
-#if UNITY_ANDROID && EM_GPGS
+#if UNITY_ANDROID && EM_GPGS && !EM_GPGS_v2
         static Gravity ToGpgsGravity(GameServicesSettings.GpgsGravity gravity)
         {
             switch (gravity)

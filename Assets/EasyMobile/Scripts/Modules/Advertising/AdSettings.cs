@@ -124,14 +124,6 @@ namespace EasyMobile
         }
 
         /// <summary>
-        /// Gets the MoPub settings.
-        /// </summary>
-        public MoPubSettings MoPub
-        {
-            get { return mMoPub; }
-        }
-
-        /// <summary>
         /// Gets the Tapjoy settings.
         /// </summary>
         public TapjoySettings Tapjoy
@@ -208,8 +200,6 @@ namespace EasyMobile
         private FairBidSettings mFairBid = null;
         [SerializeField]
         private IronSourceSettings mIronSource = null;
-        [SerializeField]
-        private MoPubSettings mMoPub = null;
         [SerializeField]
         private TapjoySettings mTapjoy = null;
         [SerializeField]

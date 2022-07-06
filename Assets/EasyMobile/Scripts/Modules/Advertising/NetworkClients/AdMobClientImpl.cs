@@ -567,7 +567,7 @@ namespace EasyMobile
             internal event Action<Instance, object, EventArgs> ClosedEvent = delegate {};
             private void InternalInvokeClosedEvent(Instance instance, object obj, EventArgs args){if(ClosedEvent != null) ClosedEvent.Invoke(instance, obj, args);}
             internal event Action<Instance, object, AdFailedToLoadEventArgs> FailToLoadEvent = delegate {};
-            private void InternalInvokeFailToLoadEvent(Instance instance, object obj, AdFailedToLoadEventArgs args){if(FailToLoadEvent != null) FailToLoadEvent.Invoke(instance, obj, args); Destroy(instance); }
+            private void InternalInvokeFailToLoadEvent(Instance instance, object obj, AdFailedToLoadEventArgs args){if(FailToLoadEvent != null) FailToLoadEvent.Invoke(instance, obj, args); }
             internal event Action<Instance, object, EventArgs> LoadedEvent = delegate {};
             private void InternalInvokeLoadedEvent(Instance instance, object obj, EventArgs args){if(LoadedEvent != null) LoadedEvent.Invoke(instance, obj, args);}
             internal event Action<Instance, object, EventArgs> OpeningEvent = delegate {};
@@ -646,12 +646,15 @@ namespace EasyMobile
                 internal event Action<Instance, object, EventArgs> LoadedEvent = delegate {};
                 internal event Action<Instance, object, EventArgs> OpeningEvent = delegate {};
                 internal event Action<Instance, object, AdValueEventArgs> PaidEvent = delegate {};
+                private Coroutine reloadRoutine;
 
                 private BannerView banner;
+                private bool showingState = false;
                 internal void Hide()
                 {
                     if(banner != null)
                         this.banner.Hide();
+                    showingState = false;
                 }
 
                 internal override bool IsReady()
@@ -665,11 +668,14 @@ namespace EasyMobile
                     {
                         banner.Destroy();
                         banner = null;
+                        if(reloadRoutine != null)
+                            RuntimeHelper.StopCoroutineOnMainThread(reloadRoutine);
                     }
                 }
 
                 internal override void Load()
                 {
+                    Destroy();
                     banner = new BannerView(
                         id,
                         Utils.Convert(size),
@@ -687,6 +693,7 @@ namespace EasyMobile
                 {
                     if(this.banner != null)
                         this.banner.Show();
+                    showingState = true;
                 }
 
                 private void HandleClosed(object sender, EventArgs e)
@@ -700,7 +707,10 @@ namespace EasyMobile
 
                     // Reload with some cool-down to avoid possible
                     // stackoverflowing issues that may lead to a crash.
-                    RuntimeHelper.RunCoroutine(CRLoad(10f));  // reload after 10s
+                    RuntimeHelper.RunCoroutineOnMainThread(
+                        CRLoad(10f),
+                        (rt)=> reloadRoutine = rt
+                    );// reload after 10s
                 }
 
                 private IEnumerator CRLoad(float delay)
@@ -711,6 +721,10 @@ namespace EasyMobile
 
                 private void HandleLoaded(object sender, EventArgs e)
                 {   
+                    if(showingState)
+                        Show();
+                    else
+                        Hide();
                     loaded = true;
                     LoadedEvent.Invoke(this, sender, e);
                 }

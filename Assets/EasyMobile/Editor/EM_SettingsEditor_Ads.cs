@@ -30,8 +30,6 @@ namespace EasyMobile.Editor
         const string FairBidAvailMsg = "FairBid plugin was imported.";
         const string FairBidDefaultAdPlacementMsg = "Easy Mobile's Default ad placement is directly translated into FairBid's default ad tag, no need to enter any associated ID here. The Default placement is loaded automatically if LoadAllDefinedPlacements mode is enabled.";
         const string FairBidCustomAdPlacementMsg = "Here you can register the custom placements to be automatically loaded with LoadAllDefinedPlacements mode. These placements are directly translated into FairBid's ad tags of the same name, no need to enter any associated IDs here.";
-        const string MoPubImportInstruction = "MoPub plugin not found. Please download and import it to show ads from MoPub.";
-        const string MoPubAvailMsg = "MoPub plugin was imported.";
         const string IronSourceImportInstruction = "IronSource plugin not found. Please download and import it to show ads from IronSource.";
         const string IronSourceAvailMsg = "IronSource plugin was imported.";
         const string IronSourceAdPlacementMsg = "ironSource doesn't require placements when loading ads. Their ads are loaded automatically if auto ad loading is enabled, no need to register any placement here. You can specify a placement when showing ads if needed.";
@@ -130,20 +128,6 @@ namespace EasyMobile.Editor
                     MarkSubModulEnableStateHasChanged();
             }
         }
-        private bool IsMopubEnabled
-        {
-            get
-            {
-                return AdProperties.mopubEnabled.property.boolValue;
-            }
-            set
-            {
-                bool needToUpdate = value != IsMopubEnabled;
-                AdProperties.mopubEnabled.property.boolValue = value;
-                if (needToUpdate)
-                    MarkSubModulEnableStateHasChanged();
-            }
-        }
         private bool IsTapjoyEnabled
         {
             get
@@ -215,15 +199,6 @@ namespace EasyMobile.Editor
             }
         }
 
-
-#if EM_MOPUB
-        bool mopubMediatedNetworksFoldout = false;
-        GUIContent mopubAdapterNameContent = new GUIContent("Adapter Configuration Class Name", "Specify the class name that implements the AdapterConfiguration interface.");
-        GUIContent mopubMediationNameContent = new GUIContent("Mediation Settings Class Name", "Specify the class name that implements the MediationSettings interface.\n Note: Custom network mediation settings are currently not supported on Android.");
-        GUIContent mopubNetworkConfigurationContent = new GUIContent("Network Configuration", "Network adapter configuration settings (initialization).");
-        GUIContent mopubRequestOptionContent = new GUIContent("Request Option", "Additional options to pass to the MoPub servers (per ad request).");
-
-#endif
         private bool advertisingSubModuleEnableStateHasChanged;
         private void MarkSubModulEnableStateHasChanged()
         {
@@ -339,9 +314,6 @@ namespace EasyMobile.Editor
 
             // IronSource setup
             DrawIronSourceSettings();
-
-            // MoPub setup
-            DrawMopubSettings();
 
             // TapJoy setup
             DrawTapjoySettings();
@@ -857,122 +829,6 @@ namespace EasyMobile.Editor
                 }, null, false);
         }
 
-        #region MoPub
-
-        void DrawMopubSettings()
-        {
-            EditorGUILayout.Space();
-            IsMopubEnabled = DrawUppercaseSectionWithToggle("MOPUB_ADS_SETUP_FOLDOUT_KEY", "MOPUB ADS", IsMopubEnabled, () =>
-                {
-                    if (!IsMopubEnabled)
-                        return;
-#if !EM_MOPUB
-                    EditorGUILayout.HelpBox(MoPubImportInstruction, MessageType.Warning);
-                    if (GUILayout.Button("Download MoPub Plugin", GUILayout.Height(EM_GUIStyleManager.buttonHeight)))
-                    {
-                        EM_ExternalPluginManager.DownloadMoPubPlugin();
-                    }
-#else
-                    EditorGUILayout.HelpBox(MoPubAvailMsg, MessageType.Info);
-                    if (GUILayout.Button("Download MoPub Plugin", GUILayout.Height(EM_GUIStyleManager.buttonHeight)))
-                    {
-                        EM_ExternalPluginManager.DownloadMoPubPlugin();
-                    }
-
-                    // Default placements.
-                    EditorGUILayout.Space();
-                    EditorGUILayout.LabelField("Default Placement", EditorStyles.boldLabel);
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.PropertyField(AdProperties.mopubDefaultBannerAdId.property, AdProperties.mopubDefaultBannerAdId.content, true);
-                    EditorGUILayout.PropertyField(AdProperties.mopubDefaultInterstitialAdId.property, AdProperties.mopubDefaultInterstitialAdId.content, true);
-                    EditorGUILayout.PropertyField(AdProperties.mopubDefaultRewardedAdId.property, AdProperties.mopubDefaultRewardedAdId.content, true);
-                    EditorGUI.indentLevel--;
-
-                    // Custom placements.
-                    EditorGUILayout.Space();
-                    EditorGUILayout.LabelField("Custom Placements", EditorStyles.boldLabel);
-                    EditorGUI.indentLevel++;
-                    EditorGUILayout.PropertyField(AdProperties.mopubCustomBannerAdIds.property, AdProperties.mopubCustomBannerAdIds.content, true);
-                    EditorGUILayout.PropertyField(AdProperties.mopubCustomInterstitialAdIds.property, AdProperties.mopubCustomInterstitialAdIds.content, true);
-                    EditorGUILayout.PropertyField(AdProperties.mopubCustomRewardedAdIds.property, AdProperties.mopubCustomRewardedAdIds.content, true);
-                    EditorGUI.indentLevel--;
-
-                    if (AdProperties.mopubReportAppOpen.property.boolValue)
-                    {                 
-                        /// We only need to provide app ID on IOS,
-                        /// on Android the report app open feature can be called without any parameter.
-#if UNITY_IOS
-                        EditorGUILayout.PropertyField(AdProperties.mopubITuneAppID.property, AdProperties.mopubITuneAppID.content, true);
-#else
-                        EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-                        EditorGUILayout.LabelField("App ID is only required on iOS.", EditorStyles.miniBoldLabel);
-                        EditorGUILayout.EndVertical();
-#endif
-                        EditorGUILayout.Space();
-                    }
-
-                    EditorGUILayout.Space();
-                    EditorGUILayout.LabelField("Advanced Settings", EditorStyles.boldLabel);
-                    EditorGUILayout.PropertyField(AdProperties.mopubEnableLocationPassing.property, AdProperties.mopubEnableLocationPassing.content);
-
-                    EditorGUILayout.PropertyField(AdProperties.mopubEnableAdvancedSetting.property, AdProperties.mopubEnableAdvancedSetting.content);
-                    if (AdProperties.mopubEnableAdvancedSetting.property.boolValue)
-                    {
-                        EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-                        EditorGUILayout.PropertyField(AdProperties.mopubAllowLegitimateInterest.property, AdProperties.mopubAllowLegitimateInterest.content);
-                        EditorGUILayout.PropertyField(AdProperties.mopubLogLevel.property, AdProperties.mopubLogLevel.content);
-                        mopubMediatedNetworksFoldout = DrawResizableArray(
-                            AdProperties.mopubMediatedNetworks.property,
-                            mopubMediatedNetworksFoldout,
-                            "Mediated Networks",
-                            (property, index) => DrawArrayElement(AdProperties.mopubMediatedNetworks.property, index, "", 0, () => 0, i =>
-                                {
-                                }, DrawMediatedNetwork),
-                            property =>
-                            {
-                                property.FindPropertyRelative("mIsSupportedNetwork").boolValue = false;
-                                property.FindPropertyRelative("mAdapterConfigurationClassName").stringValue = "";
-                                property.FindPropertyRelative("mMediationSettingsClassName").stringValue = "";
-                                property.FindPropertyRelative("mSupportedNetworkName").intValue = 0;
-                            });
-                        EditorGUILayout.EndVertical();
-                    }
-                    
-                    EditorGUILayout.Space();
-                    EditorGUILayout.LabelField("GDPR Consent", EditorStyles.boldLabel);
-                    EditorGUILayout.PropertyField(AdProperties.mopubAutoRequestConsent.property, AdProperties.mopubAutoRequestConsent.content);
-                    EditorGUILayout.PropertyField(AdProperties.mopubForceGdprApplicable.property, AdProperties.mopubForceGdprApplicable.content);
-#endif
-                }, null, false);
-        }
-
-
-        void DrawMediatedNetwork(SerializedProperty networkProperty)
-        {
-#if EM_MOPUB
-            var isSupportedNetworkProperty = networkProperty.FindPropertyRelative("mIsSupportedNetwork");
-            EditorGUILayout.PropertyField(isSupportedNetworkProperty);
-
-            if (isSupportedNetworkProperty.boolValue)
-            {
-                EditorGUILayout.PropertyField(networkProperty.FindPropertyRelative("mSupportedNetworkName"));
-            }
-            else
-            {
-                EditorGUILayout.PropertyField(networkProperty.FindPropertyRelative("mAdapterConfigurationClassName"), mopubAdapterNameContent);
-                EditorGUILayout.PropertyField(networkProperty.FindPropertyRelative("mMediationSettingsClassName"), mopubMediationNameContent);
-            }
-
-            EditorGUI.indentLevel++;
-            EditorGUILayout.PropertyField(networkProperty.FindPropertyRelative("mNetworkConfiguration"), mopubNetworkConfigurationContent);
-            EditorGUILayout.PropertyField(networkProperty.FindPropertyRelative("mMediationSettings"), mopubMediationNameContent);
-            EditorGUILayout.PropertyField(networkProperty.FindPropertyRelative("mMoPubRequestOption"), mopubRequestOptionContent);
-            EditorGUI.indentLevel--;
-#endif
-        }
-
-        #endregion
-
         void DrawTapjoySettings()
         {
             EditorGUILayout.Space();
@@ -1205,12 +1061,6 @@ namespace EasyMobile.Editor
 #else
                     return false;
 #endif
-                case AdNetwork.MoPub:
-#if EM_MOPUB
-                    return true;
-#else
-                    return false;
-#endif
                 case AdNetwork.IronSource:
 #if EM_IRONSOURCE
                     return true;
@@ -1279,14 +1129,6 @@ namespace EasyMobile.Editor
                 AddCustomAdsResource(finalResult, fbAudienceSettings.CustomBannerIds, "FBAudienceBanner");
                 AddCustomAdsResource(finalResult, fbAudienceSettings.CustomInterstitialAdIds, "FBAudienceInterstitialAd");
                 AddCustomAdsResource(finalResult, fbAudienceSettings.CustomRewardedAdIds, "FBAudienceRewardedAd");
-            }
-
-            if (IsPluginAvail(AdNetwork.MoPub))
-            {
-                var mopubSettings = AdProperties.mopubSettings.GetTargetObject() as MoPubSettings;
-                AddCustomAdsResource(finalResult, mopubSettings.CustomBannerIds, "MopubBanner");
-                AddCustomAdsResource(finalResult, mopubSettings.CustomInterstitialAdIds, "MopubInterstitialAd");
-                AddCustomAdsResource(finalResult, mopubSettings.CustomRewardedAdIds, "MopubRewardedAd");
             }
 
             if (IsPluginAvail(AdNetwork.TapJoy))

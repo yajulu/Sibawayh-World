@@ -9,8 +9,8 @@
     android:versionCode="__AndroidManifest_VersionCode__"
     android:versionName="__AndroidManifest_VersionName__">
     
-    <uses-sdk 
+    <!-- <uses-sdk 
     	android:minSdkVersion="__AndroidManifest_MinSdkVersion__"
-    	android:targetSdkVersion="__AndroidManifest_TargetSdkVersion__"/>
+    	android:targetSdkVersion="__AndroidManifest_TargetSdkVersion__"/> -->
 
 </manifest>

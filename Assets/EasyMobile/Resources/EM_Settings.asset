@@ -169,35 +169,6 @@ MonoBehaviour:
         customParams:
           keys: []
           values: []
-    mMoPub:
-      mEnable: 0
-      mReportAppOpen: 0
-      mITuneAppID: 
-      mEnableLocationPassing: 0
-      mUseAdvancedSetting: 0
-      mAllowLegitimateInterest: 0
-      mLogLevel: 70
-      mMediatedNetworks: []
-      mAutoRequestConsent: 0
-      mForceGdprApplicable: 0
-      mDefaultBannerId:
-        mIosId: 
-        mAndroidId: 
-      mDefaultInterstitialAdId:
-        mIosId: 
-        mAndroidId: 
-      mDefaultRewardedAdId:
-        mIosId: 
-        mAndroidId: 
-      mCustomBannerIds:
-        keys: []
-        values: []
-      mCustomInterstitialAdIds:
-        keys: []
-        values: []
-      mCustomRewardedAdIds:
-        keys: []
-        values: []
     mTapjoy:
       mEnable: 0
       mAutoReconnect: 1

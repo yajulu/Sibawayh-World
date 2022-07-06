@@ -33,6 +33,7 @@ namespace EasyMobile.Editor
         {
             // Check if Google Play Games plugin is available.
             bool isGPGSAvail = EM_ExternalPluginManager.IsGPGSAvail();
+            bool isGPGSv2Avail = EM_ExternalPluginManager.IsGPGSv2Avail();
             if (isGPGSAvail)
             {
                 // We won't use Google Play Game Services on iOS, so we'll define NO_GPGS symbol to disable it
@@ -41,6 +42,11 @@ namespace EasyMobile.Editor
 
                 // Define EM_GPGS symbol on Android platform
                 GlobalDefineManager.SDS_AddDefine(EM_ScriptingSymbols.GooglePlayGames, BuildTargetGroup.Android);
+
+                if (isGPGSv2Avail)
+                {
+                    GlobalDefineManager.SDS_AddDefine(EM_ScriptingSymbols.GooglePlayGamesV2, BuildTargetGroup.Android);    
+                }
             }
         }
 

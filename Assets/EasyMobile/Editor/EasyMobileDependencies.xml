@@ -33,7 +33,7 @@
       </repositories>
     </androidPackage>
 
-    <androidPackage spec="com.sglib.easymobile:easy-mobile:1.+">
+    <androidPackage spec="com.sglib.easymobile:easy-mobile:1.5.1">
       <repositories>
         <repository>Assets/EasyMobile/Plugins/Android/m2repository</repository>
       </repositories>

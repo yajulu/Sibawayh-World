@@ -143,6 +143,33 @@ namespace EasyMobile.Internal
             if (routine != null)
                 Instance.StopCoroutine(routine);
         }
+        /// <summary>
+        /// start a coroutine outside of main thread
+        /// </summary>
+        /// <param name="routine">.Routine</param>
+        /// <param name="callback">.Callback after successfully created the routine.</param>
+        public static void RunCoroutineOnMainThread(IEnumerator routine, Action<Coroutine> callback = null)
+        {
+            RunOnMainThread(()=>{
+                Coroutine rt = RunCoroutine(routine);
+                if(callback != null)
+                    callback(rt);
+            });
+        }
+
+        /// <summary>
+        /// stop a coroutine outside of main thread
+        /// </summary>
+        /// <param name="routine">.Routine</param>
+        /// <param name="callback">.Callback</param>
+        public static void StopCoroutineOnMainThread(Coroutine routine, Action callback = null)
+        {
+            RunOnMainThread(()=>{
+                Instance.StopCoroutine(routine);
+                if(callback != null)
+                    callback();
+            });
+        }
 
         /// <summary>
         /// Converts the specified action to one that runs on the main thread.

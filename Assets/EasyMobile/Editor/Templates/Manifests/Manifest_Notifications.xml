@@ -3,9 +3,9 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <application>
         <!-- Receiver for the alarm manager events and post notifications. -->
-        <receiver android:name=".notification.NotificationAlarmReceiver" android:enabled="false" />
+        <receiver android:name=".notification.NotificationAlarmReceiver" android:enabled="false" android:exported="false"/>
         <!-- Receiver for the boot completed event and reschedule pending notifications. -->
-        <receiver android:name=".notification.NotificationBootReceiver" android:enabled="true">
+        <receiver android:name=".notification.NotificationBootReceiver" android:enabled="true" android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />

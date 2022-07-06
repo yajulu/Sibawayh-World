@@ -77,12 +77,6 @@ namespace EasyMobile.Editor
                 symbols.Add(EM_ScriptingSymbols.IronSource);
             }
 
-            // MoPub
-            if (EM_ExternalPluginManager.IsMoPubAvail())
-            {
-                symbols.Add(EM_ScriptingSymbols.MoPub);
-            }
-
             // TapJoy
             if (EM_ExternalPluginManager.IsTapJoyAvail())
             {
@@ -129,7 +123,6 @@ namespace EasyMobile.Editor
                     EM_ScriptingSymbols.Chartboost,
                     EM_ScriptingSymbols.FairBid,
                     EM_ScriptingSymbols.IronSource,
-                    EM_ScriptingSymbols.MoPub,
                     EM_ScriptingSymbols.TapJoy,
                     EM_ScriptingSymbols.UnityMonetization,
                     EM_ScriptingSymbols.UnityAds,

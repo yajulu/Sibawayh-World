@@ -2,6 +2,7 @@
 using UnityEditor;
 using System.Collections;
 using System;
+using System.Linq;
 
 namespace EasyMobile.Editor
 {
@@ -29,9 +30,6 @@ namespace EasyMobile.Editor
         // IronSource
         public const string IronSourceClassname = "IronSource";
 
-        // MoPub
-        public const string MoPubClassName = "MoPub";
-
         // TapJoy
         public const string TapJoyNameSpace = "TapjoyUnity";
 
@@ -54,6 +52,9 @@ namespace EasyMobile.Editor
         // Google Play Games
         public const string GPGSNameSpace = "GooglePlayGames";
         public const string GPGSClassName = "PlayGamesPlatform";
+        public const string GPGSVersionClassName = "PluginVersion";
+        public const string GPGSVersionIntFieldName = "VersionInt";
+        public const int GPGSv2VersionInt = 0x01101;
 
         // OneSignal
         public const string OneSignalClassName = "OneSignal";
@@ -83,7 +84,6 @@ namespace EasyMobile.Editor
         public const string AppLovinDownloadURL = "https://www.applovin.com/monetize/";
         public const string FairBidDownloadURL = "https://dev-unity.fyber.com/docs";
         public const string IronSourceDownloadURL = "https://developers.ironsrc.com/ironsource-mobile/unity/unity-plugin/#step-1";
-        public const string MoPubDownloadURL = "https://github.com/mopub/mopub-unity-sdk/";
         public const string TapJoyDownloadURL = "https://ltv.tapjoy.com/d/sdks";
         public const string VungleDownloadURL = "https://publisher.vungle.com/sdk/plugins/unity";
 
@@ -168,17 +168,6 @@ namespace EasyMobile.Editor
             return EM_EditorUtil.NamespaceExists(FairBidNameSpace);
         }
 
-        /// <summary>
-        /// Determines if MoPub plugin is available.
-        /// </summary>
-        /// <returns><c>true</c> if MoPub plugin is available; otherwise, <c>false</c>.</returns>
-        public static bool IsMoPubAvail()
-        {
-            if (!EM_Settings.Advertising.MoPub.Enable)
-                return false;
-            return EM_EditorUtil.FindClass(MoPubClassName) != null;
-        }
-
         /// Determines if IronSource plugin is available.
         /// </summary>
         public static bool IsIronSourceAvail()
@@ -257,6 +246,25 @@ namespace EasyMobile.Editor
         {
             System.Type gpgs = EM_EditorUtil.FindClass(GPGSClassName, GPGSNameSpace);
             return gpgs != null;
+        }
+
+        /// <summary>
+        /// Determines if GooglePlayGamesv2 plugin is available.
+        /// </summary>
+        /// <returns><c>true</c> if is GPGSv2 avail; otherwise, <c>false</c>.</returns>
+        public static bool IsGPGSv2Avail()
+        {
+            System.Type gpgsVersion = EM_EditorUtil.FindClass(GPGSVersionClassName, GPGSNameSpace);
+            if (gpgsVersion == null) return false;
+            System.Reflection.FieldInfo versionIntField 
+                = gpgsVersion.GetFields(
+                    System.Reflection.BindingFlags.Public 
+                    | System.Reflection.BindingFlags.Static 
+                    | System.Reflection.BindingFlags.FlattenHierarchy
+                ).FirstOrDefault(fi => fi.Name == GPGSVersionIntFieldName);
+            if (versionIntField == null) return false;
+            return (int) versionIntField.GetRawConstantValue() >= GPGSv2VersionInt;
+
         }
 
         /// <summary>
@@ -350,11 +358,6 @@ namespace EasyMobile.Editor
         public static void DownloadFacebookAudiencePlugin()
         {
             Application.OpenURL(FBAudienceDownloadURL);
-        }
-
-        public static void DownloadMoPubPlugin()
-        {
-            Application.OpenURL(MoPubDownloadURL);
         }
 
         public static void DownloadIronSourcePlugin()

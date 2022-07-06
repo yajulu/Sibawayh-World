@@ -96,13 +96,17 @@ namespace EasyMobile.Internal.NativeAPIs.Media
             }
 
             byte[] rawImage = TextureUtilities.EncodeAsByteArray(image, format);
-            NSData data = NSData.DataWithBytesNoCopy(rawImage, (uint)rawImage.Length);
-            UIImage uiImage = UIImage.ImageWithData(data);
-            UIFunctions.UIImageWriteToSavedPhotosAlbum(uiImage, (savedImage, nsError) =>
+            using (NSData data = NSData.DataWithBytes(rawImage, (uint)rawImage.Length))
+            {
+                using (UIImage uiImage = UIImage.ImageWithData(data))
                 {
-                    if (callback != null)
-                        callback(nsError != null ? nsError.LocalizedDescription : null);
-                });
+                    UIFunctions.UIImageWriteToSavedPhotosAlbum(uiImage, (savedImage, nsError) =>
+                    {
+                        if (callback != null)
+                            callback(nsError != null ? nsError.LocalizedDescription : null);
+                    });
+                }
+            }
         }
 
         public void LoadImage(MediaResult result, Action<string, Texture2D> callback, int maxSize = -1)
