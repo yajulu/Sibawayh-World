@@ -1,8 +1,10 @@
+using System;
 using System.Linq;
 using _YajuluSDK._Scripts.Essentials;
 using _YajuluSDK._Scripts.GameConfig;
 using _YajuluSDK._Scripts.UI;
 using PlayFab.ClientModels;
+using PROJECT.Scripts.Shop;
 using PROJECT.Scripts.UI.Shop;
 using Sirenix.OdinInspector;
 using Unity.VisualScripting;
@@ -19,6 +21,16 @@ namespace Project.Scripts.UI.Shop
         [SerializeField] private UIPricePanel [] currencyPanelList;
 
         [SerializeField, ReadOnly] private CatalogItem shopCatalogItem;
+
+        private void OnEnable()
+        {
+            button.onClick.AddListener(PurchaseCurrentItem);
+        }
+
+        private void OnDisable()
+        {
+            button.onClick.RemoveListener(PurchaseCurrentItem);
+        }
 
         public CatalogItem ShopCatalogItem
         {
@@ -49,6 +61,11 @@ namespace Project.Scripts.UI.Shop
             }
 
             icon.sprite = GameConfig.Instance.Shop.ShopItemIDDictionary[item.ItemId];
+        }
+
+        private void PurchaseCurrentItem()
+        {
+            ShopManager.Instance.PurchaseItem(shopCatalogItem.ItemId, (int) shopCatalogItem.VirtualCurrencyPrices["YC"], "YC");
         }
 
         [Button]

@@ -24,8 +24,7 @@ namespace PROJECT.Scripts.Shop
         public static event Action OnCatalogLoadFailed;
 
         private Dictionary<eItemType, IEnumerable<CatalogItem>> catalogItemTypeDictionary;
-
-
+        
         private void Start()
         {
             InitializeCatalogDictionary();
@@ -65,5 +64,23 @@ namespace PROJECT.Scripts.Shop
                 CatalogItemTypeDictionary.Add(itemType, new List<CatalogItem>());
             }
         }
+
+        public void PurchaseItem(string itemID, int price, string virtualCurrency)
+        {
+            PlayfabManager.PurchaseItem(itemID, price, virtualCurrency, Success, Failure);
+            
+            void Success(PurchaseItemResult result)
+            {
+                Debug.Log("Success");
+            }
+
+            void Failure(PlayFabError error)
+            {
+                Debug.Log("Failed");
+            }
+
+        }
+
+        
     }
 }

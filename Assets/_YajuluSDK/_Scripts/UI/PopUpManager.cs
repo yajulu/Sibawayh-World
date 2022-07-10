@@ -1,18 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
+using _YajuluSDK._Scripts.Essentials;
 using UnityEngine;
 
-public class PopUpManager : MonoBehaviour
+namespace _YajuluSDK._Scripts.UI
 {
-    // Start is called before the first frame update
-    void Start()
+    public class PopUpManager : Singleton<PopUpManager>
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+   
     }
 }

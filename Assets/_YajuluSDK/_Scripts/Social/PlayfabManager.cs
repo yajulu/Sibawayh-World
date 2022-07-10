@@ -585,7 +585,7 @@ namespace _YajuluSDK._Scripts.Social
                 errorCallBack?.Invoke(error);
             }
         }
-
+        
         [Button]
         public static void LoadCatalogData(Action<List<CatalogItem>> resultCallBack, Action<PlayFabError> errorCallBack = null)
         {
@@ -658,22 +658,25 @@ namespace _YajuluSDK._Scripts.Social
         }
         
         [Button]
-        public static void PurchaseItem(string itemID, int price)
+        public static void PurchaseItem(string itemID, int price, string virtualCurrency, Action<PurchaseItemResult> resultCallBack, Action<PlayFabError> errorCallBack)
         {
             PlayFabClientAPI.PurchaseItem(new PurchaseItemRequest
             {
                 ItemId = itemID,
-                Price = price
+                Price = price,
+                VirtualCurrency = virtualCurrency
             }, Success, Failure);
             
             void Success(PurchaseItemResult result)
             {
                 Debug.Log(result.Items);
+                resultCallBack?.Invoke(result);
             }
 
             void Failure(PlayFabError error)
             {
                 Debug.LogError(error.GenerateErrorReport());
+                errorCallBack?.Invoke(error);
             }
         }
         
