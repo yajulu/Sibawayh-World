@@ -254,20 +254,61 @@ namespace _YajuluSDK._Scripts.GameConfig
 	[Serializable]
 	public class ShopVariableEditor
 	{
-		[SerializeField] private ShopSpritesDictionary shopDictionary;
+		[SerializeField, OnValueChanged(nameof(RefreshDict), includeChildren:true)] private ShopSpritesDictionary shopDictionary;
+		[SerializeField] private ShopItemIDSpriteDictionary shopItemIDDictionary;
+		[SerializeField] private SpriteSerializedDictionary virtualCurrenciesDict;
+		
 		public ShopSpritesDictionary ShopDictionary => shopDictionary;
+		public ShopItemIDSpriteDictionary ShopItemIDDictionary => shopItemIDDictionary;
+		public SpriteSerializedDictionary VirtualCurrenciesDict => virtualCurrenciesDict;
+		
+		[Button]
+		private void RefreshDict()
+		{
+			ShopItemIDDictionary.LoadDictionary(shopDictionary);
+		}
 
+		#region Dictionary Definitions
+		
+		[Serializable]
+		public class SpriteSerializedDictionary : UnitySerializedDictionary<string, Sprite>
+		{
+		}
+
+		[Serializable]
+		public class ShopItemIDSpriteDictionary : UnitySerializedDictionary<string, Sprite>
+		{
+			public void LoadDictionary(ShopSpritesDictionary dict)
+			{
+				Clear();
+				foreach (var key in dict.Keys)
+				{
+					var prefix = key.ToString().ToLower() + "_";
+					var list = dict[key].spriteList;
+					
+					for (var i = 0; i < list.Count; i++)
+					{
+						Add(prefix + i, list[i]);
+					}
+				}
+			}
+		}
+		
 		[Serializable]
 		public class ShopSpritesDictionary : UnitySerializedDictionary<eItemType, ItemSpriteList>
 		{
 		}
-
+		
 		[Serializable]
 		public class ItemSpriteList
 		{
 			public List<Sprite> spriteList;
 		}
 
+		
+
+		#endregion
+		
 	}
 	
 	

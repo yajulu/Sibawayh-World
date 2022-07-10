@@ -587,18 +587,20 @@ namespace _YajuluSDK._Scripts.Social
         }
 
         [Button]
-        public static void LoadCatalogData()
+        public static void LoadCatalogData(Action<List<CatalogItem>> resultCallBack, Action<PlayFabError> errorCallBack = null)
         {
             PlayFabClientAPI.GetCatalogItems(new GetCatalogItemsRequest(), Success, Failed);
 
-            static void Success(GetCatalogItemsResult result)
+            void Success(GetCatalogItemsResult result)
             {
-                Debug.Log(result.Catalog);    
+                Debug.Log(result.Catalog);
+                resultCallBack?.Invoke(result.Catalog);
             }
 
-            static void Failed(PlayFabError error)
+            void Failed(PlayFabError error)
             {
                 Debug.Log(error.GenerateErrorReport());
+                errorCallBack?.Invoke(error);
             }
         }
         
