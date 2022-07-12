@@ -45,6 +45,18 @@ namespace Project.Scripts.UI.Shop
         private void RefreshShopItemCard(CatalogItem item)
         {
             var index = 0;
+
+            if (item.Tags.Contains("Owned"))
+            {
+                button.interactable = false;
+                pricePanel.gameObject.SetActive(false);
+            }
+            else
+            {
+                button.interactable = true;
+                pricePanel.gameObject.SetActive(true);
+            }
+
             foreach (var currency in GameConfig.Instance.Shop.VirtualCurrenciesDict.Keys)
             {
                 

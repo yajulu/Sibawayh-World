@@ -6,6 +6,7 @@ using _YajuluSDK._Scripts.Social;
 using PlayFab;
 using PlayFab.ClientModels;
 using PROJECT.Scripts.Enums;
+using PROJECT.Scripts.Game.Controllers;
 using UnityEngine;
 
 namespace PROJECT.Scripts.Shop
@@ -24,21 +25,40 @@ namespace PROJECT.Scripts.Shop
         public static event Action OnCatalogLoadFailed;
 
         private Dictionary<eItemType, IEnumerable<CatalogItem>> catalogItemTypeDictionary;
-        
+
+        private bool isLoadingCatalog = false;
+
+
         private void Start()
         {
             InitializeCatalogDictionary();
+            DataPersistenceManager.OnPlayerInventoryUpdated += OnPlayerInventoryUpdated;
+        }
+
+        private void OnDestroy()
+        {
+            DataPersistenceManager.OnPlayerInventoryUpdated -= OnPlayerInventoryUpdated;
+        }
+
+        private void OnPlayerInventoryUpdated()
+        {
+            if (isLoadingCatalog)
+            {
+                isLoadingCatalog = false;
+                SortCatalogItems();
+                OnCatalogLoadCompleted?.Invoke();
+            }            
         }
 
         public void LoadCatalog()
         {
-            PlayfabManager.LoadCatalogData(Success, Failure);
+            PlayfabManager.LoadCatalogData(Success, Failure);            
 
             void Success(List<CatalogItem> result)
             {
                 currentCatalog = result;
-                SortCatalogItems();
-                OnCatalogLoadCompleted?.Invoke();
+                isLoadingCatalog = true;
+                DataPersistenceManager.Instance.LoadPlayerInventory();
             }
 
             void Failure(PlayFabError error)
@@ -49,6 +69,18 @@ namespace PROJECT.Scripts.Shop
 
         private void SortCatalogItems()
         {
+            var inventoryListIDs = DataPersistenceManager.Instance.Inventory
+                .Where(item => item.ItemClass.Equals("Cosmetics"))
+                .Select(item => item.ItemId);            
+
+            foreach( var item in currentCatalog)
+            {
+                if (inventoryListIDs.Contains(item.ItemId))
+                {
+                    item.Tags.Add("Owned");
+                }
+            }
+
             foreach (var itemType in Enum.GetNames(typeof(eItemType)))
             {
                 var type = Enum.Parse<eItemType>(itemType);
