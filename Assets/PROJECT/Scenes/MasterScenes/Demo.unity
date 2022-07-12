@@ -3926,6 +3926,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _persistent: 1
+  popupContollerList:
+  - {fileID: 1564399524}
+  availablePopup:
+  - {fileID: 1564399524}
 --- !u!1 &139890708
 GameObject:
   m_ObjectHideFlags: 0
@@ -17995,7 +17999,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 649018104}
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
@@ -29747,7 +29751,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a931c016abed4bb418050fd41df8c59e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: aebaa2493ab6e7940b29e58dcac6b0a3, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -40634,7 +40638,7 @@ PrefabInstance:
     - target: {fileID: 1807252640731028230, guid: 9eb8f57ab3d0fff4bb523ef3a871c759, type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1807252640731028230, guid: 9eb8f57ab3d0fff4bb523ef3a871c759, type: 3}
     - target: {fileID: 1807252640731028230, guid: 9eb8f57ab3d0fff4bb523ef3a871c759, type: 3}
       propertyPath: m_Colors.m_ColorMultiplier
       value: 1
@@ -42167,7 +42171,7 @@ GameObject:
   - component: {fileID: 1524068390}
   - component: {fileID: 1524068389}
   m_Layer: 0
-  m_Name: Checkmark
+  m_Name: ItemHighLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43557,9 +43561,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemIconImage: {fileID: 1167873189}
   smallIconImage: {fileID: 1086899132}
+  itemHighlight: {fileID: 1524068388}
   itemIconPanel: {fileID: 1936943019}
   buttonsPanel: {fileID: 891495998}
-  mainPanel: {fileID: 0}
+  mainPanel: {fileID: 2001670229}
   popupMessageText: {fileID: 1058157933}
   backgroundButton: {fileID: 649018106}
   backgroundImage: {fileID: 649018104}
@@ -55046,7 +55051,6 @@ GameObject:
   - component: {fileID: 2001670230}
   - component: {fileID: 2001670233}
   - component: {fileID: 2001670232}
-  - component: {fileID: 2001670234}
   m_Layer: 0
   m_Name: PopupMain_Panel
   m_TagString: Untagged
@@ -55155,35 +55159,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &2001670234
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2001670228}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e6b642eb7f8d4dcba1af4e7a8eaa4fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemIconImage: {fileID: 1167873189}
-  smallIconImage: {fileID: 1086899132}
-  itemIconPanel: {fileID: 1936943019}
-  buttonsPanel: {fileID: 891495998}
-  mainPanel: {fileID: 0}
-  popupMessageText: {fileID: 1058157933}
-  backgroundButton: {fileID: 0}
-  backgroundImage: {fileID: 0}
-  buttons:
-  - {fileID: 1268729151}
-  - {fileID: 798523967}
-  - {fileID: 320911103}
-  buttonIcons:
-  - {fileID: 1268729152}
-  - {fileID: 798523968}
-  - {fileID: 320911104}
-  buttonTexts: []
 --- !u!1 &2002607081
 GameObject:
   m_ObjectHideFlags: 0

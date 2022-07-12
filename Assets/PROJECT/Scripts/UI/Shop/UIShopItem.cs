@@ -10,6 +10,7 @@ using Sirenix.OdinInspector;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using static UIPopupController;
 
 namespace Project.Scripts.UI.Shop
 {
@@ -22,14 +23,16 @@ namespace Project.Scripts.UI.Shop
 
         [SerializeField, ReadOnly] private CatalogItem shopCatalogItem;
 
+        private PopupRequest popupRequest;
+
         private void OnEnable()
         {
-            button.onClick.AddListener(PurchaseCurrentItem);
+            button.onClick.AddListener(SelectItemForPurchase);
         }
 
         private void OnDisable()
         {
-            button.onClick.RemoveListener(PurchaseCurrentItem);
+            button.onClick.RemoveListener(SelectItemForPurchase);
         }
 
         public CatalogItem ShopCatalogItem
@@ -75,9 +78,10 @@ namespace Project.Scripts.UI.Shop
             icon.sprite = GameConfig.Instance.Shop.ShopItemIDDictionary[item.ItemId];
         }
 
-        private void PurchaseCurrentItem()
+        private void SelectItemForPurchase()
         {
-            ShopManager.Instance.PurchaseItem(shopCatalogItem.ItemId, (int) shopCatalogItem.VirtualCurrencyPrices["YC"], "YC");
+            ShopManager.Instance.SelectedItem = shopCatalogItem;
+            ShopManager.Instance.ShowConfirmPurchasePopup();
         }
 
         [Button]
