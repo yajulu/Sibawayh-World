@@ -10133,7 +10133,7 @@ MonoBehaviour:
       1\"},{\"Type\":1,\"KeyWord\":\"\u0639\u0644\u0648\u0645 \u0623\u062D\u064A\u0627\u0621\"},{\"Type\":2,\"KeyWord\":\"\u062F\u0647\u0634\u0629\"},{\"Type\":0,\"KeyWord\":\"\u0637\u0627\u0642\u0645\"},{\"Type\":0,\"KeyWord\":\"\u0648\u0631\u062F\"},{\"Type\":2,\"KeyWord\":\"\u0638\u0646\"},{\"Type\":0,\"KeyWord\":\"\u0623\u0635\u0648\u0627\u062A\"},{\"Type\":1,\"KeyWord\":\"\u062F\u0647\u0648\u0646\"},{\"Type\":1,\"KeyWord\":\"\u0623\u0637\u0641\u0627\u0644\"},{\"Type\":1,\"KeyWord\":\"\u062C\u0633\u0645\"},{\"Type\":1,\"KeyWord\":\"\u0633\u064A\u0627\u0633\u0629\"},{\"Type\":1,\"KeyWord\":\"\u0628\u0631\u0646\u0627\u0645\u062C\"},{\"Type\":2,\"KeyWord\":\"\u0623\u0644\u0645\"},{\"Type\":1,\"KeyWord\":\"\u0625\u063A\u0648\u0627\u0621\"},{\"Type\":1,\"KeyWord\":\"\u0633\u0644\u0648\u06432\"},{\"Type\":1,\"KeyWord\":\"\u0637\u0631\u064A\u0642\"},{\"Type\":1,\"KeyWord\":\"\u0639\u0646\u0643\u0628\u0648\u062A\"},{\"Type\":0,\"KeyWord\":\"\u0623\u0644\u0648\u0627\u0646\"},{\"Type\":1,\"KeyWord\":\"\u0627\u0644\u062A\u0645\u0627\u0633\"},{\"Type\":2,\"KeyWord\":\"\u0633\u062A\u0631\"},{\"Type\":2,\"KeyWord\":\"\u0639\u0627\u0628\u0631\"},{\"Type\":1,\"KeyWord\":\"\u0623\u0635\u0647\u0627\u0631\"},{\"Type\":1,\"KeyWord\":\"\u0635\u0646\u0627\u0639\u0629\"},{\"Type\":1,\"KeyWord\":\"\u0633\u0644\u0627\u0645\"},{\"Type\":2,\"KeyWord\":\"\u0634\u0641\u0627\u0621\"},{\"Type\":2,\"KeyWord\":\"\u0645\u0644\u0644\"},{\"Type\":2,\"KeyWord\":\"\u0625\u0628\u0627\u0621\"},{\"Type\":1,\"KeyWord\":\"\u0635\u062F\u0623\"},{\"Type\":0,\"KeyWord\":\"\u0623\u0642\u0648\u0627\u0644\"},{\"Type\":1,\"KeyWord\":\"\u0628\u0635\u0631\"},{\"Type\":0,\"KeyWord\":\"\u0623\u062F\u0648\u0627\u062A\"},{\"Type\":2,\"KeyWord\":\"\u0646\u062C\u0627\u062D\"},{\"Type\":2,\"KeyWord\":\"\u0639\u0646\u0627\u062F\"},{\"Type\":1,\"KeyWord\":\"\u062A\u0643\u0646\u0648\u0644\u0648\u062C\u064A\u06279\"},{\"Type\":1,\"KeyWord\":\"\u0642\u0637\u064A\u0639\"},{\"Type\":0,\"KeyWord\":\"\u062D\u0636\u0627\u0631\u0627\u062A\"},{\"Type\":2,\"KeyWord\":\"\u062F\u062D\u0636\"},{\"Type\":2,\"KeyWord\":\"\u0645\u062A\u0635\u0644\"},{\"Type\":1,\"KeyWord\":\"\u0627\u0642\u062A\u0635\u0627\u062F\"},{\"Type\":2,\"KeyWord\":\"\u0641\u0627\u0631\u0642\"},{\"Type\":2,\"KeyWord\":\"\u062F\u0627\u0643\u0646\"},{\"Type\":1,\"KeyWord\":\"\u0633\u0628\u064A\u0643\u0629\"},{\"Type\":2,\"KeyWord\":\"\u0636\u062D\u064A\u0629\"},{\"Type\":1,\"KeyWord\":\"\u0639\u0644\u0648\u06456\"},{\"Type\":2,\"KeyWord\":\"\u0634\u0627\u0645\u0644\"},{\"Type\":2,\"KeyWord\":\"\u0648\u0635\u064A\u0629\"},{\"Type\":2,\"KeyWord\":\"\u0643\u062B\u064A\u0641\"},{\"Type\":1,\"KeyWord\":\"\u0646\u062D\u0644\u0629\"},{\"Type\":2,\"KeyWord\":\"\u0639\u0642\u064A\u0645\"},{\"Type\":1,\"KeyWord\":\"\u0634\u0648\u0627\u0647\u062F\"},{\"Type\":2,\"KeyWord\":\"\u0645\u0633\u0643\u0646\"},{\"Type\":2,\"KeyWord\":\"\u0645\u0636\u0645\u0648\u0646\"},{\"Type\":1,\"KeyWord\":\"\u0646\u0647\u0631\"},{\"Type\":2,\"KeyWord\":\"\u064A\u063A\u0641\u0631\"}]"
   Shop:
     shopDictionary:
-      keyData: 0100000000000000050000000400000002000000
+      keyData: 010000000000000005000000040000000200000003000000
       valueData:
       - spriteList:
         - {fileID: 21300000, guid: aa3be9b20b823a24196ffebe7db9a5ca, type: 3}
@@ -10183,6 +10183,14 @@ MonoBehaviour:
         - {fileID: 21300000, guid: 8f9b46089be0cd0488b1e623f38ab252, type: 3}
       - spriteList:
         - {fileID: 21300000, guid: 1b41c6530c77e0f41816523a4623ef02, type: 3}
+        - {fileID: 21300000, guid: a70fcd5cdccfd9f42b0d7d08aa4c19bb, type: 3}
+      - spriteList:
+        - {fileID: 21300000, guid: b2c3738955584c847b75a36f3ede6d8b, type: 3}
+        - {fileID: 21300000, guid: 42549a7253818754fb2ad0a4d3746409, type: 3}
+        - {fileID: 21300000, guid: 5fc95c40026f05448b4acf437e67b3e7, type: 3}
+        - {fileID: 21300000, guid: 0f29c407e53735047845f789a7a2c429, type: 3}
+        - {fileID: 21300000, guid: d881caee1a4a720418c17c30ebff66c9, type: 3}
+        - {fileID: 21300000, guid: 3098e8defe8fa7c4cb11982f67cb1e4a, type: 3}
     shopItemIDDictionary:
       keyData:
       - banner_0
@@ -10228,6 +10236,13 @@ MonoBehaviour:
       - coins_4
       - coins_5
       - companion_0
+      - companion_1
+      - powerup_0
+      - powerup_1
+      - powerup_2
+      - powerup_3
+      - powerup_4
+      - powerup_5
       valueData:
       - {fileID: 21300000, guid: aa3be9b20b823a24196ffebe7db9a5ca, type: 3}
       - {fileID: 21300000, guid: 632c4038da0a1d14c821d32db241d041, type: 3}
@@ -10272,6 +10287,13 @@ MonoBehaviour:
       - {fileID: 21300000, guid: df67da9c54f12e54885b6ea58861caa3, type: 3}
       - {fileID: 21300000, guid: 8f9b46089be0cd0488b1e623f38ab252, type: 3}
       - {fileID: 21300000, guid: 1b41c6530c77e0f41816523a4623ef02, type: 3}
+      - {fileID: 21300000, guid: a70fcd5cdccfd9f42b0d7d08aa4c19bb, type: 3}
+      - {fileID: 21300000, guid: b2c3738955584c847b75a36f3ede6d8b, type: 3}
+      - {fileID: 21300000, guid: 42549a7253818754fb2ad0a4d3746409, type: 3}
+      - {fileID: 21300000, guid: 5fc95c40026f05448b4acf437e67b3e7, type: 3}
+      - {fileID: 21300000, guid: 0f29c407e53735047845f789a7a2c429, type: 3}
+      - {fileID: 21300000, guid: d881caee1a4a720418c17c30ebff66c9, type: 3}
+      - {fileID: 21300000, guid: 3098e8defe8fa7c4cb11982f67cb1e4a, type: 3}
     virtualCurrenciesDict:
       keyData:
       - YC
