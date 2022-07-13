@@ -12,6 +12,7 @@ using EasyMobile;
 using Newtonsoft.Json;
 using PROJECT.Scripts.UI.Screens;
 using LoginResult = PlayFab.ClientModels.LoginResult;
+using PROJECT.Scripts.Game.Controllers;
 
 namespace _YajuluSDK._Scripts.Social
 {
@@ -103,15 +104,17 @@ namespace _YajuluSDK._Scripts.Social
 
 
 		private void OnPlayerProfileReceived(PlayerProfileModel obj)
-		{
-			PlayerLoggedIn();
+		{	
 			_cachedPlayer = obj;
-			// displayName.SetText(obj.DisplayName);
-			// scoreTest.SetText(obj.Statistics[0].Value.ToString());
+			PlayerLoggedIn();
+			//DataPersistenceManager.Instance.UpdateLocalPlayerName(obj.DisplayName);
+            //Debug.Log($"Player Retrived DisplayName: {obj.DisplayName}");
+            // displayName.SetText(obj.DisplayName);
+            // scoreTest.SetText(obj.Statistics[0].Value.ToString());
 
 
-			// PlayfabManager.GetPlayerStatistics(null);
-		}
+            // PlayfabManager.GetPlayerStatistics(null);
+        }
 
 		private void OnDisable()
 		{

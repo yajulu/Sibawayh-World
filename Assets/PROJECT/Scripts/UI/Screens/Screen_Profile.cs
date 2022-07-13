@@ -21,11 +21,13 @@ namespace PROJECT.Scripts.UI.Screens
         {
             base.Awake();
             DataPersistenceManager.OnProfileDataUpdated += OnProfileDataUpdated;
+            DataPersistenceManager.OnPlayerDisplayNameUpdated += DataPersistenceManager_OnPlayerDisplayNameUpdated;
         }
-        
+
         private void OnDestroy()
         {
             DataPersistenceManager.OnProfileDataUpdated -= OnProfileDataUpdated;
+            DataPersistenceManager.OnPlayerDisplayNameUpdated -= DataPersistenceManager_OnPlayerDisplayNameUpdated;
         }
 
         private void OnProfileDataUpdated(ProfileData profileData)
@@ -34,12 +36,19 @@ namespace PROJECT.Scripts.UI.Screens
                 GameConfig.Instance.Shop.ShopDictionary[eItemType.Banner].spriteList[profileData.Banner.Index],
                 GameConfig.Instance.Shop.ShopDictionary[eItemType.PlayerIcon].spriteList[profileData.Icon.Index]);
         }
-        
+
+
+        private void DataPersistenceManager_OnPlayerDisplayNameUpdated(string newName)
+        {
+            playerDisplayCard.UpdatePlayerDisplayName(newName);
+        }
+
+
         protected override void OnScreenOpenStarted()
         {
             if (!DataPersistenceManager.Instance.IsPlayerUpdating)
                 DataPersistenceManager.Instance.LoadProfileData();
-            playerDisplayCard.UpdatePlayerDisplayName(PlayFabHandler.Instance.CachedPlayer.DisplayName);
+            playerDisplayCard.UpdatePlayerDisplayName(DataPersistenceManager.Instance.PlayerDisplayName);
             OnProfileDataUpdated(DataPersistenceManager.Instance.ProfileData);
             DataPersistenceManager.Instance.LoadPlayerInventory();
             base.OnScreenOpenStarted();

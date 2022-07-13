@@ -21,6 +21,8 @@ namespace PROJECT.Scripts.Game.Controllers
     {
         [SerializeField] private PlayerProgress progress;
         [SerializeField] private ProfileData profileData;
+        [SerializeField] private string playerDisplayName;
+
         public PlayerProgress Progress => progress;
         public ProfileData ProfileData
         {
@@ -32,8 +34,19 @@ namespace PROJECT.Scripts.Game.Controllers
             }
         }
 
+        public string PlayerDisplayName
+        {
+            get => playerDisplayName;
+            private set
+            {
+                playerDisplayName = value;
+                OnPlayerDisplayNameUpdated?.Invoke(value);
+            }
+        }
+
         public static event Action<PlayerProgress> OnPlayerProgressUpdated;
         public static event Action<ProfileData> OnProfileDataUpdated;
+        public static event Action<string> OnPlayerDisplayNameUpdated;
         public static event Action OnPlayerInventoryUpdated;
 
         private List<ItemInstance> _inventory;
@@ -57,6 +70,7 @@ namespace PROJECT.Scripts.Game.Controllers
             LoadPlayerProgress();
             LoadProfileData();
             LoadPlayerInventory();
+            LoadPlayerDisplayName();
         }
 
         public void LoadPlayerInventory()
@@ -76,16 +90,33 @@ namespace PROJECT.Scripts.Game.Controllers
             }
         }
 
+        private void LoadPlayerDisplayName()
+        {
+            PlayfabManager.GetPlayerData(null, Success);
+
+            void Success(GetPlayerProfileResult obj)
+            {
+                PlayerDisplayName = obj.PlayerProfile.DisplayName;
+            }
+        }
+
+
         public void UpdateLocalPlayerData(ProfileData newProfileData)
         {
             OnProfileDataUpdated?.Invoke(newProfileData);
         }
 
-        public void UpdatePlayerGameProfileData(ProfileData newProfileData)
+        public void UpdateOnlinePlayerData(ProfileData newProfileData, string newName)
         {
             if (_isPlayerUpdating)
                 return;
             _isPlayerUpdating = true;
+            UpdatePlayerGameProfileData(newProfileData);
+            UpdatePlayerDisplayName(newName);
+        }
+
+        private void UpdatePlayerGameProfileData(ProfileData newProfileData)
+        {
             PlayfabManager.UpdatePlayerGameProfile(newProfileData, Success, Failure);
             ProfileData = newProfileData;
             void Success(ExecuteFunctionResult result)
@@ -105,7 +136,22 @@ namespace PROJECT.Scripts.Game.Controllers
             }
         }
 
-        
+        public void UpdateLocalPlayerName(string name)
+        {
+            PlayerDisplayName = name;
+        }
+
+
+        private void UpdatePlayerDisplayName(string newName)
+        {
+            PlayfabManager.UpdatePlayerDisplayName(newName, Success);
+            PlayerDisplayName = newName;
+
+            void Success(UpdateUserTitleDisplayNameResult obj)
+            {
+                OnPlayerDisplayNameUpdated?.Invoke(obj.DisplayName);
+            }
+        }
 
 
         [Button, TitleGroup("ProfileDa")]

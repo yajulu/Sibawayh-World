@@ -11,6 +11,8 @@ using Project.Scripts.Inventory;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using RTLTMPro;
 
 namespace PROJECT.Scripts.UI.Screens
 {
@@ -18,9 +20,12 @@ namespace PROJECT.Scripts.UI.Screens
     {
         [SerializeField] private UIInventoryList iconsList;
         [SerializeField] private UIInventoryList bannersList;
+        [SerializeField] private TMP_InputField displayNameImput;
+        [SerializeField] private Button displayNameSaveButton;
 
         [SerializeField] private Image playerIconImage;
         [SerializeField] private Image bannerImage;
+        [SerializeField] private RTLTextMeshPro displayName;
 
         private List<ItemInstance> _inventoryCosmetics;
         private ProfileData _currentProfile;
@@ -28,15 +33,19 @@ namespace PROJECT.Scripts.UI.Screens
         {
             DataPersistenceManager.OnPlayerInventoryUpdated += RefreshInventory;
             DataPersistenceManager.OnProfileDataUpdated += OnProfileDataUpdated;
+            DataPersistenceManager.OnPlayerDisplayNameUpdated += DataPersistenceManager_OnPlayerDisplayNameUpdated;
             iconsList.OnValueChanged += OnInventoryListSelectionChanged;
             bannersList.OnValueChanged += OnInventoryListSelectionChanged;
+            displayNameSaveButton.onClick.AddListener(OnDisplayNameSaveButtonClicked);
         }
-        
+
         private void OnDestroy()
         {
             DataPersistenceManager.OnPlayerInventoryUpdated -= RefreshInventory;
+            DataPersistenceManager.OnPlayerDisplayNameUpdated -= DataPersistenceManager_OnPlayerDisplayNameUpdated;
             iconsList.OnValueChanged -= OnInventoryListSelectionChanged;
             bannersList.OnValueChanged -= OnInventoryListSelectionChanged;
+            displayNameSaveButton.onClick.RemoveListener(OnDisplayNameSaveButtonClicked);
         }
 
         private void RefreshInventory()
@@ -68,9 +77,17 @@ namespace PROJECT.Scripts.UI.Screens
             DataPersistenceManager.Instance.UpdateLocalPlayerData(_currentProfile);
         }
 
+        private void OnDisplayNameSaveButtonClicked()
+        {
+            displayName.text = displayNameImput.text;
+            DataPersistenceManager.Instance.UpdateLocalPlayerName(displayName.text);
+        }
+
         protected override void OnScreenOpenStarted()
         {
             _currentProfile = DataPersistenceManager.Instance.ProfileData;
+            displayName.text = DataPersistenceManager.Instance.PlayerDisplayName;
+            displayNameImput.text = DataPersistenceManager.Instance.PlayerDisplayName;
             RefreshInventory();
             OnProfileDataUpdated(_currentProfile);
             base.OnScreenOpenStarted();
@@ -78,7 +95,7 @@ namespace PROJECT.Scripts.UI.Screens
 
         protected override void OnScreenCloseStarted()
         {
-            DataPersistenceManager.Instance.UpdatePlayerGameProfileData(_currentProfile);
+            DataPersistenceManager.Instance.UpdateOnlinePlayerData(_currentProfile, displayName.text);
             base.OnScreenCloseStarted();
         }
         
@@ -90,6 +107,12 @@ namespace PROJECT.Scripts.UI.Screens
                 .spriteList[newProfile.Banner.Index];
         }
 
+        private void DataPersistenceManager_OnPlayerDisplayNameUpdated(string obj)
+        {
+            displayName.text = obj;
+            displayNameImput.text = obj;
+        }
+
         [Button]
         private void SetRefs()
         {
@@ -97,6 +120,9 @@ namespace PROJECT.Scripts.UI.Screens
             bannersList = transform.FindDeepChild<UIInventoryList>("EditBanner_PopUp");
             bannerImage = transform.FindDeepChild<Image>("Banner_Image");
             playerIconImage = transform.FindDeepChild<Image>("PlayerIcon_Image");
+            displayNameImput = transform.FindDeepChild<TMP_InputField>("DisplayName_InputField");
+            displayName = transform.FindDeepChild<RTLTextMeshPro>("DisplayName_Text");
+            displayNameSaveButton = transform.FindDeepChild<Button>("DisplayNameSave_Button");
         }
     }
 }

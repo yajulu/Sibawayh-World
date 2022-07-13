@@ -370,7 +370,7 @@ namespace _YajuluSDK._Scripts.Social
             OnPlayerLoggedInBasic?.Invoke();
         }
         
-        public static void UpdatePlayerDisplayName(string displayName)
+        public static void UpdatePlayerDisplayName(string displayName, Action<UpdateUserTitleDisplayNameResult> resultCallBack = null, Action<PlayFabError> erroCallBack = null)
         {
             var request = new UpdateUserTitleDisplayNameRequest
             {
@@ -379,19 +379,19 @@ namespace _YajuluSDK._Scripts.Social
             //TODO: Update Callbacks
             PlayFabClientAPI.UpdateUserTitleDisplayName(request, Succeeded, Failed);
 
-            static void Succeeded(UpdateUserTitleDisplayNameResult result)
+            void Succeeded(UpdateUserTitleDisplayNameResult result)
             {
                 Debug.Log($"Name Updated: {result.DisplayName}");
-                GetPlayerData(null);
+                resultCallBack?.Invoke(result);
             }
 
-            static void Failed(PlayFabError error)
+            void Failed(PlayFabError error)
             {
-                
+                erroCallBack?.Invoke(error);
             }
         }
 
-        public static void GetPlayerData(string playFabID)
+        public static void GetPlayerData(string playFabID, Action<GetPlayerProfileResult> resultCallback = null, Action<PlayFabError> errorCallBack = null)
         {
             var request = new GetPlayerProfileRequest
             {
@@ -408,11 +408,13 @@ namespace _YajuluSDK._Scripts.Social
             {
                 Debug.LogError(obj.GenerateErrorReport());
 
+                errorCallBack?.Invoke(obj);
             }
 
             void OnPlayerDataReceived(GetPlayerProfileResult obj)
             {
                 Debug.Log(obj.PlayerProfile.ToString());
+                resultCallback?.Invoke(obj);
                 OnPlayerProfileReceived?.Invoke(obj.PlayerProfile);
             }
         }
