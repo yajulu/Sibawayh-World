@@ -64,10 +64,12 @@ namespace _YajuluSDK._Scripts.UI
         public Image BlackScreenMid => blackScreenMid;
 
         public Image BlackScreenTop => blackScreenTop;
-        
+
         public Image CurrentBlackScreen => blackScreenTop.gameObject.activeSelf ?
             blackScreenTop : blackScreenMid.gameObject.activeSelf ?
                 blackScreenMid : null;
+
+        public UIScreenBase TopScreen => _openedScreens.Count > 0 ? _openedScreens[_openedScreens.Count - 1] : null;   
 
         #endregion
 

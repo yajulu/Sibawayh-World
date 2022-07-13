@@ -34,15 +34,15 @@ public class UIHeaderPanelController : MonoBehaviour
         else
         {
             gameObject.SetActive(true);
-            if (obj is Screen_HomeScreen || obj is UIPanelBase)
+            if (obj is Screen_HomeScreen)
             {
                 profilePanel.gameObject.SetActive(true);
                 navigationButtons.gameObject.SetActive(false);
             }
-            else
+            else if (obj is UIPanelBase)
             {
                 profilePanel.gameObject.SetActive(false);
-                navigationButtons.gameObject.SetActive(true);
+                navigationButtons.gameObject.SetActive(false);
             }
         }
     }
@@ -51,8 +51,7 @@ public class UIHeaderPanelController : MonoBehaviour
     {
         if (obj is UIPanelBase)
         {
-            profilePanel.gameObject.SetActive(true);
-            navigationButtons.gameObject.SetActive(false);
+            UIScreenManager_OnScreenOpenStarted(UIScreenManager.Instance.TopScreen);
         }
 
     }
