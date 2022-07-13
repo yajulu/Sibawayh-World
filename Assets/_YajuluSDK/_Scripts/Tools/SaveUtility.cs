@@ -9,11 +9,13 @@ namespace _YajuluSDK._Scripts.Tools
 {
     public static class SaveUtility 
     {
-        public static void SaveObject<T>(string key, T obj)
+        public static void SaveObject<T>(string key, T obj, bool localOnly = false)
         {
             var json = JsonConvert.SerializeObject(obj);
             PlayerPrefs.SetString(key, json);
             PlayerPrefs.Save();
+            if (localOnly)
+                return;
             PlayfabManager.UpdatePlayerData(key, json);
         }
 
