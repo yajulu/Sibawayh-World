@@ -47475,7 +47475,7 @@ MonoBehaviour:
   m_fontSizeMax: 50
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
+  m_VerticalAlignment: 8192
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -47510,10 +47510,10 @@ MonoBehaviour:
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
   preserveNumbers: 0
-  farsi: 1
+  farsi: 0
   originalText: "\u062F\u06A9\u0645\u0647"
   fixTags: 1
-  forceFix: 0
+  forceFix: 1
 --- !u!222 &1419037706
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -53166,7 +53166,7 @@ MonoBehaviour:
   m_fontSizeMax: 50
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
+  m_VerticalAlignment: 8192
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -53201,10 +53201,10 @@ MonoBehaviour:
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
   preserveNumbers: 0
-  farsi: 1
+  farsi: 0
   originalText: "\u062F\u06A9\u0645\u0647"
   fixTags: 1
-  forceFix: 0
+  forceFix: 1
 --- !u!222 &1562285888
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -71270,7 +71270,7 @@ MonoBehaviour:
   m_fontSizeMax: 50
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
+  m_VerticalAlignment: 8192
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -71305,10 +71305,10 @@ MonoBehaviour:
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
   preserveNumbers: 0
-  farsi: 1
+  farsi: 0
   originalText: "\u062F\u06A9\u0645\u0647"
   fixTags: 1
-  forceFix: 0
+  forceFix: 1
 --- !u!222 &2101370958
 CanvasRenderer:
   m_ObjectHideFlags: 0

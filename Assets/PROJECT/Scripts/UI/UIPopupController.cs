@@ -128,12 +128,12 @@ public class UIPopupController : MonoBehaviour
         OpenSequence.OnStart(() => gameObject.SetActive(true));
 
         OpenSequence.Append(
-            backgroundImage.DOFade(0.3f, 0.2f)
+            backgroundImage.DOFade(0.3f, 0.3f)
             .From(0f)
             .SetEase(Ease.Linear));
 
         OpenSequence.Join(
-            mainPanel.DOScale(1f, 0.2f)
+            mainPanel.DOScale(1f, 0.3f)
             .From(0.5f)
             .SetEase(Ease.OutBack));
 
@@ -146,14 +146,14 @@ public class UIPopupController : MonoBehaviour
         CloseSequence.OnComplete(() => gameObject.SetActive(false));
 
         CloseSequence.Append(
-            backgroundImage.DOFade(0f, 0.2f)
+            backgroundImage.DOFade(0f, 0.3f)
             .From(0.3f)
             .SetEase(Ease.Linear));
 
         CloseSequence.Join(
-            mainPanel.DOScale(0.5f, 0.2f)
+            mainPanel.DOScale(0.5f, 0.3f)
             .From(1f)
-            .SetEase(Ease.OutBack));
+            .SetEase(Ease.InBack));
     }
 
     public class PopupRequest

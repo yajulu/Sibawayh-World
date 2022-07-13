@@ -21,12 +21,12 @@ public class UIHeaderPanelController : MonoBehaviour
         //Debug.Log("AWAKE");
         DataPersistenceManager.OnPlayerInventoryUpdated += DataPersistenceManager_OnPlayerInventoryUpdated;
         //DataPersistenceManager_OnPlayerInventoryUpdated();
-        UIScreenManager.OnScreenOpenStarted += UIScreenManager_OnScreenOpenStarted; 
+        UIScreenManager.OnScreenOpenStarted += UIScreenManager_OnScreenOpenStarted;
+        UIScreenManager.OnScreenCloseEnded += UIScreenManager_OnScreenCloseStarted;
     }
 
     private void UIScreenManager_OnScreenOpenStarted(UIScreenBase obj)
     {
-        Debug.Log(obj.GetType().Equals(typeof(Screen_GameMode)));
         if (obj.GetType().Equals(typeof(Screen_GameMode)))
         {
             gameObject.SetActive(false);
@@ -34,7 +34,7 @@ public class UIHeaderPanelController : MonoBehaviour
         else
         {
             gameObject.SetActive(true);
-            if (obj.GetType().Equals(typeof(Screen_HomeScreen)))
+            if (obj is Screen_HomeScreen || obj is UIPanelBase)
             {
                 profilePanel.gameObject.SetActive(true);
                 navigationButtons.gameObject.SetActive(false);
@@ -47,10 +47,21 @@ public class UIHeaderPanelController : MonoBehaviour
         }
     }
 
+    private void UIScreenManager_OnScreenCloseStarted(UIScreenBase obj)
+    {
+        if (obj is UIPanelBase)
+        {
+            profilePanel.gameObject.SetActive(true);
+            navigationButtons.gameObject.SetActive(false);
+        }
+
+    }
+
     private void OnDestroy()
     {
         DataPersistenceManager.OnPlayerInventoryUpdated -= DataPersistenceManager_OnPlayerInventoryUpdated;
         UIScreenManager.OnScreenOpenStarted -= UIScreenManager_OnScreenOpenStarted;
+        UIScreenManager.OnScreenCloseEnded -= UIScreenManager_OnScreenCloseStarted;
     }
 
     private void DataPersistenceManager_OnPlayerInventoryUpdated()
