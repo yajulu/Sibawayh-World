@@ -13,26 +13,17 @@ public class Panel_Settings : UIPanelBase
 {
 
     [SerializeField] private Slider musicSlider;
-    private AudioSource source;
-
-    private string MUSIC_PREFS = "Music_Volume";
 
     protected override void Awake()
     {
         base.Awake();
-        source = DataPersistenceManager.Instance.gameObject.GetComponent<AudioSource>();
-        if (SaveUtility.HasKey(MUSIC_PREFS))
-            source.volume = SaveUtility.LoadObject<float>(MUSIC_PREFS);
-        else
-            source.volume = 1;
         musicSlider.onValueChanged.AddListener(UpdateAudioSource);
-        musicSlider.value = source.volume;
+        musicSlider.value = SoundManager.Instance.MusicVolume;
     }
 
     private void UpdateAudioSource(float value)
     {
-        source.volume = value;
-        SaveUtility.SaveObject(MUSIC_PREFS, source.volume, true);
+        SoundManager.Instance.MusicVolume = value;
     }
 
     [Button]
