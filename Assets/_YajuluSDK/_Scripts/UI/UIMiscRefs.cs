@@ -12,8 +12,10 @@ namespace _YajuluSDK._Scripts.UI
 
         [SerializeField] private Transform _miscParent;
         [SerializeField] private UIStatsPanelController _statsPanelController;
+        [SerializeField] private UIHeaderPanelController _headerPanelController;
 
         public UIStatsPanelController StatsPanelController => _statsPanelController;
+        public UIHeaderPanelController HeaderController => _headerPanelController;
 
         private void OnEnable()
         {
@@ -33,6 +35,7 @@ namespace _YajuluSDK._Scripts.UI
         {
             _miscParent = transform.FindDeepChild<Transform>("Misc");
             _statsPanelController = _miscParent.transform.GetComponentInChildren<UIStatsPanelController>(true);
+            _headerPanelController = _miscParent.transform.GetComponentInChildren<UIHeaderPanelController>(true);
         }
     }
 }

@@ -46,11 +46,18 @@ namespace PROJECT.Scripts.Shop
             InitializeCatalogDictionary();
             InitializePopUpRequest();
             DataPersistenceManager.OnPlayerInventoryUpdated += OnPlayerInventoryUpdated;
+            PlayfabManager.OnPlayerLoggedInBasic += PlayfabManager_OnPlayerLoggedIn;
+        }
+
+        private void PlayfabManager_OnPlayerLoggedIn()
+        {
+            LoadCatalog();
         }
 
         private void OnDestroy()
         {
             DataPersistenceManager.OnPlayerInventoryUpdated -= OnPlayerInventoryUpdated;
+            PlayfabManager.OnPlayerLoggedInBasic -= PlayfabManager_OnPlayerLoggedIn;
         }
 
         private void OnPlayerInventoryUpdated()

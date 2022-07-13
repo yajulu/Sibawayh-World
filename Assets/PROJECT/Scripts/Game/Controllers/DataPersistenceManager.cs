@@ -56,6 +56,7 @@ namespace PROJECT.Scripts.Game.Controllers
         {
             LoadPlayerProgress();
             LoadProfileData();
+            LoadPlayerInventory();
         }
 
         public void LoadPlayerInventory()
