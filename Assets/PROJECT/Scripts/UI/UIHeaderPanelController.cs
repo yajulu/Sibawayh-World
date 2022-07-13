@@ -27,14 +27,15 @@ public class UIHeaderPanelController : MonoBehaviour
 
     private void UIScreenManager_OnScreenOpenStarted(UIScreenBase obj)
     {
-        if (obj.GetType().Equals(typeof(Screen_GameMode)))
+        var type = obj.GetType();
+        if (type.IsEquivalentTo(typeof(Screen_GameMode)))
         {
             gameObject.SetActive(false);
         }
         else
         {
             gameObject.SetActive(true);
-            if (obj is Screen_HomeScreen)
+            if (type.IsEquivalentTo(typeof(Screen_HomeScreen)))
             {
                 profilePanel.gameObject.SetActive(true);
                 navigationButtons.gameObject.SetActive(false);
@@ -43,6 +44,11 @@ public class UIHeaderPanelController : MonoBehaviour
             {
                 profilePanel.gameObject.SetActive(false);
                 navigationButtons.gameObject.SetActive(false);
+            }
+            else
+            {
+                profilePanel.gameObject.SetActive(false);
+                navigationButtons.gameObject.SetActive(true);
             }
         }
     }
