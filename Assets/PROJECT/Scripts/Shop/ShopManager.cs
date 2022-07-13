@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using _YajuluSDK._Scripts.Essentials;
+using _YajuluSDK._Scripts.GameConfig;
 using _YajuluSDK._Scripts.Social;
+using _YajuluSDK._Scripts.UI;
 using PlayFab;
 using PlayFab.ClientModels;
 using PROJECT.Scripts.Enums;
 using PROJECT.Scripts.Game.Controllers;
 using UnityEngine;
+using static UIPopupController;
 
 namespace PROJECT.Scripts.Shop
 {
@@ -28,10 +31,20 @@ namespace PROJECT.Scripts.Shop
 
         private bool isLoadingCatalog = false;
 
+        private CatalogItem selectedItem;
+
+        public CatalogItem SelectedItem
+        {
+            get => selectedItem;
+            set => selectedItem = value;
+        }
+
+        private PopupRequest popupRequest;
 
         private void Start()
         {
             InitializeCatalogDictionary();
+            InitializePopUpRequest();
             DataPersistenceManager.OnPlayerInventoryUpdated += OnPlayerInventoryUpdated;
         }
 
@@ -97,22 +110,88 @@ namespace PROJECT.Scripts.Shop
             }
         }
 
+        private void InitializePopUpRequest()
+        {
+            popupRequest = new PopupRequest
+            {
+                IconType = PopupIconType.ItemIconNormal,
+                CancelAction = (() => { selectedItem = null; })
+            };
+        }
+
         public void PurchaseItem(string itemID, int price, string virtualCurrency)
         {
             PlayfabManager.PurchaseItem(itemID, price, virtualCurrency, Success, Failure);
             
             void Success(PurchaseItemResult result)
             {
+                ShowPurchaseCompletePopup(result.Items[0]);
+                LoadCatalog();
                 Debug.Log("Success");
             }
 
             void Failure(PlayFabError error)
             {
+                ShopPurchaseFailedPopup(error);
                 Debug.Log("Failed");
             }
 
         }
 
-        
+        public void ShowConfirmPurchasePopup()
+        {
+            InitializePopUpRequest();
+            popupRequest.Icon = GameConfig.Instance.Shop.ShopItemIDDictionary[selectedItem.ItemId];
+            popupRequest.Msg = selectedItem.DisplayName;
+            popupRequest.ButtonsConfig = new List<PopupButtonAction>();
+            PopupButtonAction buttonAction;
+
+            foreach (var virtualCurrency in selectedItem.VirtualCurrencyPrices)
+            {
+                buttonAction = new PopupButtonAction
+                {
+                    buttonText = virtualCurrency.Value + " " + virtualCurrency.Key,
+                    buttonAction = (() => { PurchaseItem(selectedItem.ItemId, (int)virtualCurrency.Value, virtualCurrency.Key); })
+                };
+                popupRequest.ButtonsConfig.Add(buttonAction);
+            }
+
+            PopUpManager.Instance.RequestPopUp(popupRequest);
+        }
+
+        public void ShowPurchaseCompletePopup(ItemInstance item)
+        {
+            var request = new PopupRequest
+            {
+                IconType = PopupIconType.ItemIconHighlighted,
+                Icon = GameConfig.Instance.Shop.ShopItemIDDictionary[item.ItemId],
+                Msg = selectedItem.DisplayName,
+                ButtonsConfig = new List<PopupButtonAction>(),
+            };            
+  
+            PopUpManager.Instance.RequestPopUp(request);
+        }
+
+        public void ShopPurchaseFailedPopup(PlayFabError error)
+        {
+            var msg = "";
+
+            switch (error.Error)
+            {
+                case PlayFabErrorCode.InsufficientFunds:
+                    msg = "لا يوجد لديك نقوة كافية";
+                    break;
+            }
+
+            var request = new PopupRequest
+            {
+                IconType = PopupIconType.smallIcon,
+                //Icon = GameConfig.Instance.Shop.ShopItemIDDictionary[selectedItem.ItemId],
+                Msg = msg,
+                ButtonsConfig = new List<PopupButtonAction>(),
+            };
+
+            PopUpManager.Instance.RequestPopUp(request);
+        }
     }
 }
