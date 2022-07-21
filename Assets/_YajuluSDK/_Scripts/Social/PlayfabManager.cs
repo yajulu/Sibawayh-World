@@ -714,6 +714,15 @@ namespace _YajuluSDK._Scripts.Social
         }
 
         [Button]
+        private static void UpdateAvatarURL(string newURL)
+        {
+            PlayFabClientAPI.UpdateAvatarUrl(new UpdateAvatarUrlRequest
+            {
+                ImageUrl = newURL
+            }, (res) => { Debug.Log("Avatar Url Updated.");}, (error)=> {Debug.Log(error.GenerateErrorReport());});
+        }
+
+        [Button]
         public static void EquipItem(string itemID, Action<ExecuteFunctionResult> resultCallBack, Action<PlayFabError> errorCallBack)
         {
             Dictionary<string, object> body = new Dictionary<string, object>
@@ -767,6 +776,67 @@ namespace _YajuluSDK._Scripts.Social
                 Debug.Log(playFabError.GenerateErrorReport());
             }
         }
+
+        #region Friends
+
+        public static void GetFriendsList(Action<List<FriendInfo>> resultCallBack, Action<PlayFabError> errorCallBack)
+        {
+            PlayFabClientAPI.GetFriendsList(new GetFriendsListRequest(), Success, Failure);
+
+            void Success(GetFriendsListResult obj)
+            {
+                resultCallBack?.Invoke(obj.Friends);
+                Debug.Log($"Friends Retrieved {obj.Friends}");
+            }
+
+            void Failure(PlayFabError error)
+            {
+                errorCallBack?.Invoke(error);
+                Debug.Log(error.GenerateErrorReport());
+            }
+        }
+
+        [Button]
+        public static void AddFriend(AddFriendRequest request, Action<AddFriendResult> resultCallBack, Action<PlayFabError> errorCallBack)
+        {
+            PlayFabClientAPI.AddFriend(request, Success, Failure);
+
+            void Success(AddFriendResult result)
+            {
+                resultCallBack?.Invoke(result);
+                Debug.Log($"Friend Added {request.FriendTitleDisplayName}");
+            }
+
+            void Failure(PlayFabError error)
+            {
+                errorCallBack?.Invoke(error);
+                Debug.Log(error.GenerateErrorReport());
+            }
+        }
+        
+        [Button]
+        public static void RemoveFriend(string friendPlayFabID, Action resultCallBack, Action<PlayFabError> errorCallBack)
+        {
+            PlayFabClientAPI.RemoveFriend(new RemoveFriendRequest
+            {
+                FriendPlayFabId = friendPlayFabID
+            }, Success, Failure);
+
+            void Success(RemoveFriendResult result)
+            {
+                resultCallBack?.Invoke();
+                Debug.Log($"Friend Removed {friendPlayFabID}");
+            }
+
+            void Failure(PlayFabError error)
+            {
+                errorCallBack?.Invoke(error);
+                Debug.Log(error.GenerateErrorReport());
+            }
+        }
+
+        #endregion
+        
         
         //Should be moved to another script
         public void RateUs()

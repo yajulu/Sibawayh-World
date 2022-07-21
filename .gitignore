@@ -67,3 +67,9 @@ UserSettings/Layouts/
 Assets/FacebookSDK/SDK/Resources/FacebookSettings.asset
 
 Assets/Firebase/Plugins/x86_64/
+
+Assets/PlayFabEditorExtensions/Editor/Resources/PlayFabEditorPrefsSO.asset
+
+Assets/PlayFabEditorExtensions/Editor/Resources/PlayFabEditorPrefsSO.asset.meta
+
+Assets/PlayFabSDK/Shared/Public/Resources/PlayFabSharedSettings.asset
