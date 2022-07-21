@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using _YajuluSDK._Scripts.GameConfig;
 using _YajuluSDK._Scripts.UI;
+using Project.Scripts.Data;
 using PROJECT.Scripts.Game.Controllers;
 using PROJECT.Scripts.UI;
 using PROJECT.Scripts.UI.Screens;
@@ -82,24 +83,25 @@ namespace PROJECT.Scripts.Game.Map
             UIScreenManager.OnScreenCloseEnded -= UIScreenManagerOnScreenCloseEnded;
         }
 
-        // private async void UpdateButtonsAsync()
-        // {
-        //     await Task.Run(Activate);
-        //
-        //     void Activate()
-        //     {
-        //         for (int i = 0; i < levelButtons.Count; i++)
-        //         {
-        //             levelButtons[i].ButtonState = DataPersistenceManager.Instance.Progress.GetLevelState(i);
-        //         }
-        //     }
-        // }
+        private void UpdateButtonsAsync(PlayerProgress progress)
+        {
+            Task.Run(Activate);
+        
+            void Activate()
+            {
+                for (int i = 0; i < levelButtons.Count; i++)
+                {
+                    levelButtons[i].ButtonState = progress.GetLevelState(i);
+                }
+            }
+        }
 
         private void UIScreenManagerOnScreenOpenStarted(UIScreenBase obj)
         {
             if (obj.GetType().Name.Equals(nameof(Screen_Map)))
             {
                 mapHolder.gameObject.SetActive(true);
+                // UpdateButtonsAsync(DataPersistenceManager.Instance.Progress);
                _input.Map.Enable();
             }
         }

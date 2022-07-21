@@ -1,3 +1,4 @@
+using System;
 using _YajuluSDK._Scripts.Essentials;
 using _YajuluSDK._Scripts.GameConfig;
 using _YajuluSDK._Scripts.UI;
@@ -60,7 +61,17 @@ namespace PROJECT.Scripts.Game.Map
         {
             ButtonState = DataPersistenceManager.Instance.Progress.GetLevelState(levelIndex);
         }
-        
+
+        private void OnBecameVisible()
+        {
+            gameObject.SetActive(true);
+        }
+
+        private void OnBecameInvisible()
+        {
+            gameObject.SetActive(false);
+        }
+
         #endregion
 
         private void OnStateChanged(eLevelState newState)
