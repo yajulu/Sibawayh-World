@@ -27380,7 +27380,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0669\u0669\u0669\u0669\u0669\u0669"
+  m_text: 
   m_isRightToLeft: 1
   m_fontAsset: {fileID: 11400000, guid: c704da261a6afbc40b0fe350ea89641b, type: 2}
   m_sharedMaterial: {fileID: -8798198981223475417, guid: c704da261a6afbc40b0fe350ea89641b, type: 2}
@@ -27451,7 +27451,7 @@ MonoBehaviour:
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
   preserveNumbers: 0
   farsi: 0
-  originalText: "\u0669\u0669\u0669\u0669\u0669\u0669"
+  originalText: 
   fixTags: 1
   forceFix: 1
 --- !u!222 &833909707
@@ -31329,7 +31329,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u0669\u0669\u0669\u0669\u0669\u0669"
+  m_text: 
   m_isRightToLeft: 1
   m_fontAsset: {fileID: 11400000, guid: c704da261a6afbc40b0fe350ea89641b, type: 2}
   m_sharedMaterial: {fileID: -8798198981223475417, guid: c704da261a6afbc40b0fe350ea89641b, type: 2}
@@ -31400,7 +31400,7 @@ MonoBehaviour:
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
   preserveNumbers: 0
   farsi: 0
-  originalText: "\u0669\u0669\u0669\u0669\u0669\u0669"
+  originalText: 
   fixTags: 1
   forceFix: 1
 --- !u!222 &947725127
@@ -49760,7 +49760,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 175.98169}
+  m_AnchoredPosition: {x: 0, y: 175.98145}
   m_SizeDelta: {x: 238.09998, y: 351.94214}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1463084395
@@ -58126,7 +58126,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -61592,7 +61592,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000061035156, y: -122.5061}
+  m_AnchoredPosition: {x: 0, y: -122.50586}
   m_SizeDelta: {x: 0, y: 245.0212}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1821231186

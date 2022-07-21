@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using _YajuluSDK._Scripts.Essentials;
 using _YajuluSDK._Scripts.GameConfig;
 using _YajuluSDK._Scripts.Social;
@@ -30,6 +31,7 @@ namespace PROJECT.Scripts.Shop
         private Dictionary<eItemType, IEnumerable<CatalogItem>> catalogItemTypeDictionary;
 
         private bool isLoadingCatalog = false;
+        private bool purchaseLock = false;
 
         private CatalogItem selectedItem;
 
@@ -66,46 +68,55 @@ namespace PROJECT.Scripts.Shop
             {
                 isLoadingCatalog = false;
                 SortCatalogItems();
+                purchaseLock = false;
                 OnCatalogLoadCompleted?.Invoke();
             }            
         }
 
         public void LoadCatalog()
         {
+            isLoadingCatalog = true;
             PlayfabManager.LoadCatalogData(Success, Failure);            
 
             void Success(List<CatalogItem> result)
             {
                 currentCatalog = result;
-                isLoadingCatalog = true;
                 DataPersistenceManager.Instance.LoadPlayerInventory();
             }
 
             void Failure(PlayFabError error)
             {
+                isLoadingCatalog = false;
+                purchaseLock = false;
                 OnCatalogLoadFailed?.Invoke();
             }
         }
 
         private void SortCatalogItems()
         {
-            var inventoryListIDs = DataPersistenceManager.Instance.Inventory
-                .Where(item => item.ItemClass.Equals("Cosmetics"))
-                .Select(item => item.ItemId);            
+            Task.Run(Sorting);
 
-            foreach( var item in currentCatalog)
+            void Sorting()
             {
-                if (inventoryListIDs.Contains(item.ItemId))
+                var inventoryListIDs = DataPersistenceManager.Instance.Inventory
+                    .Where(item => item.ItemClass.Equals("Cosmetics"))
+                    .Select(item => item.ItemId);            
+
+                foreach( var item in currentCatalog)
                 {
-                    item.Tags.Add("Owned");
+                    if (inventoryListIDs.Contains(item.ItemId))
+                    {
+                        item.Tags.Add("Owned");
+                    }
+                }
+
+                foreach (var itemType in Enum.GetNames(typeof(eItemType)))
+                {
+                    var type = Enum.Parse<eItemType>(itemType);
+                    CatalogItemTypeDictionary[type] = currentCatalog.Where(item => item.Tags[0].Equals(itemType));
                 }
             }
-
-            foreach (var itemType in Enum.GetNames(typeof(eItemType)))
-            {
-                var type = Enum.Parse<eItemType>(itemType);
-                CatalogItemTypeDictionary[type] = currentCatalog.Where(item => item.Tags[0].Equals(itemType));
-            }
+            
         }
 
         private void InitializeCatalogDictionary()
@@ -122,7 +133,11 @@ namespace PROJECT.Scripts.Shop
             popupRequest = new PopupRequest
             {
                 IconType = PopupIconType.ItemIconNormal,
-                CancelAction = (() => { selectedItem = null; })
+                CancelAction = (() => 
+                { 
+                    selectedItem = null;
+                    purchaseLock = false;
+                })
             };
         }
 
@@ -140,6 +155,7 @@ namespace PROJECT.Scripts.Shop
             void Failure(PlayFabError error)
             {
                 ShopPurchaseFailedPopup(error);
+                purchaseLock = false;
                 Debug.Log("Failed");
             }
 
@@ -147,6 +163,9 @@ namespace PROJECT.Scripts.Shop
 
         public void ShowConfirmPurchasePopup()
         {
+            if (purchaseLock)
+                return;
+            purchaseLock = true;
             InitializePopUpRequest();
             popupRequest.Icon = GameConfig.Instance.Shop.ShopItemIDDictionary[selectedItem.ItemId];
             popupRequest.Msg = selectedItem.DisplayName;
@@ -195,7 +214,7 @@ namespace PROJECT.Scripts.Shop
                 IconType = PopupIconType.smallIcon,
                 //Icon = GameConfig.Instance.Shop.ShopItemIDDictionary[selectedItem.ItemId],
                 Msg = msg,
-                ButtonsConfig = new List<PopupButtonAction>(),
+                ButtonsConfig = new List<PopupButtonAction>()
             };
 
             PopUpManager.Instance.RequestPopUp(request);
