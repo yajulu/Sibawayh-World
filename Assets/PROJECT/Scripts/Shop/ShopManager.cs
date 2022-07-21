@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using _YajuluSDK._Scripts.Essentials;
@@ -30,6 +30,7 @@ namespace PROJECT.Scripts.Shop
         private Dictionary<eItemType, IEnumerable<CatalogItem>> catalogItemTypeDictionary;
 
         private bool isLoadingCatalog = false;
+        private bool purchaseLock = false;
 
         private CatalogItem selectedItem;
 
@@ -66,23 +67,26 @@ namespace PROJECT.Scripts.Shop
             {
                 isLoadingCatalog = false;
                 SortCatalogItems();
+                purchaseLock = false;
                 OnCatalogLoadCompleted?.Invoke();
             }            
         }
 
         public void LoadCatalog()
         {
+            isLoadingCatalog = true;
             PlayfabManager.LoadCatalogData(Success, Failure);            
 
             void Success(List<CatalogItem> result)
             {
                 currentCatalog = result;
-                isLoadingCatalog = true;
                 DataPersistenceManager.Instance.LoadPlayerInventory();
             }
 
             void Failure(PlayFabError error)
             {
+                isLoadingCatalog = false;
+                purchaseLock = false;
                 OnCatalogLoadFailed?.Invoke();
             }
         }
@@ -122,7 +126,11 @@ namespace PROJECT.Scripts.Shop
             popupRequest = new PopupRequest
             {
                 IconType = PopupIconType.ItemIconNormal,
-                CancelAction = (() => { selectedItem = null; })
+                CancelAction = (() => 
+                { 
+                    selectedItem = null;
+                    purchaseLock = false;
+                })
             };
         }
 
@@ -140,6 +148,7 @@ namespace PROJECT.Scripts.Shop
             void Failure(PlayFabError error)
             {
                 ShopPurchaseFailedPopup(error);
+                purchaseLock = false;
                 Debug.Log("Failed");
             }
 
@@ -147,6 +156,9 @@ namespace PROJECT.Scripts.Shop
 
         public void ShowConfirmPurchasePopup()
         {
+            if (purchaseLock)
+                return;
+            purchaseLock = true;
             InitializePopUpRequest();
             popupRequest.Icon = GameConfig.Instance.Shop.ShopItemIDDictionary[selectedItem.ItemId];
             popupRequest.Msg = selectedItem.DisplayName;
@@ -195,7 +207,7 @@ namespace PROJECT.Scripts.Shop
                 IconType = PopupIconType.smallIcon,
                 //Icon = GameConfig.Instance.Shop.ShopItemIDDictionary[selectedItem.ItemId],
                 Msg = msg,
-                ButtonsConfig = new List<PopupButtonAction>(),
+                ButtonsConfig = new List<PopupButtonAction>()
             };
 
             PopUpManager.Instance.RequestPopUp(request);
