@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: PlayFabSharedSettings
   m_EditorClassIdentifier: 
   TitleId: 7FE43
-  DeveloperSecretKey: SJ99BYAJ1XAYYFID5F8YNAOUQEGYQOHM3K1NF5XK8OSWYH85ZM
-  ProductionEnvironmentUrl: https://7FE43.playfabapi.com
+  DeveloperSecretKey: 
+  ProductionEnvironmentUrl: 
   RequestType: 0
   DisableDeviceInfo: 0
   DisableFocusTimeCollection: 0
-  RequestTimeout: 2000
+  RequestTimeout: 0
   RequestKeepAlive: 1
   LogLevel: 12
   LoggerHost: 

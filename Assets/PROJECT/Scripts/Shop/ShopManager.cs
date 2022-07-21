@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using _YajuluSDK._Scripts.Essentials;
 using _YajuluSDK._Scripts.GameConfig;
 using _YajuluSDK._Scripts.Social;
@@ -93,23 +94,29 @@ namespace PROJECT.Scripts.Shop
 
         private void SortCatalogItems()
         {
-            var inventoryListIDs = DataPersistenceManager.Instance.Inventory
-                .Where(item => item.ItemClass.Equals("Cosmetics"))
-                .Select(item => item.ItemId);            
+            Task.Run(Sorting);
 
-            foreach( var item in currentCatalog)
+            void Sorting()
             {
-                if (inventoryListIDs.Contains(item.ItemId))
+                var inventoryListIDs = DataPersistenceManager.Instance.Inventory
+                    .Where(item => item.ItemClass.Equals("Cosmetics"))
+                    .Select(item => item.ItemId);            
+
+                foreach( var item in currentCatalog)
                 {
-                    item.Tags.Add("Owned");
+                    if (inventoryListIDs.Contains(item.ItemId))
+                    {
+                        item.Tags.Add("Owned");
+                    }
+                }
+
+                foreach (var itemType in Enum.GetNames(typeof(eItemType)))
+                {
+                    var type = Enum.Parse<eItemType>(itemType);
+                    CatalogItemTypeDictionary[type] = currentCatalog.Where(item => item.Tags[0].Equals(itemType));
                 }
             }
-
-            foreach (var itemType in Enum.GetNames(typeof(eItemType)))
-            {
-                var type = Enum.Parse<eItemType>(itemType);
-                CatalogItemTypeDictionary[type] = currentCatalog.Where(item => item.Tags[0].Equals(itemType));
-            }
+            
         }
 
         private void InitializeCatalogDictionary()
