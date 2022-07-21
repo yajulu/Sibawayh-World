@@ -15,7 +15,7 @@ namespace PROJECT.Scripts.UI.Screens
     public class Screen_Profile : UIScreenBase
     {
 
-        [SerializeField] private PlayerCardController playerDisplayCard;
+        [SerializeField] private UIPlayerCardControllerBase uiPlayerDisplayCard;
 
         protected override void Awake()
         {
@@ -32,7 +32,7 @@ namespace PROJECT.Scripts.UI.Screens
 
         private void OnProfileDataUpdated(ProfileData profileData)
         {
-            playerDisplayCard.SetPlayerProfileItems(
+            uiPlayerDisplayCard.SetPlayerProfileItems(
                 GameConfig.Instance.Shop.ShopDictionary[eItemType.Banner].spriteList[profileData.Banner.Index],
                 GameConfig.Instance.Shop.ShopDictionary[eItemType.PlayerIcon].spriteList[profileData.Icon.Index]);
         }
@@ -40,7 +40,7 @@ namespace PROJECT.Scripts.UI.Screens
 
         private void DataPersistenceManager_OnPlayerDisplayNameUpdated(string newName)
         {
-            playerDisplayCard.UpdatePlayerDisplayName(newName);
+            uiPlayerDisplayCard.UpdatePlayerDisplayName(newName);
         }
 
 
@@ -48,7 +48,7 @@ namespace PROJECT.Scripts.UI.Screens
         {
             if (!DataPersistenceManager.Instance.IsPlayerUpdating)
                 DataPersistenceManager.Instance.LoadProfileData();
-            playerDisplayCard.UpdatePlayerDisplayName(DataPersistenceManager.Instance.PlayerDisplayName);
+            uiPlayerDisplayCard.UpdatePlayerDisplayName(DataPersistenceManager.Instance.PlayerDisplayName);
             OnProfileDataUpdated(DataPersistenceManager.Instance.ProfileData);
             DataPersistenceManager.Instance.LoadPlayerInventory();
             base.OnScreenOpenStarted();
@@ -57,7 +57,7 @@ namespace PROJECT.Scripts.UI.Screens
         [Button]
         private void SetRefs()
         {
-            playerDisplayCard = transform.FindDeepChild<PlayerCardController>("Profile_Panel");
+            uiPlayerDisplayCard = transform.FindDeepChild<UIPlayerCardControllerBase>("Profile_Panel");
         }
     }
 }

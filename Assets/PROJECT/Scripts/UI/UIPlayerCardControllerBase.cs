@@ -1,4 +1,6 @@
 using _YajuluSDK._Scripts.Essentials;
+using _YajuluSDK._Scripts.GameConfig;
+using Project.Scripts.Inventory;
 using RTLTMPro;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -6,39 +8,38 @@ using UnityEngine.UI;
 
 namespace PROJECT.Scripts.UI
 {
-    public class PlayerCardController : MonoBehaviour
+    public class UIPlayerCardControllerBase : MonoBehaviour
     {
         [SerializeField, TitleGroup("Refs")] private RTLTextMeshPro playerDisplayNameText;
         [SerializeField, TitleGroup("Refs")] private RTLTextMeshPro playerLevelText;
-        [SerializeField, TitleGroup("Refs")] private RTLTextMeshPro expValText;
         [SerializeField, TitleGroup("Refs")] private Image profileIconImage;
         [SerializeField, TitleGroup("Refs")] private Image bannerImage;
 
-
-        public void SetPlayerData(string displayName, int level, int currExp, int maxExp, Sprite icon)
+        
+        public virtual void SetPlayerData(string displayName, int level, ProfileData data)
         {
             playerLevelText.text = level.ToString();
             playerDisplayNameText.text = displayName;
-            expValText.text = currExp.ToString() +"/"+ maxExp.ToString();
+            bannerImage.sprite = GameConfig.Instance.Shop.ShopItemIDDictionary[data.Banner.ItemID];
+            profileIconImage.sprite = GameConfig.Instance.Shop.ShopItemIDDictionary[data.Icon.ItemID];
         }
 
-        public void SetPlayerProfileItems(Sprite banner, Sprite icon)
+        public virtual void SetPlayerProfileItems(Sprite banner, Sprite icon)
         {
             bannerImage.sprite = banner;
             profileIconImage.sprite = icon;
         }
 
-        public void UpdatePlayerDisplayName(string displayName)
+        public virtual void UpdatePlayerDisplayName(string displayName)
         {
             playerDisplayNameText.text = displayName;
         }
 
         [Button]
-        private void SetRefs()
+        protected virtual void SetRefs()
         {
             playerDisplayNameText = transform.FindDeepChild<RTLTextMeshPro>("ProfileName_Text");
             playerLevelText = transform.FindDeepChild<RTLTextMeshPro>("ProfileName_Text");
-            expValText = transform.FindDeepChild<RTLTextMeshPro>("ProgressPanel_Text");
             profileIconImage = transform.FindDeepChild<Image>("ProfileIcon_Image");
             bannerImage = transform.FindDeepChild<Image>("ProfileBanner_Image");
         }
