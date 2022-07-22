@@ -111,6 +111,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: a45d1595061f36b46b478e5795e44e45, type: 3}
   - {fileID: 21300000, guid: 7464f1d58450e194bb8adaa2d699f46c, type: 3}
   - {fileID: 21300000, guid: 0d3a42d53bc1af143a950b33cdae4cd3, type: 3}
+  - {fileID: 21300000, guid: eadceef51eaf7477d98d32e0bac15a9d, type: 3}
   - {fileID: 21300000, guid: ef91dff573fcc3c42a4eabba27f3fd53, type: 3}
   - {fileID: 21300000, guid: b8a50f165805ba148b042d42e6af8a85, type: 3}
   - {fileID: 21300000, guid: 1acdaf1684ddfd048aba994255ea6edb, type: 3}
@@ -203,6 +204,7 @@ SpriteAtlas:
   - Profile_Progress number orange
   - EditButton
   - C5B
+  - Mask_Gradient_Left
   - R1M
   - Slider_bg_w_frame_red-8
   - Achievements_frame-8
