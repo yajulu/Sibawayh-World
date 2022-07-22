@@ -17445,6 +17445,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 541590637}
   m_CullTransparentMesh: 1
+--- !u!114 &544919916 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1651801549134549261, guid: 14e4ee76df88140a3bfe13bdfd4567b7, type: 3}
+  m_PrefabInstance: {fileID: 335854714}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbf0d9e03afd1d5479b50bae9e17f74f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &545868763
 GameObject:
   m_ObjectHideFlags: 0
@@ -25181,6 +25192,17 @@ RectTransform:
   m_AnchoredPosition: {x: 0.11254883, y: -22.399994}
   m_SizeDelta: {x: -109.98999, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &812556043 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1651801549134549261, guid: 14e4ee76df88140a3bfe13bdfd4567b7, type: 3}
+  m_PrefabInstance: {fileID: 923429159}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbf0d9e03afd1d5479b50bae9e17f74f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &814357899
 GameObject:
   m_ObjectHideFlags: 0
@@ -37188,6 +37210,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1173229619}
   m_CullTransparentMesh: 1
+--- !u!114 &1174796413 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1651801549134549261, guid: 14e4ee76df88140a3bfe13bdfd4567b7, type: 3}
+  m_PrefabInstance: {fileID: 1579024385}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbf0d9e03afd1d5479b50bae9e17f74f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1174996968
 GameObject:
   m_ObjectHideFlags: 0
@@ -44035,6 +44068,9 @@ MonoBehaviour:
   currentFriendList: []
   friendCardList:
   - {fileID: 1216114169}
+  - {fileID: 812556043}
+  - {fileID: 1174796413}
+  - {fileID: 544919916}
 --- !u!1 &1396576203
 GameObject:
   m_ObjectHideFlags: 0
