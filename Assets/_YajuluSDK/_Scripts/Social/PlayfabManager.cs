@@ -781,7 +781,13 @@ namespace _YajuluSDK._Scripts.Social
 
         public static void GetFriendsList(Action<List<FriendInfo>> resultCallBack, Action<PlayFabError> errorCallBack)
         {
-            PlayFabClientAPI.GetFriendsList(new GetFriendsListRequest(), Success, Failure);
+            PlayFabClientAPI.GetFriendsList(new GetFriendsListRequest
+            {
+                ProfileConstraints = new PlayerProfileViewConstraints
+                {
+                    ShowAvatarUrl = true
+                }
+            }, Success, Failure);
 
             void Success(GetFriendsListResult obj)
             {

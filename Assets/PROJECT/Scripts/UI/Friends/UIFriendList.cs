@@ -1,8 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using _YajuluSDK._Scripts.Social;
+using _YajuluSDK._Scripts.UI;
 using Newtonsoft.Json;
+using PlayFab;
 using PlayFab.ClientModels;
 using Project.Scripts.Inventory;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace PROJECT.Scripts.UI.Friends
@@ -14,13 +19,29 @@ namespace PROJECT.Scripts.UI.Friends
 
         private ProfileData _dummyProfileData;
 
-        public List<UIFriendCard> FriendCardList
+        public List<FriendInfo> CurrentFriendList
         {
-            get => friendCardList;
+            get => currentFriendList;
             set
             {
-                friendCardList = value;
+                currentFriendList = value;
                 UpdateFriendListUI();
+            }
+        }
+        
+        public void LoadFriends()
+        {
+            PlayfabManager.GetFriendsList(Success, Failure);
+
+            void Success (List<FriendInfo> list)
+            {
+                CurrentFriendList = list;
+            }
+
+            void Failure(PlayFabError error)
+            {
+                //TODO: request a popup
+                Debug.Log("Loading Friends Failed.");
             }
         }
 
@@ -28,8 +49,9 @@ namespace PROJECT.Scripts.UI.Friends
         {
             var index = 0;
 
-            foreach (var friend in currentFriendList)
+            for (; index < currentFriendList.Count; index++)
             {
+                var friend = currentFriendList[index];
                 if (index >= friendCardList.Count)
                 {
                     Debug.LogWarning($"{this.name} is full, instantiating an new element.");
@@ -38,26 +60,33 @@ namespace PROJECT.Scripts.UI.Friends
 
                 try
                 {
-                    _dummyProfileData = JsonConvert.DeserializeObject<ProfileData>(friend.Profile.AvatarUrl);
+                    var list = friend.Profile.AvatarUrl.Split("/");
+                    _dummyProfileData = new ProfileData
+                    {
+                        Banner = { ItemID = list[1] },
+                        Icon = { ItemID = list[2] },
+                        Companion = { ItemID = list[3] }
+                    };
                 }
                 catch (Exception e)
                 {
                     Debug.LogWarning(e.ToString());
-                }
-                finally
-                {
                     _dummyProfileData = new ProfileData();
                 }
-                
-                friendCardList[index].SetPlayerData(friend.TitleDisplayName, 1,  _dummyProfileData);
 
-                index++;
+                friendCardList[index].SetPlayerData(friend.TitleDisplayName, 1, _dummyProfileData);
             }
-            
+
             for (var i = index; i < friendCardList.Count; i++)
             {
                 friendCardList[i].gameObject.SetActive(false);
             }
+        }
+
+        [Button]
+        protected void SetRefs()
+        {
+            friendCardList = GetComponentsInChildren<UIFriendCard>().ToList();
         }
     }
 }
